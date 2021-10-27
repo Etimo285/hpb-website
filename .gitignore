@@ -18,3 +18,8 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+### Exlusions persos ###
+.idea/
+/migrations/*.php
+###
