@@ -37,6 +37,12 @@ class AlertMessage
      */
     private $alert;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="alertMessages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +92,18 @@ class AlertMessage
     public function setAlert(?Alert $alert): self
     {
         $this->alert = $alert;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

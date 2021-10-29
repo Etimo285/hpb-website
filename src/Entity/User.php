@@ -89,11 +89,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity=AlertView::class, mappedBy="viewed_by")
+     */
+    private $alertViews;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="author")
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AlertMessage::class, mappedBy="author")
+     */
+    private $alertMessages;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->events = new ArrayCollection();
         $this->alerts = new ArrayCollection();
+        $this->alertViews = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+        $this->alertMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -355,6 +373,96 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AlertView[]
+     */
+    public function getAlertViews(): Collection
+    {
+        return $this->alertViews;
+    }
+
+    public function addAlertView(AlertView $alertView): self
+    {
+        if (!$this->alertViews->contains($alertView)) {
+            $this->alertViews[] = $alertView;
+            $alertView->setViewedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlertView(AlertView $alertView): self
+    {
+        if ($this->alertViews->removeElement($alertView)) {
+            // set the owning side to null (unless already changed)
+            if ($alertView->getViewedBy() === $this) {
+                $alertView->setViewedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getAuthor() === $this) {
+                $comment->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AlertMessage[]
+     */
+    public function getAlertMessages(): Collection
+    {
+        return $this->alertMessages;
+    }
+
+    public function addAlertMessage(AlertMessage $alertMessage): self
+    {
+        if (!$this->alertMessages->contains($alertMessage)) {
+            $this->alertMessages[] = $alertMessage;
+            $alertMessage->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlertMessage(AlertMessage $alertMessage): self
+    {
+        if ($this->alertMessages->removeElement($alertMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($alertMessage->getAuthor() === $this) {
+                $alertMessage->setAuthor(null);
+            }
+        }
 
         return $this;
     }
