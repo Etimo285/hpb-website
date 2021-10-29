@@ -21,7 +21,7 @@ class Alert
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=150)
      */
     private $object;
 
@@ -80,11 +80,6 @@ class Alert
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $viewed_date;
-
-    /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="alerts")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -99,6 +94,11 @@ class Alert
      * @ORM\OneToMany(targetEntity=AlertMessage::class, mappedBy="alert")
      */
     private $alertmessage;
+
+    /**
+     * @ORM\OneToOne(targetEntity=AlertView::class, cascade={"persist", "remove"})
+     */
+    private $alertview;
 
     public function __construct()
     {
@@ -287,6 +287,18 @@ class Alert
                 $alertmessage->setAlert(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAlertview(): ?AlertView
+    {
+        return $this->alertview;
+    }
+
+    public function setAlertview(?AlertView $alertview): self
+    {
+        $this->alertview = $alertview;
 
         return $this;
     }
