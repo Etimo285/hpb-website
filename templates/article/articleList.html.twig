@@ -1,0 +1,26 @@
+{% extends 'test/base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ category.name }}</h1>
+
+    {% for article in articles %}
+
+        <div>
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.content }}</p>
+            <strong>{{ article.author.username }}</strong>
+            <p>{{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+        </div>
+
+    {% else %}
+
+        <h2 style="color: #B0413E">Rien à afficher.</h2>
+
+    {% endfor %}
+
+    <a href="{{ path('home') }}">Retourner à l'acceuil</a>
+
+{% endblock %}

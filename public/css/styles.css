@@ -1,0 +1,74 @@
+/*-------------------- IMPORTS --------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/*-------------------- HTML ELEMENTS --------------------*/
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+}
+
+/*-------------------- CUSTOM CLASSES --------------------*/
+
+.dropdown-choice{
+    background-color: yellowgreen;
+    color: white;
+}
+
+.navbar-nav>.nav-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 15px;
+    width: 200px;
+    background-color: yellowgreen;
+}
+
+.nav-icon{
+    width: 50px;
+    height: 50px;
+    color: yellow;
+}
+
+
+.image-cover{
+    background-image: url('../images/concert-bal.jpg');
+    background-position: center;
+    background-size: cover;
+    height: 600px;
+    border: 2px solid;
+    border-radius: 25px;
+}
+
+.toolbar{
+    border: 3px solid;
+    position: absolute;
+    left: 0;
+    top: 25%;
+    width: 50px;
+    height: 500px;
+    background-color: darkorange;
+}
+
+.dropdown>.btn{
+    background-color: yellowgreen;
+    color: white;
+}
+
+/* BGCs */
+.bg-custom-celadon{
+    background-color: yellowgreen;
+}
+
+.bg-custom-dark-celadon{
+    background-color: white;
+}
+
+/* COLORs */
+.text-color-dark-celadon{
+    color: #063b25;
+}
