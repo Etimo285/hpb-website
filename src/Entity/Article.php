@@ -126,7 +126,7 @@ class Article
         return $this->category;
     }
 
-    public function setCategory(array $category): self
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 
