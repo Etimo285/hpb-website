@@ -264,12 +264,12 @@ class Alert
     /**
      * @return Collection|AlertMessage[]
      */
-    public function getAlertmessage(): Collection
+    public function getAlertMessage(): Collection
     {
         return $this->alertmessage;
     }
 
-    public function addAlertmessage(AlertMessage $alertmessage): self
+    public function addAlertMessage(AlertMessage $alertmessage): self
     {
         if (!$this->alertmessage->contains($alertmessage)) {
             $this->alertmessage[] = $alertmessage;
@@ -279,7 +279,7 @@ class Alert
         return $this;
     }
 
-    public function removeAlertmessage(AlertMessage $alertmessage): self
+    public function removeAlertMessage(AlertMessage $alertmessage): self
     {
         if ($this->alertmessage->removeElement($alertmessage)) {
             // set the owning side to null (unless already changed)
@@ -291,12 +291,12 @@ class Alert
         return $this;
     }
 
-    public function getAlertview(): ?AlertView
+    public function getAlertView(): ?AlertView
     {
         return $this->alertview;
     }
 
-    public function setAlertview(?AlertView $alertview): self
+    public function setAlertView(?AlertView $alertview): self
     {
         $this->alertview = $alertview;
 
