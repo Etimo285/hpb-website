@@ -142,7 +142,6 @@ class AppFixtures extends Fixture
                 ->setContent($faker->paragraph(10))
                 ->setAuthor($newAdmin) // 'HPB' sera l'auteur
                 ->setHidden(false)
-                // TODO: Corriger ce truc de merde
                 ->setCategory($faker->randomElement($categories))
                 ->setCreatedAt($faker->dateTimeBetween('-5years', 'now') )
                 ->setUpdatedAt($faker->dateTime)

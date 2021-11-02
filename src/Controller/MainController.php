@@ -2,10 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
+use App\Entity\Category;
+use App\Form\CreateArticleFormType;
+use App\Repository\CategoryRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -14,12 +21,59 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function home(): Response
+    public function home(CategoryRepository $categoryRepository, Request $request): Response
     {
-        return $this->render('main/index.html.twig', [
-            'controller_name' => 'MainController',
+
+        return $this->render('main/home.html.twig', [
+            'categories' => $categoryRepository->findAll(),
         ]);
     }
+
+    #[Route('/liste-articles/{slug}/', name: 'article_list')]
+    public function articleList(Category $category, Request $request, PaginatorInterface $paginator): Response
+    {
+
+        // Récupération du numéro de page
+        $requestedPage = $request->query->getInt('page', 1);
+
+        // Vérification que le numéro est positif
+        if ($requestedPage < 1) {
+            throw new NotFoundHttpException();
+        }
+
+        $query = $category->getArticles();
+
+        // Récupération des projets
+        $articles = $paginator->paginate(
+            $query,
+            $requestedPage,
+            10
+        );
+
+        return $this->render('article/articleList.html.twig', [
+            'category' => $category,
+            'articles' => $articles
+        ]);
+    }
+
+    #[Route('/creer-un-article/', name: 'article_create')]
+    public function createArticle(): Response
+    {
+
+        // Création d'un nouvel objet de la classe Article, vide pour le moment
+        $newArticle = new Article();
+
+        // Création d'un nouveau formulaire à partir de notre formulaire CreateArticleFormType et de notre nouvel article encore vide
+        $form = $this->createForm(CreateArticleFormType::class, $newArticle);
+
+
+        // Pour que la vue puisse afficher le formulaire, on doit lui envoyer le formulaire généré, avec $form->createView()
+        return $this->render('article/createArticle.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
+
 
 
      // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
@@ -48,7 +102,7 @@ class MainController extends AbstractController
     //      $em->flush();
 
 
-    //      return $this->render('main/index.html.twig');
+    //      return $this->render('main/articleList.html.twig');
 
     //  }
 
