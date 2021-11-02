@@ -108,7 +108,7 @@ class AppFixtures extends Fixture
         // --CATEGORY-- //
 
         $categoryList = ['News', 'Blog', 'Documentation',
-            'Conseil d administation, Grande Dépendance',
+            'Conseil d administation', 'Grande Dépendance',
             'Vie scolaire', 'Vie professionnelle',
             'Culture, sport et loisirs', 'Accessibilité',
             'Handi-Acceuillance', 'Humour', 'Nos Amis'];
