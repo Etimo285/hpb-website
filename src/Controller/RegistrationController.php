@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Recaptcha\RecaptchaValidator;
 use App\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -23,42 +25,85 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
+    // Page d'inscription
     #[Route('/creer-un-compte/', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, RecaptchaValidator $recaptcha): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Encoder le 'plainPassword'
-            $user->setPassword(
-            $userPasswordHasherInterface->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('support@hpb.fr', 'Handicaps Pays Beaujolais'))
-                    ->to($user->getEmail())
-                    ->subject('Veuillez confirmer votre email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
-
+        // Si l'utilisateur est déjà connecté on le redirige sur l'accueil
+        if($this->getUser()){
             return $this->redirectToRoute('home');
         }
 
+        // Création d'un nouvel utilisateur
+        $user = new User();
+
+        // Création d'un nouveau formulaire de création de compte
+        $form = $this->createForm(RegistrationFormType::class, $user);
+
+        // Remplissage du formulaire avec les données POST (dans $request)
+        $form->handleRequest($request);
+
+        // Si le formulaire a été envoyé
+        if ($form->isSubmitted()) {
+
+            // Récupération de la valeur du captcha ( $_POST['g-recaptcha-response'] )
+            $captchaResponse = $request->request->get('g-recaptcha-response', null);
+
+            // Récupération de l'adresse IP de l'utilisateur ( $_SERVER['REMOTE_ADDR'] )
+            $ip = $request->server->get('REMOTE_ADDR');
+
+            // Si le captcha est null ou si il est invalide, ajout d'une erreur générale sur le formulaire (qui sera considéré comme échoué après)
+            if ($captchaResponse == null || !$recaptcha->verify($captchaResponse, $ip)) {
+
+                // Ajout d'une nouvelle erreur dans le formulaire
+                $form->addError(new FormError('Veuillez remplir le captcha de sécurité'));
+            }
+
+            // Si le formulaire n'a pas d'erreur
+            if ($form->isValid()) {
+                // Hydratation du nouveau compte
+                $user
+                    // Hashage du mot de passe
+                    ->setPassword(
+                        $userPasswordHasherInterface->hashPassword(
+                            $user,
+                            $form->get('plainPassword')->getData()
+                        )
+                    );
+
+                $user
+                    ->setRoles(['ROLE_USER']);
+                $user
+                    ->setCreatedAt();
+                $user
+                    ->setUpdatedAt();
+
+                // Sauvegarde du nouveau compte grâce au manager général des entités
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+                // Message flash de succès
+                $this->addFlash('success', 'Votre compte a été créé avec succès !');
+                // generate a signed url and email it to the user
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('support@hpb.fr', 'Handicaps Pays Beaujolais'))
+                        ->to($user->getEmail())
+                        ->subject('Veuillez confirmer votre email')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+                // Redirection de l'utilisateur vers la page de connexion
+                return $this->redirectToRoute('app_login');
+            }
+
+        }
+
+        // Appel de la vue en envoyant le formulaire à afficher
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+
     }
 
     #[Route('/verification/email', name: 'app_verify_email')]
@@ -66,7 +111,7 @@ class RegistrationController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Validation de du lien envoyé par email, configure User::isVerified=true et persiste
+        // Validation du lien envoyé par email, configure User::isVerified=true et persiste
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
@@ -81,3 +126,4 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('app_register');
     }
 }
+

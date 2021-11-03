@@ -256,8 +256,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->createdAt;
     }
 
-    /* Doctrine Lifecycle Listeners */
-
     #[ORM\PrePersist]
     public function setCreatedAt(): void
     {
