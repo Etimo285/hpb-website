@@ -39,12 +39,12 @@ class AppFixtures extends Fixture
             ->setFirstName('admin')
             ->setLastName('admin')
             ->setEmail('admin@a.fr')
-            ->setCreatedAt($faker->dateTime)
-            ->setUpdatedAt($faker->dateTime)
             ->setPseudo('HPB')
             ->setIsVerified(true)
-            ->setPassword('Password1*')
-        ;
+            ->setPassword('Password1*');
+        $newAdmin->setCreatedAt();
+        $newAdmin->setUpdatedAt();
+
 
         // Persistance de l'admin
         $manager->persist($newAdmin);
@@ -62,13 +62,13 @@ class AppFixtures extends Fixture
                 ->setFirstName($faker->firstName)
                 ->setLastName($faker->lastName)
                 ->setEmail($faker->email)
-                ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
-                ->setUpdatedAt($faker->dateTime)
                 ->setPhone($faker->e164PhoneNumber)
                 ->setPseudo($faker->userName)
                 ->setIsVerified(true)
-                ->setPassword('Password1*')
-            ;
+                ->setPassword('Password1*');
+            $newAdherent->setCreatedAt();
+            $newAdherent->setUpdatedAt();
+
 
             // Enregistrement du nouvel utilisateur auprès de Doctrine
             $manager->persist($newAdherent);
@@ -90,13 +90,13 @@ class AppFixtures extends Fixture
                 ->setFirstName($faker->firstName)
                 ->setLastName($faker->lastName)
                 ->setEmail($faker->email)
-                ->setCreatedAt($faker->dateTimeBetween('-1 year', 'now'))
-                ->setUpdatedAt($faker->dateTime)
                 ->setPhone($faker->e164PhoneNumber)
                 ->setPseudo($faker->userName)
                 ->setIsVerified(false)
-                ->setPassword('Password1*')
-            ;
+                ->setPassword('Password1*');
+            $newUser->setCreatedAt();
+            $newUser->setUpdatedAt();
+
 
             // Enregistrement du nouvel utilisateur auprès de Doctrine
             $manager->persist($newUser);
@@ -142,10 +142,10 @@ class AppFixtures extends Fixture
                 ->setContent($faker->paragraph(10))
                 ->setAuthor($newAdmin) // 'HPB' sera l'auteur
                 ->setHidden(false)
-                ->setCategory($faker->randomElement($categories))
-                ->setCreatedAt($faker->dateTimeBetween('-5years', 'now') )
-                ->setUpdatedAt($faker->dateTime)
-            ;
+                ->setCategory($faker->randomElement($categories));
+            $newArticle->setCreatedAt();
+            $newArticle->setUpdatedAt();
+
 
             // --COMMENT-- //
 
@@ -158,10 +158,9 @@ class AppFixtures extends Fixture
                 $newComment
                     ->setContent($faker->paragraph(10))
                     ->setAuthor($faker->randomElement($users))
-                    ->setArticle($newArticle)
-                    ->setCreatedAt($faker->dateTimeBetween('-5years', 'now') )
-                    ->setUpdatedAt($faker->dateTime)
-                ;
+                    ->setArticle($newArticle);
+                $newComment->setCreatedAt();
+                $newComment->setUpdatedAt();
 
                 // Enregistrement du nouvel article auprès de Doctrine
                 $manager->persist($newComment);
@@ -188,10 +187,10 @@ class AppFixtures extends Fixture
                 ->setPostcode($faker->postcode)
                 ->setAddress1($faker->address)
                 ->setAddress2('Batîment '. $faker->randomDigitNot(0))
-                ->setAuthor($newAdmin) // 'HPB' sera l'auteur
-                ->setCreatedAt($faker->dateTimeBetween('-5years', 'now') )
-                ->setUpdatedAt($faker->dateTime)
-            ;
+                ->setAuthor($newAdmin); // 'HPB' sera l'auteur;
+            $newEvent->setCreatedAt();
+            $newEvent->setUpdatedAt();
+
 
             // Enregistrement du nouvel évènement auprès de Doctrine
             $manager->persist($newEvent);
@@ -213,10 +212,10 @@ class AppFixtures extends Fixture
                 ->setPostcode($faker->postcode)
                 ->setAddress1($faker->address)
                 ->setAddress2('Batîment '. $faker->randomDigitNot(0))
-                ->setAuthor($newAdmin) // 'HPB' sera l'auteur
-                ->setCreatedAt($faker->dateTimeBetween('-5years', 'now') )
-                ->setUpdatedAt($faker->dateTime)
-            ;
+                ->setAuthor($newAdmin);// 'HPB' sera l'auteur;
+            $newAlert->setCreatedAt();
+            $newAlert->setUpdatedAt();
+
 
             // Enregistrement de la nouvelle alerte auprès de Doctrine
             $manager->persist($newAlert);
