@@ -1,21 +1,53 @@
-{% extends 'base.html.twig' %}
+{% extends 'test/base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Créer un compte{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
 
-    <h1>Register</h1>
+    <div class="class container-fluid">
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        <div class="row">
+            <h1 class="col-12 text-center my-5">Créer un compte</h1>
+        </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        <div class="row">
+            <div class="col-12 col-md-4 offset-md-4">
+                {{ form_start( registrationForm ) }}
+
+                {{ form_errors( registrationForm )}}
+
+                {{ form_row( registrationForm.pseudo )}}
+
+                {{ form_row( registrationForm.last_name )}}
+
+                {{ form_row( registrationForm.first_name )}}
+
+                {{ form_row( registrationForm.phone )}}
+
+                {{ form_row( registrationForm.email )}}
+
+                {{ form_row( registrationForm.plainPassword ) }}
+
+                {# Affichage du captcha avec la clé publique récupérée directement grâce à la passerelle faite dans twig.yaml #}
+                <div class="form-group my-3">
+                    <div class="g-recaptcha" data-sitekey="{{ google_recaptcha_site_key }}"></div>
+                </div>
+
+                {{ form_row( registrationForm.save)  }}
+
+                {{ form_end(registrationForm) }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block stylesheets %}
+    {# Insertion du fichier JS dans le block stylesheets, ce n'est pas une erreur, la documentation de Recaptcha préconise en effet d'intégrer ce fichier JS dans le head #}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}
