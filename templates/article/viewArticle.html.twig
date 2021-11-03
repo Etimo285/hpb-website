@@ -4,6 +4,33 @@
 
 {% block body %}
 
-    <h1>{{ article.title }}</h1>
+    <div class="row my-2">
+        <div class="col-8 offset-2">
+            <h1 class="fs-2 fw-bold">{{ article.title }}</h1>
+            <div class="bg-white my-4 p-3">
+                <p class="fs-4 ">{{ article.content }}</p>
+
+                {% if article.media == true %}
+
+                    <div class="article-images">
+                    {% for media in medias %}
+                        {# La liste des photos associée à l'article est affichée ici #}
+                        <img src="{{ media.url }}" alt="">
+                    {% endfor %}
+                    </div>
+
+                {% else %}
+                    <p class="fs-6 fst-italic text-secondary text-start">(aucun médias à afficher)</p>
+                {% endif %}
+
+                <p class="text-end">Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                <p class="text-end">Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+            </div>
+        </div>
+        <div class="col-8 offset-5">
+            <a href="" class="mx-2"><button class="bg-warning button-global"><i class="fas fa-edit me-1"></i>Modifier</button></a>
+            <a href="" class="mx-2"><button class="bg-danger button-global"><i class="fas fa-trash-alt me-1"></i>Supprimer</button></a>
+        </div>
+    </div>
 
 {% endblock %}

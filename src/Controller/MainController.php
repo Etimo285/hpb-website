@@ -20,14 +20,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
 {
+
     #[Route('/', name: 'home')]
-    public function home(CategoryRepository $categoryRepository, Request $request): Response
+    public function home(CategoryRepository $categoryRepository): Response
     {
 
         return $this->render('main/home.html.twig', [
             'categories' => $categoryRepository->findAll(),
         ]);
     }
+
 
     #[Route('/liste-articles/{slug}/', name: 'article_list')]
     public function articleList(Category $category, Request $request, PaginatorInterface $paginator): Response
@@ -43,7 +45,7 @@ class MainController extends AbstractController
 
         $query = $category->getArticles();
 
-        // Récupération des projets
+        // On stocke dans $pageArticles les 10 articles de la page demandée dans l'URL
         $articles = $paginator->paginate(
             $query,
             $requestedPage,
@@ -53,6 +55,18 @@ class MainController extends AbstractController
         return $this->render('article/articleList.html.twig', [
             'category' => $category,
             'articles' => $articles
+        ]);
+    }
+
+    #[Route('/consulter-article/{slug}/', name: 'article_view')]
+    public function viewArticle(Article $article): Response
+    {
+
+        $medias = $article->getMedia();
+
+        return $this->render('article/viewArticle.html.twig', [
+            'article' => $article,
+            'medias' => $medias
         ]);
     }
 
@@ -73,7 +87,6 @@ class MainController extends AbstractController
         ]);
 
     }
-
 
 
      // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
