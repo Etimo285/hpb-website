@@ -8,7 +8,7 @@ html, body{
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background-color: white;
+    background-color: #deefc2;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -36,7 +36,7 @@ html, body{
 
 
 .image-cover{
-    background-image: url('../images/concert-bal.jpg');
+    background-image: url('');
     background-position: center;
     background-size: cover;
     height: 600px;
@@ -54,18 +54,24 @@ html, body{
     background-color: darkorange;
 }
 
+.button-global{
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 8px 16px;
+}
+
 .dropdown>.btn{
     background-color: yellowgreen;
     color: white;
 }
 
 /* BGCs */
-.bg-custom-celadon{
+.bg-custom-green{
     background-color: yellowgreen;
 }
 
 .bg-custom-dark-celadon{
-    background-color: white;
+    background-color: #b9d78f;
 }
 
 /* COLORs */

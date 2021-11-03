@@ -18,11 +18,6 @@ class Media
     private $id;
 
     /**
-     * @ORM\Column(type="json")
-     */
-    private $type = [];
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $url;
@@ -42,21 +37,14 @@ class Media
      */
     private $alert;
 
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    private $type;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getType(): ?array
-    {
-        return $this->type;
-    }
-
-    public function setType(array $type): self
-    {
-        $this->type = $type;
-
-        return $this;
     }
 
     public function getUrl(): ?string
@@ -103,6 +91,18 @@ class Media
     public function setAlert(?Alert $alert): self
     {
         $this->alert = $alert;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

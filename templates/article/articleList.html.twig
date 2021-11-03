@@ -1,26 +1,46 @@
-{% extends 'test/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ category.name }}{% endblock %}
 
 {% block body %}
 
-    <h1>{{ category.name }}</h1>
-
-    {% for article in articles %}
-
-        <div>
-            <h2>{{ article.title }}</h2>
-            <p>{{ article.content }}</p>
-            <strong>{{ article.author.username }}</strong>
-            <p>{{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+    <div class="row my-3">
+        <div class="col-12 text-center">
+            <h1 class="border-3 border text-white bg-custom-green">{{ category.name }}</h1>
         </div>
+    </div>
 
-    {% else %}
+    <div class="row">
+        <div class="col-8 offset-2">
 
-        <h2 style="color: #B0413E">Rien à afficher.</h2>
+            <div class="list-articles">
 
-    {% endfor %}
+                {% for article in articles %}
 
-    <a href="{{ path('home') }}">Retourner à l'acceuil</a>
+                    <div class="card my-5">
+                        <h2 class="p-3 bg-custom-green text-white fs-2">{{ article.title }}</h2>
+                        <div class="card-body">
+                            <p class="card-text fs-4">{{ article.content }}</p>
+                            <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                            <p>Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('article_view', {'slug': article.slug }) }}">Voir l'article en détail</a>
+                        </div>
+                    </div>
 
+                {% else %}
+
+                    <h2 style="color: #B0413E">Rien à afficher.</h2>
+
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
+        <a href="{{ path('home') }}">Retourner à l'acceuil</a>
+
+        </div>
+    </div>
 {% endblock %}
