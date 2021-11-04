@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MediaRepository::class)
@@ -20,6 +21,11 @@ class Media
     /**
      * @ORM\Column(type="string", length=255)
      */
+
+    #[Assert\NotBlank(
+        message: 'L\'url du média ne peut être vide.'
+    )]
+    
     private $url;
 
     /**

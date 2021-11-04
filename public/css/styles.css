@@ -14,10 +14,17 @@ html, body{
 
 /*-------------------- CUSTOM CLASSES --------------------*/
 
+.image-logo{
+    width: 100px;
+}
+
+.image-footer{
+    width: 200px;
+}
+
 .dropdown-choice{
     background-color: yellowgreen;
     color: white;
-
 }
 
 .navbar-nav>.nav-item{

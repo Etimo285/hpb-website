@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AlertMessageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AlertMessageRepository::class)
@@ -20,6 +21,17 @@ class AlertMessage
     /**
      * @ORM\Column(type="text")
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un contenu pour votre message.'
+    )]
+
+    #[Assert\Length(
+        min: 5,
+        max: 2500,
+        minMessage: 'Le contenu de votre message doit comporter au moins {{ limit }} caractères.',
+        maxMessage: 'Le contenu de votre message ne peut dépasser {{ limit }} caractères.',
+    )]
     private $content;
 
     /**

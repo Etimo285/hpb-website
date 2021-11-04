@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
@@ -23,6 +24,15 @@ class Category
     /**
      * @ORM\Column(type="string", length=50)
      */
+
+    #[Assert\NotBlank(
+        message: 'Le nom de la catégorie ne peut être vide.',
+    )]
+
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'Le nom de la catégorie ne doit pas dépasser {{ limit }}'
+    )]
     private $name;
 
     /** --SLUG--
