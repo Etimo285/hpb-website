@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
@@ -23,11 +25,33 @@ class Article
     /**
      * @ORM\Column(type="string", length=150)
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un titre.',
+    )]
+
+    #[Assert\Length(
+        min: 2,
+        max: 150,
+        minMessage: 'Le titre doit faire au minimum {{ limit }} caractères.',
+        maxMessage: 'Le titre ne peut dépasser {{ limit }} caractères.',
+    )]
     private $title;
 
     /**
      * @ORM\Column(type="text")
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un contenu.',
+    )]
+
+    #[Assert\Length(
+        min: 2,
+        max: 50000,
+        minMessage: 'Le contenu doit faire au minimum {{ limit }} caractères.',
+        maxMessage: 'Le contenu ne peut dépasser {{ limit }} caractères.',
+    )]
     private $content;
 
     /** --SLUG--
@@ -84,6 +108,10 @@ class Article
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
      * @ORM\JoinColumn(nullable=false)
      */
+
+    #[Assert\NotBlank(
+        message: 'La catégorie ne peut être nulle.',
+    )]
     private $category;
 
     public function __construct()

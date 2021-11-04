@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use http\Message;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AlertRepository::class)
@@ -23,31 +25,93 @@ class Alert
     /**
      * @ORM\Column(type="string", length=150)
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner l\'objet de votre alerte.',
+    )]
+
+    #[Assert\Length(
+        min: 2,
+        max: 150,
+        minMessage: 'L\'objet de votre alerte doit contenir au moins {{ limit }} caractères.',
+        maxMessage: 'L\'objet de votre alerte ne peut dépasser {{ limit }} caractères.',
+    )]
     private $object;
 
     /**
      * @ORM\Column(type="text")
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un contenu pour votre alerte.'
+    )]
+
+    #[Assert\Length(
+        min: 10,
+        max: 50000,
+        minMessage: 'Le contenu de votre alerte doit comporter au moins {{ limit }} caractères.',
+        maxMessage: 'Le contenu de votre alerte ne peut dépasser {{ limit }} caractères.',
+    )]
     private $content;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
+
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'La ville renseignée comporte plus de {{ limit }} caractères.',
+    )]
+
+    #[Assert\Regex(
+        pattern: "/^[a-z ,.'-]+/",
+        message: 'La ville renseignée ne peut comporter uniquement des lettres et/ou tirets',
+    )]
     private $city;
 
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
      */
+
+    #[Assert\Length(
+        exactly: 5,
+        exactMessage: 'Le code postal doit comporter 5 chiffres.'
+    )]
+
+    #[Assert\Regex(
+        pattern: '/[0-9]/',
+        message: 'Le code postal ne peut comporter que des chiffres.',
+    )]
     private $postcode;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
      */
+
+    #[Assert\Length(
+        max: 150,
+        maxMessage: 'Le premier champ d\'adresse ne peut dépasser {{ limit }} caractères.'
+    )]
+
+    #[Assert\Regex(
+        pattern: '/[A-Za-z0-9\ \-\_]/',
+        message: 'Le premier champ d\'adresse ne peut comporter que des caractères, chiffres, espaces et tirets.',
+    )]
     private $address1;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
+
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'Le deuxième champ d\'adresse ne peut dépasser {{ limit }} caractères.'
+    )]
+
+    #[Assert\Regex(
+        pattern: '/[A-Za-z0-9\ \-\_]/',
+        message: 'Le deuxieme champ d\'adresse ne peut comporter que des caractères, chiffres, espaces et tirets.',
+    )]
     private $address2;
 
     /** --SLUG--

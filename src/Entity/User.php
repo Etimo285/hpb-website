@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -26,6 +27,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un email.',
+    )]
+
+    #[Assert\Length(
+        min: 2,
+        max: 180,
+        minMessage: 'L\'adresse email renseignée doit faire au minimum {{ limit }} caractères.',
+        maxMessage: 'L\'adresse email renseignée ne peut dépasser {{ limit }} caractères.',
+    )]
+
+    #[Assert\Email(
+        message: 'L\'adresse email {{ value }} n\'est pas une adresse email valide',
+    )]
     private $email;
 
     /**
@@ -37,26 +53,87 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un mot de passe.',
+    )]
+
+    #[Assert\Length(
+        min: 2,
+        max: 4096,
+        minMessage: 'Votre mot de passe doit faire au minimum {{ limit }} caractères.',
+        maxMessage: 'Votre mot de passe est trop grand !',
+    )]
     private $password;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
+
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'Votre pseudo doit faire au maximum {{ limit }} caractères.',
+    )]
+
+    #[Assert\Regex(
+        pattern: "/^[a-z0-9 -]+/",
+    )]
     private $pseudo;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un prénom.',
+    )]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le prénom doit faire au moins {{ limit }} caractères.',
+        maxMessage: 'Le prénom ne peut dépasser {{ limit }} caractères.',
+    )]
+    #[Assert\Regex(
+        pattern: "/^[a-z ,.'-]+/",
+        message: 'Le prénom ne peut contenir que des lettres et/ou tirets.',
+    )]
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un nom.',
+    )]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le nom doit faire au moins {{ limit }} caractères.',
+        maxMessage: 'Le nom ne peut dépasser {{ limit }} caractères.',
+    )]
+
+    #[Assert\Regex(
+        pattern: "/^[a-z ,.'-]+/",
+        message: 'Le nom ne peut contenir que des lettres.',
+    )]
     private $last_name;
 
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
      */
+
+    #[Assert\Length(
+        min: 10,
+        max: 15,
+        minMessage: 'Le numéro de téléphone doit contenir {{ limit }} chiffres.',
+        maxMessage: 'Le numéro de téléphone ne peut dépasser {{ limit }} chiffres.',
+    )]
+
+    #[Assert\Regex(
+        pattern: '/[0-9]/',
+        message: 'Le numéro de téléphone ne peut contenir que des chiffres.',
+    )]
     private $phone;
 
     /**

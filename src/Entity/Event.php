@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
@@ -23,36 +24,115 @@ class Event
     /**
      * @ORM\Column(type="string", length=150)
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner un titre à votre évènement.'
+    )]
+
+    #[Assert\Length(
+        min: 2,
+        max: 150,
+        minMessage: 'Le titre de votre évènement doit comporter au minimum {{ limit }} caractères.',
+        maxMessage: 'Le titre de votre évènement ne doit dépasser {{ limit }} caractères.'
+    )]
     private $title;
 
     /**
      * @ORM\Column(type="text")
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner une description à votre évènement.'
+    )]
+
+    #[Assert\Length(
+        min: 10,
+        max: 50000,
+        minMessage: 'La description de votre évènement doit comporter au minimum {{ limit }} caractères.',
+        maxMessage: 'La description de votre évènement ne doit dépasser {{ limit }} caractères.'
+    )]
     private $content;
 
     /**
      * @ORM\Column(type="string", length=50)
      */
+
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner une ville à votre évènement.'
+    )]
+
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'La ville renseignée ne doit comporter plus de {{ limit }} caractères.',
+    )]
+
+    #[Assert\Regex(
+        pattern: "/^[a-z ,.'-]+/",
+        message: 'La ville renseignée ne peut comporter uniquement des lettres et/ou tirets',
+    )]
     private $city;
 
     /**
      * @ORM\Column(type="string", length=15)
      */
+
+    #[Assert\NotBlank(
+        message: 'Le code postal ne peut être vide.',
+    )]
+
+    #[Assert\Length(
+        exactly: 5,
+        exactMessage: 'Le code postal doit comporter 5 chiffres.'
+    )]
+
+    #[Assert\Regex(
+        pattern: '/[0-9]/',
+        message: 'Le code postal ne peut comporter que des chiffres.',
+    )]
     private $postcode;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=150)
      */
+
+    #[Assert\NotBlank(
+        message: 'Le premier champ d\'adresse ne peut être vide.',
+    )]
+
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'Le premier champ d\'adresse ne peut dépasser {{ limit }} caractères.'
+    )]
+
+    #[Assert\Regex(
+        pattern: '/[A-Za-z0-9\ \-\_]/',
+        message: 'Le premier champ d\'adresse ne peut comporter que des caractères, chiffres, espaces et tirets.',
+    )]
     private $address1;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
+
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'Le deuxième champ d\'adresse ne peut dépasser {{ limit }} caractères.'
+    )]
+
+    #[Assert\Regex(
+        pattern: '/[A-Za-z0-9\ \-\_]/',
+        message: 'Le deuxieme champ d\'adresse ne peut comporter que des caractères, chiffres, espaces et tirets.',
+    )]
     private $address2;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+
+    #[Assert\Url(
+        message: 'Le champ doit contenir une URL uniquement',
+        protocols: ['https'],
+    )]
     private $map;
 
     /** --SLUG--
