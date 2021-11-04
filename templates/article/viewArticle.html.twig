@@ -10,18 +10,12 @@
             <div class="bg-white my-4 p-3">
                 <p class="fs-4 ">{{ article.content }}</p>
 
-                {% if article.media == true %}
-
                     <div class="article-images">
                     {% for media in medias %}
                         {# La liste des photos associée à l'article est affichée ici #}
-                        <img src="{{ media.url }}" alt="">
+                        <img src="{{ asset( media.url )| imagine_filter('small_picture') }}" alt="">
                     {% endfor %}
                     </div>
-
-                {% else %}
-                    <p class="fs-6 fst-italic text-secondary text-start">(aucun médias à afficher)</p>
-                {% endif %}
 
                 <p class="text-end">Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
                 <p class="text-end">Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
