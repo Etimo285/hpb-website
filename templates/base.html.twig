@@ -39,17 +39,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rubriques</a>
                     <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Blog</a></li>
-                        <li><a class="dropdown-item" href="#">Documentation</a></li>
-                        <li><a class="dropdown-item" href="#">Conseil d'Administration</a></li>
-                        <li><a class="dropdown-item" href="#">Grande Dépendance</a></li>
-                        <li><a class="dropdown-item" href="#">Vie Scolaire</a></li>
-                        <li><a class="dropdown-item" href="#">Vie Professionnelle</a></li>
-                        <li><a class="dropdown-item" href="#">Culture, Sport et Loisirs</a></li>
-                        <li><a class="dropdown-item" href="#">Accessibilité</a></li>
-                        <li><a class="dropdown-item" href="#">Handi-Acceuillance</a></li>
-                        <li><a class="dropdown-item" href="#">Humour</a></li>
-                        <li><a class="dropdown-item" href="#">Nos Amis</a></li>
+                        {% for category in category_repo.findAll %}
+                            <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
                 {% if not app.user %}
