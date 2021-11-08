@@ -29,67 +29,28 @@ class RegistrationFormType extends AbstractType
             // Champ Pseudo
             ->add('pseudo', TextType::class, [
                 'label' => 'Pseudo',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Merci de renseigner votre pseudo',
-                    ]),
-                    new Length([
-                        'max' => 50,
-                        'maxMessage' => 'Votre pseudo doit contenir au maximum {{ limit }} caractères',
-                    ]),
-                ],
+                'required' => false,
             ])
 
             // Champ nom
             ->add('last_name', TextType::class, [
                 'label' => 'Nom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Merci de renseigner votre nom',
-                    ]),
-                    new Length([
-                        'max' => 50,
-                        'maxMessage' => 'Votre nom doit contenir au maximum {{ limit }} caractères',
-                    ]),
-                ],
             ])
 
             // Champ prénom
             ->add('first_name', TextType::class, [
                 'label' => 'Prénom',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Merci de renseigner votre prénom',
-                    ]),
-                    new Length([
-                        'max' => 50,
-                        'maxMessage' => 'Votre prénom doit contenir au maximum {{ limit }} caractères',
-                    ]),
-                ],
             ])
 
             // Champ téléphone
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone',
-                'constraints' => [
-                    new Length([
-                        'max' => 15,
-                        'maxMessage' => 'Votre numéro de téléphone doit contenir au maximum {{ limit }} chiffres',
-                    ]),
-                ],
+                'required' => false,
             ])
 
             // Champ email
             ->add('email', EmailType::class, [
                 'label' => 'Adresse Email',
-                'constraints' => [
-                    new Email([
-                        'message' => "L'adresse email {{ value }} n'est pas une adresse valide"
-                    ]),
-                    new NotBlank([
-                        'message' => 'Merci de renseigner une adresse email',
-                    ]),
-                ],
             ])
 
             // Champ mot de passe (en double)
@@ -125,7 +86,7 @@ class RegistrationFormType extends AbstractType
             ->add('save', SubmitType::class, [
                 'label' => 'Créer mon compte',
                 'attr' => [
-                    'class' => 'w-100',
+                    'class' => 'w-100 fw-bold',
                 ],
             ])
         ;

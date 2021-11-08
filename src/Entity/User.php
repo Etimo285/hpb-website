@@ -53,17 +53,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-
-    #[Assert\NotBlank(
-        message: 'Merci de renseigner un mot de passe.',
-    )]
-
-    #[Assert\Length(
-        min: 2,
-        max: 4096,
-        minMessage: 'Votre mot de passe doit faire au minimum {{ limit }} caractères.',
-        maxMessage: 'Votre mot de passe est trop grand !',
-    )]
     private $password;
 
     /**
@@ -76,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
 
     #[Assert\Regex(
-        pattern: "/^[a-z0-9 -]+/",
+        pattern: "/[a-zA-Z0-9 -]/",
     )]
     private $pseudo;
 
@@ -94,7 +83,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'Le prénom ne peut dépasser {{ limit }} caractères.',
     )]
     #[Assert\Regex(
-        pattern: "/^[a-z ,.'-]+/",
+        pattern: "/[a-zA-Z ,.'-]/",
         message: 'Le prénom ne peut contenir que des lettres et/ou tirets.',
     )]
     private $first_name;
@@ -114,7 +103,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
 
     #[Assert\Regex(
-        pattern: "/^[a-z ,.'-]+/",
+        pattern: "/[a-zA-Z ,.'-]/",
         message: 'Le nom ne peut contenir que des lettres.',
     )]
     private $last_name;
