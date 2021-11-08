@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdherentController extends AbstractController
 {
-    #[Route('/adherent/', name: 'adherent')]
+    #[Route('/')]
     public function index(): Response
     {
         return $this->render('adherent/index.html.twig', [

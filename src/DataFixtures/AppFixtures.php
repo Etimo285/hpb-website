@@ -11,9 +11,18 @@ use App\Entity\Event;
 use App\Entity\Alert;
 use App\Entity\User;
 use Faker;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+
+    private $encoder;
+
+    public function __construct(UserPasswordHasherInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager): void
     {
 
@@ -41,7 +50,7 @@ class AppFixtures extends Fixture
             ->setEmail('admin@a.fr')
             ->setPseudo('HPB')
             ->setIsVerified(true)
-            ->setPassword('Password1*');
+            ->setPassword( $this->encoder->hashPassword($newAdmin, 'Password1*') );
         $newAdmin->setCreatedAt();
         $newAdmin->setUpdatedAt();
 
@@ -65,7 +74,7 @@ class AppFixtures extends Fixture
                 ->setPhone($faker->e164PhoneNumber)
                 ->setPseudo($faker->userName)
                 ->setIsVerified(true)
-                ->setPassword('Password1*');
+                ->setPassword( $this->encoder->hashPassword($newAdherent, 'Password1*') );
             $newAdherent->setCreatedAt();
             $newAdherent->setUpdatedAt();
 
@@ -93,7 +102,7 @@ class AppFixtures extends Fixture
                 ->setPhone($faker->e164PhoneNumber)
                 ->setPseudo($faker->userName)
                 ->setIsVerified(false)
-                ->setPassword('Password1*');
+                ->setPassword( $this->encoder->hashPassword($newUser, 'Password1*') );
             $newUser->setCreatedAt();
             $newUser->setUpdatedAt();
 
