@@ -12,6 +12,9 @@ twig:
         # Récupération de la clé publique Google Recaptcha depuis le fichier services.yaml
         google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
 
+        # Récupération du repository des catégories pour l'intégrer en base.html.twig
+        category_repo: '@App\Repository\CategoryRepository'
+
 when@test:
     twig:
         strict_variables: true

@@ -22,12 +22,10 @@ class MainController extends AbstractController
 {
 
     #[Route('/', name: 'home')]
-    public function home(CategoryRepository $categoryRepository): Response
+    public function home(): Response
     {
 
-        return $this->render('main/home.html.twig', [
-            'categories' => $categoryRepository->findAll(),
-        ]);
+        return $this->render('main/home.html.twig');
     }
 
 
