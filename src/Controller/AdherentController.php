@@ -7,14 +7,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[IsGranted('ROLE_ADHERENT')]
+// Pages accessibles aux adhérents
+// #[IsGranted('ROLE_ADHERENT')]
+
+// Préfixes de la route et du nom des pages adhérent
+#[Route("/adherent", name:"adherent_")]
+
 class AdherentController extends AbstractController
 {
-    #[Route('/adherent', name: 'adherent')]
+    #[Route('/adherent/', name: 'adherent')]
     public function index(): Response
     {
         return $this->render('adherent/index.html.twig', [
             'controller_name' => 'AdherentController',
         ]);
+    }
+
+    #[Route('/mon-profil/', name: 'profil')]
+
+    public function profil(): Response
+    {
+        return $this->render('adherent/profil.html.twig');
     }
 }

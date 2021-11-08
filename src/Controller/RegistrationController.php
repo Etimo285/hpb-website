@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
                 $user
                     ->setRoles(['ROLE_USER']);
                 $user
-                    ->setCreatedAt();
+                    ->setCreatedAt(new \DateTime());
                 $user
                     ->setUpdatedAt();
 
@@ -83,6 +83,7 @@ class RegistrationController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
                 $entityManager->flush();
+
                 // Message flash de succès
                 $this->addFlash('success', 'Votre compte a été créé avec succès !');
                 // generate a signed url and email it to the user
