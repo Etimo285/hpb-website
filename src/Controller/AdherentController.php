@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 // Pages accessibles aux adhérents
-// #[IsGranted('ROLE_ADHERENT')]
+#[IsGranted('ROLE_ADHERENT')]
 
 // Préfixes de la route et du nom des pages adhérent
 #[Route("/adherent", name:"adherent_")]

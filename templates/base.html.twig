@@ -53,19 +53,6 @@
                     <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
                 </li>
                 {% endif %}
-                {#  } else {
-                echo '<li><a href="index.php?p=user">Utilisateur</a></li>';
-                }
-                if (!empty($_SESSION['topadmin'])) {
-                if ($_SESSION['topadmin'] == 1) {
-                echo '
-                <li><a href="#" class="blue">Administration</a>
-                    <ul id="sousmenu">
-                        <li><a href="index.php?p=adminComment">Commentaires</a></li>
-                        <li><a href="index.php?p=adminUser">Utilisateurs</a></li>
-                    </ul>
-                    ';
-                    }#}
 
                 </li>
             </ul>
