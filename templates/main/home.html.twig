@@ -4,15 +4,5 @@
 
 {% block body %}
 
-    <div class="dropdown text-center">
-        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-            <p class="fs-4">Rubriques</p>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            {% for category in categories %}
-                <li class="fw-bold"><a class="dropdown-item dropdown-choice" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
 
 {% endblock %}
