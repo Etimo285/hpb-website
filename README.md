@@ -51,4 +51,5 @@ DATABASE_URL="mysql://root:@127.0.0.1:3306/hpb-website?serverVersion=5.7"
 symfony console doctrine:database:create
 symfony console make:migration
 symfony console doctrine:migrations:migrate
+symfony console doctrine:fixtures:load
 ```

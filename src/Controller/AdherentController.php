@@ -15,12 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdherentController extends AbstractController
 {
-    #[Route('/')]
-    public function index(): Response
+    #[Route('/gestion/')]
+    public function gestion(): Response
     {
-        return $this->render('adherent/index.html.twig', [
-            'controller_name' => 'AdherentController',
-        ]);
+        return $this->render('adherent/gestion.html.twig');
     }
 
     #[Route('/mon-profil/', name: 'profil')]
@@ -28,5 +26,12 @@ class AdherentController extends AbstractController
     public function profil(): Response
     {
         return $this->render('adherent/profil.html.twig');
+    }
+
+    #[Route('/mes-alertes/', name: 'alert')]
+
+    public function alert(): Response
+    {
+        return $this->render('adherent/alert.html.twig');
     }
 }
