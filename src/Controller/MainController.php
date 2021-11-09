@@ -4,18 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\User;
 use App\Form\CreateArticleFormType;
-use App\Repository\CategoryRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MainController extends AbstractController
@@ -68,16 +63,36 @@ class MainController extends AbstractController
         ]);
     }
 
-    #[Route('/creer-un-article/', name: 'article_create')]
-    public function createArticle(): Response
+    #[Route('/creer-article/', name: 'article_create')]
+    public function createArticle(Request $request): Response
     {
 
         // Création d'un nouvel objet de la classe Article, vide pour le moment
-        $newArticle = new Article();
+        $article = new Article();
+        $form = $this->createForm(CreateArticleFormType::class, $article);
+        $form->handleRequest($request);
 
-        // Création d'un nouveau formulaire à partir de notre formulaire CreateArticleFormType et de notre nouvel article encore vide
-        $form = $this->createForm(CreateArticleFormType::class, $newArticle);
+        // Contrôle sur la validité du formulaire envoyé
+        if ($form->isSubmitted() && $form->isValid()) {
 
+            // Gestion de l'envoi des données en base de données
+            $em = $this->getDoctrine()->getManager();
+
+            /** @var $user User **/
+            $user = $this->getUser();
+            $article->setAuthor($user);
+            $article->setCreatedAt();
+            $article->setUpdatedAt();
+            $article->setHidden(0);
+            $em->persist($article);
+            $em->flush();
+
+            // Message flash
+            $this->addFlash('success', 'Votre article à été créé avec succès !');
+
+            // Redirection sur la page interface adhérent
+            return $this->redirectToRoute('home');
+        }
 
         // Pour que la vue puisse afficher le formulaire, on doit lui envoyer le formulaire généré, avec $form->createView()
         return $this->render('article/createArticle.html.twig', [
@@ -87,7 +102,7 @@ class MainController extends AbstractController
     }
 
 
-     // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
+    // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
 
     //  #[Route("/changer-mot-de-passe/", name: "change_password_test")]
     //  #[Security("is_granted('ROLE_ADHERENT')")]

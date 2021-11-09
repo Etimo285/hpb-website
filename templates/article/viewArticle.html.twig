@@ -17,7 +17,12 @@
                     {% endfor %}
                     </div>
 
-                <p class="text-end">Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                {% if article.author.pseudo is not null %}
+                    <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                {% else %}
+                    <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
+                {% endif %}
+
                 <p class="text-end">Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
             </div>
         </div>

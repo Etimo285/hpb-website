@@ -29,4 +29,6 @@ class AdherentController extends AbstractController
     {
         return $this->render('adherent/profil.html.twig');
     }
+
+
 }
