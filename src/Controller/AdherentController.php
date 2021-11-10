@@ -28,10 +28,11 @@ class AdherentController extends AbstractController
         return $this->render('adherent/profil.html.twig');
     }
 
-    #[Route('/mes-alertes/', name: 'alert')]
 
+    #[Route('/mes-alertes/', name: 'alert')]
     public function alert(): Response
     {
         return $this->render('adherent/alert.html.twig');
     }
+
 }

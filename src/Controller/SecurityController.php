@@ -16,6 +16,8 @@ class SecurityController extends AbstractController
     {
         // Redirection vers la page d'acceuil si l'utilisateur est déjà connecté
         if ($this->getUser()) {
+
+            $this->addFlash('success', 'Vous êtes déjà connecté.');
             return $this->redirectToRoute('home');
         }
 
