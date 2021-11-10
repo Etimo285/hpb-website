@@ -26,10 +26,20 @@
                 <p class="text-end">Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
             </div>
         </div>
+
+        {% if app.user.roles[0] is same as ("ROLE_ADMIN") %}
         <div class="col-8 offset-5">
-            <a href="" class="mx-2"><button class="bg-warning button-global"><i class="fas fa-edit me-1"></i>Modifier</button></a>
-            <a href="" class="mx-2"><button class="bg-danger button-global"><i class="fas fa-trash-alt me-1"></i>Supprimer</button></a>
+            {# Bouton de modification de l'article #}
+            <a href="{{ path('article_edit', {'slug': article.slug}) }}" class="bg-warning button-global text-decoration-none text-dark">
+                <i class="fas fa-edit me-1"></i> Modifier
+            </a>
+
+            {# Bouton de suppression de l'article #}
+            <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')" class="bg-danger button-global text-decoration-none text-dark" href="{{ path('article_delete', {'id': article.id, csrf_token: csrf_token('article_delete_' ~ article.id ) }) }}">
+                <i class="fas fa-trash-alt me-1"></i> Supprimer
+            </a>
         </div>
+        {% endif %}
     </div>
 
 {% endblock %}

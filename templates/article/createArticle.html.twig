@@ -14,7 +14,7 @@
                         <h1 class="fs-1">Ecrire un nouvel article</h1>
                     </div>
 
-                        {# Formulaire de création, inclus des labels pour le nom, la description, et le secteur d'activité #}
+                        {# Formulaire de création, inclus des labels pour le nom, la description, la catégorie #}
                         {{ form_start(form) }}
                         {{ form_row(form.title, {
                             label: 'Titre de votre article',
@@ -34,7 +34,7 @@
                                 class: 'fw-bold',
                             }
                         }) }}
-                    {# Bouton pour valider la création du service #}
+                    {# Bouton pour valider la création de l'article #}
                     <button class="btn btn-success mt-4 w-100" type="submit">Valider la création</button>
                     {{ form_end(form) }}
                     {# Annuler la création, qui redirige vers l'interface du client' #}
