@@ -15,13 +15,20 @@
 
             <div class="list-articles">
 
-                {% for article in articles %}
+                {# Boucle qui liste les articles, triés dans l'odre chronologique inverse (le plus récent en premier) #}
+                {% for article in articles|sort|reverse %}
 
                     <div class="card my-5">
                         <h2 class="p-3 bg-custom-green text-white fs-2">{{ article.title }}</h2>
                         <div class="card-body">
                             <p class="card-text fs-4">{{ article.content }}</p>
-                            <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+
+                            {% if article.author.pseudo is not null %}
+                                <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                            {% else %}
+                                <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
+                            {% endif %}
+
                             <p>Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
                         </div>
                         <div class="card-footer">
