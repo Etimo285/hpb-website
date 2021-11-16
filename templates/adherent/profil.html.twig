@@ -1,15 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion du profil{% endblock %}
+{% block title %}Profil de {{ app.user.firstName }} {{ app.user.lastName }}{% endblock %}
 
 {% block body %}
 
     <div class="container-fluid">
-        <div class="row">
-            <h1 class="col-12 text-center my-5">Mon profil</h1>
 
+        <div class="row fs-4">
+
+            <h1 class="col-12 text-center my-3">Mon profil</h1>
+            <p>
+            <div class="col-3 offset-3 text-center my-3">Pseudo</div>
+            <div class="col-3 text-center my-3">{{ app.user.pseudo }}</div>
+            </p>
+            <p>
+            <div class="col-3 offset-3 text-center my-3">Nom</div>
+            <div class="col-3 text-center my-3">{{ app.user.lastName }}</div>
+            </p>
+            <div class="col-3 offset-3 text-center my-3">Prénom</div>
+            <div class="col-3 text-center my-3">{{ app.user.firstName }}</div>
+            </p>
+            </p>
+            <div class="col-3 offset-3 text-center my-3">Téléphone</div>
+            <div class="col-3 text-center my-3">{{ app.user.phone }}</div>
+            </p>
+            </p>
+            <div class="col-3 offset-3 text-center my-3">Email</div>
+            <div class="col-3 text-center my-3">{{ app.user.email }}</div>
+            </p>
 
         </div>
+
+
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="button" class="btn btn-warning"><a class="text-decoration-none fs-4 fw-bold" href="{{ path('adherent_profil_update') }}">Modifier mon profil</a></button>
+        </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="button" class="btn btn-warning"><a class="text-decoration-none fs-4 fw-bold" href="{{ path('adherent_change_password') }}">Modifier mon mot de passe</a></button>
+        </div>
+
+
     </div>
 
 

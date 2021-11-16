@@ -22,8 +22,6 @@
 
 {# HEADER #}
 
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-success justify-content-around">
     <div class="container-fluid ">
         <div class="d-flex flex-column align-items-center justify-content-center p-2">
@@ -97,6 +95,23 @@
             {% endfor %}
 
         </div>
+
+    </div>
+{% endif %}
+
+{# Message flashs en cas d'erreur #}
+{% if app.session.flashBag.has('error') %}
+    <div class="container">
+        <div class="row">
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger text-center col-8 offset-2 my-3 fw-bold" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        </div>
+
     </div>
 {% endif %}
 
