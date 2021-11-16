@@ -21,7 +21,6 @@ use Symfony\Component\Validator\Constraints\Regex;
 class RegistrationFormType extends AbstractType
 {
 
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -85,9 +84,6 @@ class RegistrationFormType extends AbstractType
             // Bouton de validation
             ->add('save', SubmitType::class, [
                 'label' => 'Créer mon compte',
-                'attr' => [
-                    'class' => 'w-100 fw-bold',
-                ],
             ])
         ;
     }
