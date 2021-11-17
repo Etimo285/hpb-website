@@ -53,3 +53,11 @@ symfony console make:migration
 symfony console doctrine:migrations:migrate
 symfony console doctrine:fixtures:load
 ```
+
+Les fixtures créeront :
+* Un compte admin (email: admin@a.a , password : Password1*)
+* 25 comptes adhérents (email aléatoire "vérifiés", password : Password1*)
+* 10 comptes utilisateurs (email aléatoire, password : Password1*)
+* 40 articles
+* 5 événements
+* 10 alertes

@@ -6,10 +6,22 @@
 
     <div class="container-fluid">
         <div class="row">
-            <h1 class="col-12 text-center my-5">Gestion de {{ app.user.pseudo  }}</h1>
+            <h1 class="col-12 text-center my-5">
+                {% if app.user.pseudo is not null %}
+                    Gestion de {{ app.user.pseudo  }}
+                {% else %}
+                    Gestion de {{ app.user.firstName  }} {{ app.user.lastName }}
+                {% endif %}
+            </h1>
+        </div>
+        <div class="row">
 
+            <button type="button" class="btn btn-warning col-3 offset-1 my-5 "><a class="text-decoration-none fw-bold" href="{{ path('adherent_profil') }}">Modifier mon profil</a></button>
+
+            <button type="button" class="btn btn-danger col-3 offset-1 my-5 "><a class="text-decoration-none fw-bold" href="{{ path('adherent_alert') }}">Mes alertes</a></button>
 
         </div>
+
     </div>
 
 

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier du profil de {{ app.user.firstName }} {{ app.user.lastName }}{% endblock %}
+
+{% block body %}
+
+    <div class="class container-fluid">
+
+        <div class="row">
+            <h1 class="col-12 text-center my-5">Modifier mon profil</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-md-4 offset-md-4">
+                {{ form_start( profilUpdateForm ) }}
+
+                {{ form_errors( profilUpdateForm )}}
+
+                {{ form_row( profilUpdateForm.pseudo )}}
+
+                {{ form_row( profilUpdateForm.last_name )}}
+
+                {{ form_row( profilUpdateForm.first_name )}}
+
+                {{ form_row( profilUpdateForm.phone )}}
+
+                {{ form_row( profilUpdateForm.email )}}
+
+                <div class="text-center">{{ form_row( profilUpdateForm.save)  }}</div>
+
+
+                {{ form_end(profilUpdateForm) }}
+
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
