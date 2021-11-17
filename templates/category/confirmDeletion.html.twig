@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmer suppression de {{ category.name }}{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center my-5 text-decoration-underline">Confirmer la suppression de {{ category.name }}</h1>
+
+    <div class="my-5 warning-article-to-delete">
+        <p class="fs-3 fw-bold"><i class="fas fa-exclamation-circle text-danger me-2"></i>Attention</p>
+        <p class="fs-5">- Vous êtes sur le point de supprimer la catégorie <span class="fw-bold"> {{ category.name }}</span>. Après confirmation, les articles ci-dessous vont également être supprimés, veuillez vérifier avant de confirmer votre suppression. </p>
+        <p class="fs-5">- Une fois votre vérification terminée, cliquez sur le bouton de suppression en bas de cette liste.</p>
+    </div>
+
+    <table class="table article-to-delete-table fs-5">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Titre de l'article</th>
+            <th scope="col">Contenu de l'article</th>
+            <th scope="col">Auteur</th>
+            <th scope="col">Créé le</th>
+            <th scope="col" class="text-decoration-underline">Détails</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for article in category.articles %}
+            <tr>
+                <th scope="row">{{ article.id }}</th>
+                <td>{{ article.title }}</td>
+                <td>{{ article.content|excerpt(50) }}</td>
+                {% if article.author.pseudo is not null %}
+                    <td>{{ article.author.pseudo }}</td>
+                {% else %}
+                    <td>{{ article.author.firstname }} {{ article.author.lastname }}</td>
+                {% endif %}
+                <td>{{ article.createdAt|date('d/m/Y à H\\hi') }}</td>
+                <td><a href="{{ path('article_view', {'slug': article.slug, 'slug_category': category.slug}) }}" target="_blank" class="text-decoration-none">Accéder à l'article</a></td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+    <a onclick="return alert('Êtes vous sûr de vouloir supprimer cette catégorie ainsi que tous ses articles?')"
+            class="my-5 offset-5 p-2 fs-5 btn-danger button-global text-decoration-none"
+            href="{{ path('category_delete', {'id': category.id, csrf_token: csrf_token('category_delete_' ~ category.id ) }) }}">
+        Confirmer la suppression
+    </a>
+
+{% endblock %}

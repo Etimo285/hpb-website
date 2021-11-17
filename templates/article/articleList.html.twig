@@ -32,7 +32,7 @@
                             <p>Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
                         </div>
                         <div class="card-footer">
-                            <a href="{{ path('article_view', {'slug': article.slug }) }}">Voir l'article en détail</a>
+                            <a href="{{ path('article_view', {'slug_category': category.slug ,'slug': article.slug }) }}">Voir l'article en détail</a>
                         </div>
                     </div>
 

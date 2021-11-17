@@ -4,14 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
-use App\Entity\User;
-use App\Form\CreateArticleFormType;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class MainController extends AbstractController
 {
@@ -19,6 +19,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'home')]
     public function home(): Response
     {
+
 
         return $this->render('main/home.html.twig');
     }
@@ -51,55 +52,20 @@ class MainController extends AbstractController
         ]);
     }
 
-    #[Route('/consulter-article/{slug}/', name: 'article_view')]
-    public function viewArticle(Article $article): Response
+    #[Route('/{slug_category}/consulter-article/{slug}/', name: 'article_view')]
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function viewArticle(Article $article, Category $category): Response
     {
 
         $medias = $article->getMedia();
 
         return $this->render('article/viewArticle.html.twig', [
             'article' => $article,
+            'slug_category' => $category->getSlug(),
             'medias' => $medias
         ]);
     }
 
-    #[Route('/creer-article/', name: 'article_create')]
-    public function createArticle(Request $request): Response
-    {
-
-        // Création d'un nouvel objet de la classe Article, vide pour le moment
-        $article = new Article();
-        $form = $this->createForm(CreateArticleFormType::class, $article);
-        $form->handleRequest($request);
-
-        // Contrôle sur la validité du formulaire envoyé
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // Gestion de l'envoi des données en base de données
-            $em = $this->getDoctrine()->getManager();
-
-            /** @var $user User **/
-            $user = $this->getUser();
-            $article->setAuthor($user);
-            $article->setCreatedAt();
-            $article->setUpdatedAt();
-            $article->setHidden(0);
-            $em->persist($article);
-            $em->flush();
-
-            // Message flash
-            $this->addFlash('success', 'Votre article à été créé avec succès !');
-
-            // Redirection sur la page interface adhérent
-            return $this->redirectToRoute('home');
-        }
-
-        // Pour que la vue puisse afficher le formulaire, on doit lui envoyer le formulaire généré, avec $form->createView()
-        return $this->render('article/createArticle.html.twig', [
-            'form' => $form->createView()
-        ]);
-
-    }
 
 
     // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
