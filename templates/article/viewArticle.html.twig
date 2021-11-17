@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        {% if app.user.roles[0] is same as ("ROLE_ADMIN") %}
+        {% if article.author == app.user %}
         <div class="col-8 offset-5">
             {# Bouton de modification de l'article #}
             <a href="{{ path('article_edit', {'slug': article.slug}) }}" class="bg-warning button-global text-decoration-none text-dark">

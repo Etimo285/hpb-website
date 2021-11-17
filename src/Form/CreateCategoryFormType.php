@@ -2,23 +2,20 @@
 
 namespace App\Form;
 
-use App\Entity\Article;
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EditArticleFormType extends AbstractType
+class CreateCategoryFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // Champ de nom pour la catégorie que l'admin souhaite créer
         $builder
-            //Le champ où changer le nom de l'article
-            ->add('title', TextType::class)
-            //le Champ où changer la description de l'article
-            ->add('content', TextareaType::class, [
-                'attr' => ['style' => 'height: 300px']
+            ->add('name', TextType::class, [
+                'attr' => ['style' => '']
             ])
         ;
     }
@@ -26,7 +23,7 @@ class EditArticleFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Article::class,
+            'data_class' => Category::class,
         ]);
     }
 }
