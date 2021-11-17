@@ -31,6 +31,7 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
+     * Méthode pour initialiser le mot de passe.
      * Display & process form to request a password reset.
      */
     #[Route('', name: 'app_forgot_password_request')]
@@ -52,6 +53,7 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
+     * Page de confirmation après qu'un utilisateur ait requis une initialisation de mot de passe
      * Confirmation page after a user has requested a password reset.
      */
     #[Route('/check-email', name: 'app_check_email')]
@@ -153,9 +155,9 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('support@hpb.fr', 'Handicaps Pays Beaujolais'))
+            ->from(new Address('hpbwebsitedev@gmail.com', 'Handicaps Pays Beaujolais'))
             ->to($user->getEmail())
-            ->subject('Your password reset request')
+            ->subject('Votre demande d\'initialisation de mot de passe')
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
