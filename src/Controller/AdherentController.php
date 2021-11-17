@@ -38,6 +38,7 @@ class AdherentController extends AbstractController
         return $this->render('adherent/profil.html.twig');
     }
 
+
     // Page permettant de modifier un profil adhérent existant
     #[Route('/modifier-mon-profil/', name: 'profil_update')]
     public function profilUpdate(Request $request): Response
@@ -79,7 +80,6 @@ class AdherentController extends AbstractController
     #[Route("/changer-mon-mot-de-passe/", name: "change_password")]
     public function changePassword(Request $request, UserPasswordHasherInterface $encoder, RecaptchaValidator $recaptcha): Response
     {
-        // On récupère l'utilisateur connecté
 
         // On récupère l'utilisateur connecté
         /** @var $connectedUser PasswordAuthenticatedUserInterface * */
@@ -140,13 +140,9 @@ class AdherentController extends AbstractController
 
         }
 
-
-
-
-
     // Page des alertes créées par l'adhérent
-    #[Route("/mes-alertes/", name: 'alert')]
 
+    #[Route('/mes-alertes/', name: 'alert')]
     public function alert(): Response
     {
         return $this->render('adherent/alert.html.twig');

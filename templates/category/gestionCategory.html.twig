@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des catégories{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 form-container">
+                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box text-center my-5">
+
+                    <div class="heading mb-5">
+                        <h1 class="fs-1 text-decoration-underline">Gestionnaire des categories</h1>
+                    </div>
+
+                    {# Début - Section d'ajout de catégorie #}
+                    <section id="add-category">
+                        <h2 class="fs-2">Ajouter une catégorie</h2>
+
+                    <div class="offset-3 col-6 my-5">
+                        {{ form_start(createCategoryForm) }}
+                        {{ form_row(createCategoryForm.name, {
+                            label: 'Donnez un nom à votre catégorie',
+                            label_attr: {
+                                class: 'fw-bold',
+                            }
+                        }) }}
+
+                        <button class="btn btn-success mt-4 w-100" type="submit">Valider</button>
+                        {{ form_end(createCategoryForm) }}
+
+                    </div>
+                    </section>
+                    {# Fin de Section #}
+
+                    <hr class="my-5">
+
+                    {# Début - Section de modification de nom de catégorie #}
+                    <section id="modify-category">
+                        <h2 class="fs-2">Modifier le nom d'une catégorie</h2>
+
+                    </section>
+                    {# Fin de Section #}
+
+                    <hr class="my-5">
+
+                    {# Début - Section de suppression de catégorie #}
+                    <section id="delete-category">
+
+                        <h2 class="fs-2">Supprimer une catégorie</h2>
+
+                        <button class="btn btn-white bg-dark dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories</button>
+                        <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+                            {% for category in category_repo.findAll %}
+                                <li class="fw-bold"><a class="dropdown-item" href="{{ path('category_confirm_delete', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                        
+                    </section>
+                    {# Fin de Section #}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% block js %}{% endblock %}
+
+{% endblock %}

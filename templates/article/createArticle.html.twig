@@ -4,7 +4,45 @@
 
 {% block body %}
 
-    {{ form(form) }}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 form-container">
+                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box text-center my-5">
+
+                    {# Titre de la page de création #}
+                    <div class="heading mb-5">
+                        <h1 class="fs-1">Ecrire un nouvel article</h1>
+                    </div>
+
+                        {# Formulaire de création, inclus des labels pour le nom, la description, la catégorie #}
+                        {{ form_start(form) }}
+                        {{ form_row(form.title, {
+                            label: 'Titre de votre article',
+                            label_attr: {
+                                class: 'fw-bold',
+                            }
+                        }) }}
+                        {{ form_row(form.content, {
+                            label: 'Décrivez votre article',
+                            label_attr: {
+                                class: 'fw-bold',
+                            }
+                        }) }}
+                        {{ form_row(form.category, {
+                            label: 'Catégorie',
+                            label_attr: {
+                                class: 'fw-bold',
+                            }
+                        }) }}
+                    {# Bouton pour valider la création de l'article #}
+                    <button class="btn btn-success mt-4 w-100" type="submit">Valider la création</button>
+                    {{ form_end(form) }}
+                    {# Annuler la création, qui redirige vers l'interface du client' #}
+                    <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('home') }}">Annuler</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

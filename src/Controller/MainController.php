@@ -4,19 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
-use App\Form\CreateArticleFormType;
-use App\Repository\CategoryRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class MainController extends AbstractController
 {
@@ -24,6 +19,7 @@ class MainController extends AbstractController
     #[Route('/', name: 'home')]
     public function home(): Response
     {
+
 
         return $this->render('main/home.html.twig');
     }
@@ -56,38 +52,23 @@ class MainController extends AbstractController
         ]);
     }
 
-    #[Route('/consulter-article/{slug}/', name: 'article_view')]
-    public function viewArticle(Article $article): Response
+    #[Route('/{slug_category}/consulter-article/{slug}/', name: 'article_view')]
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function viewArticle(Article $article, Category $category): Response
     {
 
         $medias = $article->getMedia();
 
         return $this->render('article/viewArticle.html.twig', [
             'article' => $article,
+            'slug_category' => $category->getSlug(),
             'medias' => $medias
         ]);
     }
 
-    #[Route('/creer-un-article/', name: 'article_create')]
-    public function createArticle(): Response
-    {
-
-        // Création d'un nouvel objet de la classe Article, vide pour le moment
-        $newArticle = new Article();
-
-        // Création d'un nouveau formulaire à partir de notre formulaire CreateArticleFormType et de notre nouvel article encore vide
-        $form = $this->createForm(CreateArticleFormType::class, $newArticle);
 
 
-        // Pour que la vue puisse afficher le formulaire, on doit lui envoyer le formulaire généré, avec $form->createView()
-        return $this->render('article/createArticle.html.twig', [
-            'form' => $form->createView()
-        ]);
-
-    }
-
-
-     // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
+    // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
 
     //  #[Route("/changer-mot-de-passe/", name: "change_password_test")]
     //  #[Security("is_granted('ROLE_ADHERENT')")]

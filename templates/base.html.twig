@@ -1,5 +1,8 @@
 {# Variable twig contenant le nom de la route actuelle pour le menu #}
 {% set route = app.request.attributes.get('_route') %}
+{% set slug = app.request.attributes.get('slug') %}
+{% import 'Macros/breadcrumbs.html.twig' as breadcrumbs %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -16,7 +19,7 @@
     {# Bloc pour ajouter du css additionnel #}
     {% block css %}{% endblock %}
 
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} - {{ site_name }}</title>
 </head>
 <body>
 
@@ -44,17 +47,17 @@
                         {% endfor %}
                     </ul>
                 </li>
+                
                 {% if not app.user %}
-                <li class="nav-item">
-                    <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
+                    </li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
+                    </li>
                 {% endif %}
 
-                </li>
             </ul>
         </div>
         <form class="d-flex">
@@ -115,9 +118,64 @@
     </div>
 {% endif %}
 
-{% block body %}
+{# BREADCRUMB #}
 
-{% endblock %}
+{% if route == 'category_gestion' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Gestion des catégories'}
+    ]) }}
+
+{% elseif route == 'category_confirm_delete' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('category_gestion'), 'text': 'Gestion des catégories'},
+        {'text': 'Supprimer une catégorie'}
+    ]) }}
+
+{% elseif route == 'article_list' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': slug|capitalize},
+    ]) }}
+
+{% elseif route == 'article_view' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('article_list', {'slug': slug_category }), 'text': slug_category|capitalize},
+        {'text': slug|capitalize}
+    ]) }}
+
+{% elseif route == 'app_login' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Se connecter'}
+    ]) }}
+
+{% elseif route == 'article_create' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Creer un article'}
+    ]) }}
+
+{% else %}
+
+    {{ breadcrumbs.render([
+        {'text': 'Accueil'},
+    ]) }}
+
+{% endif %}
+
+
+{# BODY #}
+
+{% block body %}{% endblock %}
 
 {# FOOTER #}
 
