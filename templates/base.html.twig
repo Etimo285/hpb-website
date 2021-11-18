@@ -13,10 +13,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/visibiliter.css') }}">
+   {#  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">#}
     <link rel="stylesheet" href="{{ asset('css/styles-slide.css') }}">
     {% block stylesheets %}{% endblock %}
 
@@ -27,14 +30,76 @@
 </head>
 <body>
 
-{# HEADER #}
+{# DEBUT DU HEADER #}
+
+{# ================================================================================================ #}
+
+{#--------------------------------------------------------------------------------------------------#}
+
+{#  DEBUT DE LA NAV "OFFICIELLE"  #}
+
 
 <nav class="navbar navbar-expand-lg navbar-light bg-success justify-content-around">
+
     <div class="container-fluid ">
         <div class="d-flex flex-column align-items-center justify-content-center p-2">
             <img src="{{ asset('images/accueil/logo_hpb.jpg') }}" alt="logo" class="image-logo">
             <a class="navbar-brand text-white" href="{{ path('home') }}">Accueil</a>
         </div>
+
+        {#--------------------------------------------------------------------------------------------------#}
+
+        {# DEBUT DU BANDEAU LATERALE #}
+
+        <div id="sideNavigation" class="sidenav flex-md-column flex-row navbar-nav p-10 m-10 mx-10 justify-content-between col-12 col-md-2 ">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a class="nav-item m-10 p-10 mb-3 mx-auto bg-danger" href="#">Alerte inclusion</a>
+            <li class="nav-item m-10 p-10 mb-3 mx-auto dropdown">
+                <a class="nav-item m-10 p-10 mb-3 mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Meillieur contraste</a>
+                <ul class="dropdown-menu colors" aria-labelledby="navbarDropdown">
+                    {#  <li class="fw-bold"><button id="squareblue" class="square" onclick="ChangeStyleSheet('css/sty//le-blue.css')">Bleu</button></li>#}
+                    <li class="fw-bold"><button class="btn" data-color="blue">Bleu</button></li>
+                    <li class="fw-bold"><button class="btn" data-color="red"> Rouge</button></li>
+                    <li class="fw-bold"><button class="btn" data-color="black">Noir</button></li>
+                    <li class="fw-bold"><button class="btn" data-color="pink">Rose</button></li>
+                    <li class="fw-bold"><button class="btn" data-color="green">Vert</button></li>
+                    <li class="fw-bold"><button class="btn" data-color="orange">Orange</button></li>
+                </ul>
+            </li>
+
+            {# <ul>
+                    <a class="nav-item m-10 p-10 mb-3 mx-auto contra">meillieur contraste</a>
+                    .colors
+  button.btn(data-color="red") Switch to red
+  button.btn(data-color="blue") Switch to blue
+  button.btn(data-color="green") Switch to green
+  button.btn(data-color="orange") Switch to orange
+  button.btn(data-color="pink") Switch to pink
+  button.btn(data-color="black") Switch to black
+
+
+
+
+                </ul>#}
+            <a class="nav-item m-10 p-10 mb-3 mx-auto" href="#">Lecteur d'ecran</a>
+            <a class="nav-item m-10 p-10 mb-3 mx-auto " href="#">version simplifié</a>
+
+        </div>
+
+        <nav class="topnav">
+            <a href="javascript:void(0)" onclick="openNav()">
+                <svg width="30" height="30" id="icoOpen">
+                    <path d="M0,5 30,5" stroke="#000" stroke-width="5"/>
+                    <path d="M0,14 30,14" stroke="#000" stroke-width="5"/>
+                    <path d="M0,23 30,23" stroke="#000" stroke-width="5"/>
+                </svg>
+            </a>
+        </nav>
+
+        {# FIN DU BANDEAU LATERALE #}
+
+        {#--------------------------------------------------------------------------------------------------#}
+
         <div class="collapse navbar-collapse mx-auto" id="navbarSupportedContent">
             <ul class="navbar-nav col justify-content-evenly">
                 <li class="nav-item">
@@ -48,81 +113,51 @@
                     <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
                         {% for category in category_repo.findAll %}
                             <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
-                        {% endfor %}
+          <              {% endfor %}
                     </ul>
                 </li>
-                
                 {% if not app.user %}
                     <li class="nav-item">
                         <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
                     </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mon Compte</a>
+                        <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('adherent_gestion') }}">Adhérent</a></li>
+                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                        </ul>
                     </li>
+                    {#<li class="nav-item dropdown">
+                            <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('adherent_gestion') }}">Adhérent</a>
+                            </li>
+                        </li>#}
                 {% endif %}
 
             </ul>
         </div>
+
         <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success text-white" type="submit">Search</button>
         </form>
 
     </div>
+
+
 </nav>
 
-<div id="sideNavigation" class="sidenav flex-md-column flex-row navbar-nav p-10 m-10 mx-10 justify-content-between col-12 col-md-2 bg-dark">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a class="nav-link m-10 p-10 bg-danger mb-3" href="#">Alerte inclusion</a>
-    <a class="nav-item m-10 p-10 mb-3" href="#">Lecteur d'ecran</a>
-    <a class="nav-item m-10 p-10 mb-3" href="#">version simplifié</a>
-    <a class="nav-item m-10 p-10 mb-3" href="#">meillierur contraste</a>
-</div>
+{#  FIN DE LA NAV "OFFICIELLE"  #}
 
-<nav class="topnav">
-    <a href="javascript:void(0)" onclick="openNav()">
-        <svg width="30" height="30" id="icoOpen">
-            <path d="M0,5 30,5" stroke="#000" stroke-width="5"/>
-            <path d="M0,14 30,14" stroke="#000" stroke-width="5"/>
-            <path d="M0,23 30,23" stroke="#000" stroke-width="5"/>
-        </svg>
-    </a>
-</nav>
+{#--------------------------------------------------------------------------------------------------#}
 
-{# Message flashs en cas de succès #}
-{% if app.session.flashBag.has('success') %}
-    <div class="container">
-        <div class="row">
-
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success text-center col-8 offset-2 my-3 fw-bold" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-
-        </div>
-
-    </div>
-{% endif %}
-
-{# Message flashs en cas d'erreur #}
-{% if app.session.flashBag.has('error') %}
-    <div class="container">
-        <div class="row">
-
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger text-center col-8 offset-2 my-3 fw-bold" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-
-        </div>
-
-    </div>
-{% endif %}
-
-{# BREADCRUMB #}
+{#  DEBUT DU BREADCRUMBD #}
 
 {% if route == 'category_gestion' %}
 
@@ -176,7 +211,49 @@
 
 {% endif %}
 
+{#  FIN DU BREADCRUMBD #}
 
+{#--------------------------------------------------------------------------------------------------#}
+
+
+{# Message flashs en cas de succès #}
+
+{% if app.session.flashBag.has('success') %}
+    <div class="container">
+        <div class="row">
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success text-center col-8 offset-2 my-3 fw-bold" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+{% endif %}
+
+{# Message flashs en cas d'erreur #}
+
+{% if app.session.flashBag.has('error') %}
+    <div class="container">
+        <div class="row">
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger text-center col-8 offset-2 my-3 fw-bold" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+{% endif %}
+
+{# Fin du Message flashs en cas de succès #}
+{# --------------------------------------------------------------------------------------------- #}
+
+<div id="main">
 {# BODY #}
 
 {% block body %}{% endblock %}
@@ -263,14 +340,15 @@
         <a class="text-white" href="#">TU COPIE PAS !!! HEAINNNN!!</a>
     </div>
     <!-- Copyright -->
-</footer>
+    </footer>
 {# Inclusion JS Bootstrap #}
 <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
-
+<script src="{{ asset('js/essaicontraste1.js') }}"></script>
 
 {# Bloc pour ajouter du js additionnel #}
 {% block js %}{% endblock %}
+</div>
 </body>
 </html>
