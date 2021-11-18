@@ -8,6 +8,7 @@ use App\Entity\User;
 use Doctrine\ORM\PersistentCollection;
 use App\Form\CreateArticleFormType;
 use App\Form\CreateCategoryFormType;
+use App\Form\EditCategoryFormType;
 use App\Form\EditArticleFormType;
 use App\Repository\CategoryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -126,13 +127,14 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-                                /* GESTIONNAIRE DES CATEGORIES */
+    /* GESTIONNAIRE DES CATEGORIES */
 
     #[Route('/gestionnaire-categories/', name: 'category_gestion')]
-    public function gestionCategory(Request $request): Response
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function gestionCategory(Category $category, Request $request): Response
     {
 
-        // --Ajout-- //
+        //-- Ajout --//
         $newCategory = new Category();
         $creationForm = $this->createForm(CreateCategoryFormType::class, $newCategory);
         $creationForm->handleRequest($request);
@@ -140,7 +142,6 @@ class AdminController extends AbstractController
         if ($creationForm->isSubmitted() && $creationForm->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($newCategory);
             $em->flush();
 
             // Message flash
@@ -150,25 +151,31 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('category_gestion');
         }
 
+        //-- Modification --//
+        //$editForm = $this->createForm(EditCategoryFormType::class, $category);
+        //$editForm->handleRequest($request);
+//
+        //if ($creationForm->isSubmitted() && $creationForm->isValid()) {
+//
+        //    $em = $this->getDoctrine()->getManager();
+        //    $em->persist($newCategory);
+        //    $em->flush();
+//
+        //    // Message flash
+        //    $this->addFlash('success', 'Le nom de votre catégorie à été modifié avec succès !');
+//
+        //    // Redirection sur la page de gestionnaire de catégories
+        //    return $this->redirectToRoute('category_gestion');
+        //}
 
         return $this->render('category/gestionCategory.html.twig', [
             'createCategoryForm' => $creationForm->createView(),
+            'editCategoryForm' => $editForm->createView()
         ]);
 
     }
 
-    //// --Ajout-- //
-    //#[Route('/gestionnaire-categories/ajouter/', name: 'category_create')]
-    //public function createCategory(Request $request): Response
-    //{
-//
-    //
-//
-    //}
-
-    // --Modification-- //
-
-    // --Section Suppression-- //
+    // --  Suppression -- //
 
     // Page de confirmation de suppression
     #[Route('/gestionnaire-categories/confirmer-suppression/{slug}', name: 'category_confirm_delete')]
