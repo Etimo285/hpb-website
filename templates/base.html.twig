@@ -58,12 +58,12 @@
                 <a class="nav-item m-10 p-10 mb-3 mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Meillieur contraste</a>
                 <ul class="dropdown-menu colors" aria-labelledby="navbarDropdown">
                     {#  <li class="fw-bold"><button id="squareblue" class="square" onclick="ChangeStyleSheet('css/sty//le-blue.css')">Bleu</button></li>#}
-                    <li class="fw-bold"><button class="btn" data-color="blue">Bleu</button></li>
-                    <li class="fw-bold"><button class="btn" data-color="red"> Rouge</button></li>
-                    <li class="fw-bold"><button class="btn" data-color="black">Noir</button></li>
-                    <li class="fw-bold"><button class="btn" data-color="pink">Rose</button></li>
-                    <li class="fw-bold"><button class="btn" data-color="green">Vert</button></li>
-                    <li class="fw-bold"><button class="btn" data-color="orange">Orange</button></li>
+                    <li class="fw-bold"><button class="bttn contra" data-color="blue">Bleu</button></li>
+                    <li class="fw-bold"><button class="bttn contra" data-color="red"> Rouge</button></li>
+                    <li class="fw-bold"><button class="bttn contra" data-color="black">Noir</button></li>
+                    <li class="fw-bold"><button class="bttn contra" data-color="pink">Rose</button></li>
+                    <li class="fw-bold"><button class="bttn contra" data-color="green">Vert</button></li>
+                    <li class="fw-bold"><button class="bttn contra" data-color="orange">Orange</button></li>
                 </ul>
             </li>
 
@@ -113,7 +113,7 @@
                     <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
                         {% for category in category_repo.findAll %}
                             <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
-          <              {% endfor %}
+                        {% endfor %}
                     </ul>
                 </li>
                 {% if not app.user %}
