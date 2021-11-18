@@ -5,7 +5,7 @@
 {% set slug = app.request.attributes.get('slug') %}
 
 {# Import de la macro des breadcrumbs #}
-{% import 'Macros/breadcrumbs.html.twig' as breadcrumbs %}
+{% import 'macros/breadcrumbs.html.twig' as breadcrumbs %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -189,6 +189,20 @@
         {'text': slug|capitalize}
     ]) }}
 
+{% elseif route == 'article_create' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Creer un article'}
+    ]) }}
+
+{% elseif route == 'app_register' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Creer un compte'}
+    ]) }}
+
 {% elseif route == 'app_login' %}
 
     {{ breadcrumbs.render([
@@ -196,11 +210,37 @@
         {'text': 'Se connecter'}
     ]) }}
 
-{% elseif route == 'article_create' %}
+{% elseif route == 'adherent_gestion' %}
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'text': 'Creer un article'}
+        {'text': 'Gestion Adhérent'}
+    ]) }}
+
+{% elseif route == 'adherent_profil' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'text': 'Mon profil'}
+    ]) }}
+
+{% elseif route == 'adherent_profil_update' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_profil'),'text': 'Mon profil'},
+        {'text': 'Modifier mon profil'}
+    ]) }}
+
+{% elseif route == 'adherent_change_password' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_profil'),'text': 'Mon profil'},
+        {'text': 'Modifier mon mot de passe'}
     ]) }}
 
 {% else %}
@@ -210,6 +250,7 @@
     ]) }}
 
 {% endif %}
+
 
 {#  FIN DU BREADCRUMBD #}
 
@@ -252,6 +293,7 @@
 
 {# Fin du Message flashs en cas de succès #}
 {# --------------------------------------------------------------------------------------------- #}
+
 
 <div id="main">
 {# BODY #}

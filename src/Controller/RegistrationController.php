@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Recaptcha\RecaptchaValidator;
 use App\Security\EmailVerifier;
+use http\Env;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -15,6 +16,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 class RegistrationController extends AbstractController
 {
@@ -32,6 +34,7 @@ class RegistrationController extends AbstractController
     {
         // Si l'utilisateur est déjà connecté on le redirige sur l'accueil
         if($this->getUser()){
+            $this->addFlash('error','Vous êtes déjà connecté !');
             return $this->redirectToRoute('home');
         }
 
@@ -86,10 +89,12 @@ class RegistrationController extends AbstractController
 
                 // Message flash de succès
                 $this->addFlash('success', 'Votre compte a été créé avec succès !');
+
                 // generate a signed url and email it to the user
+                // génère un lien url de confirmation et l'envoie par email à l'utilisateur
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
-                        ->from(new Address('support@hpb.fr', 'Handicaps Pays Beaujolais'))
+                        ->from(gmail: '//hpbwebsitedev@gmail.com:hmtlslpgetbjefcy@default?verify_peer=0')
                         ->to($user->getEmail())
                         ->subject('Veuillez confirmer votre email')
                         ->htmlTemplate('registration/confirmation_email.html.twig')
@@ -128,7 +133,7 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Votre adresse email a bien été verifiée !');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_login');
     }
 }
 
