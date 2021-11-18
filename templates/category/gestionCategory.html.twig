@@ -17,8 +17,9 @@
                     <section id="add-category">
                         <h2 class="fs-2">Ajouter une catégorie</h2>
 
-                    <div class="offset-3 col-6 my-5">
+                        <div class="offset-3 col-6 my-5">
                         {{ form_start(createCategoryForm) }}
+                        
                         {{ form_row(createCategoryForm.name, {
                             label: 'Donnez un nom à votre catégorie',
                             label_attr: {
@@ -38,6 +39,35 @@
                     {# Début - Section de modification de nom de catégorie #}
                     <section id="modify-category">
                         <h2 class="fs-2">Modifier le nom d'une catégorie</h2>
+
+                        {# <div class="offset-3 col-6 my-5">
+                            {{ form_start(editCategoryForm) }}
+
+                            <select class="form-select" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+
+                            {% for category in category_repo.findAll %}
+
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+
+                            {% endfor %}
+
+                            </select>
+                            {{ form_row(editCategoryForm.name, {
+                                label: 'Nouveau nom de la catégorie',
+                                label_attr: {
+                                    class: 'fw-bold',
+                                }
+
+                            }) }}
+
+                            <button class="btn btn-success mt-4 w-100" type="submit">Valider</button>
+                            {{ form_end(editCategoryForm) }}
+
+                        </div> #}
 
                     </section>
                     {# Fin de Section #}

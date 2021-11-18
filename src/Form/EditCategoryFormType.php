@@ -8,11 +8,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateCategoryFormType extends AbstractType
+class EditCategoryFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // Champ de nom pour la catégorie que l'admin souhaite créer
         $builder
             ->add('name', TextType::class)
         ;
