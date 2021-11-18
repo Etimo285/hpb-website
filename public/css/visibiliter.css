@@ -28,7 +28,7 @@
     background: #343437;
     color: white;
 }
-.list-items button {
+.list-items .contra {
     padding: 0.5em 1em;
     background: #68686a;
     border: 0;
@@ -36,19 +36,19 @@
     border-radius: 0.25em;
     transition: 0.2s ease-in-out;
 }
-.blue .list-items button {
+.blue .list-items .contra {
     background: #4b88bb;
 }
-.red .list-items button {
+.red .list-items .contra {
     background: #d84b3d;
 }
-.green .list-items button {
+.green .list-items .contra {
     background: #90a959;
 }
-.black .list-items button {
+.black .list-items .contra {
     background: #343437;
 }
-.orange .list-items button {
+.orange .list-items .contra {
     background:#deefc2;
 }
 .list-items button.alt {
@@ -76,7 +76,7 @@
     color: #f7b669;
     border-color: #f7b669;
 }
-.btn {
+.bttn {
     background: #68686a;
     color: #fff;
     padding: 0;
@@ -89,21 +89,21 @@
     font-size: 0;
     margin-bottom: 0.5rem;
 }
-.btn[data-color="red"] {
+.bttn[data-color="red"] {
     background: #d84b3d;
 }
-.btn[data-color="blue"] {
+.bttn[data-color="blue"] {
     background: #4b88bb;
 }
-.btn[data-color="green"] {
+.bttn[data-color="green"] {
     background: #90a959;
 }
-.btn[data-color="orange"] {
+.bttn[data-color="orange"] {
     background: #f7b669;
 }
-.btn[data-color="pink"] {
+.bttn[data-color="pink"] {
     background: #e8a0e2;
 }
-.btn[data-color="black"] {
+.bttn[data-color="black"] {
     background: #343437;
 }
