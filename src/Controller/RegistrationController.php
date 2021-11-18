@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Recaptcha\RecaptchaValidator;
 use App\Security\EmailVerifier;
+use http\Env;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -15,6 +16,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 class RegistrationController extends AbstractController
 {
@@ -32,6 +34,7 @@ class RegistrationController extends AbstractController
     {
         // Si l'utilisateur est déjà connecté on le redirige sur l'accueil
         if($this->getUser()){
+            $this->addFlash('error','Vous êtes déjà connecté !');
             return $this->redirectToRoute('home');
         }
 
@@ -91,7 +94,7 @@ class RegistrationController extends AbstractController
                 // génère un lien url de confirmation et l'envoie par email à l'utilisateur
                 $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                     (new TemplatedEmail())
-                        ->from(new Address('hpbwebsitedev@gmail.com', 'HPB'))
+                        ->from(gmail: '//hpbwebsitedev@gmail.com:hmtlslpgetbjefcy@default?verify_peer=0')
                         ->to($user->getEmail())
                         ->subject('Veuillez confirmer votre email')
                         ->htmlTemplate('registration/confirmation_email.html.twig')
