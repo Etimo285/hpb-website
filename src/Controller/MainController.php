@@ -6,10 +6,13 @@ use App\Entity\Article;
 use App\Entity\Category;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
@@ -67,36 +70,38 @@ class MainController extends AbstractController
     }
 
 
+    // Tester l'envoi d'email
+    #[Route("/envoyer-un-email-de-test/", name:"send_email_test")]
 
-    // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
+    public function sendEmailTest(MailerInterface $mailer): Response
+    {
 
-    //  #[Route("/changer-mot-de-passe/", name: "change_password_test")]
-    //  #[Security("is_granted('ROLE_ADHERENT')")]
-    //  public function changePasswordTest(UserPasswordHasherInterface $encoder): Response
-    //  {
+        // Le mailer est récupéré automatiquement en paramètre par autowiring dans $mailer
 
-    //      // On récupère l'utilisateur connecté
-    //      $connectedUser = $this->getUser();
+        // Création du mail
+        $email = (new TemplatedEmail())
+            ->from(new Address('expediteur@exemple.fr', 'noreply'))
+            ->to('destinataire@gmail.com')
+            ->subject('Sujet du mail')
+            ->htmlTemplate('test/test.html.twig')    // Fichier twig du mail en version html
+            ->textTemplate('test/test.txt.twig')     // Fichier twig du mail en version text
+            /* Il est possible de faire passer aux deux  templates twig des variables en ajoutant le code suivant :
+            ->context([
+                'fruits' => ['Pomme', 'Cerise', 'Poire']
+            ])
+            */
+        ;
 
-    //      // Définition complètement arbitraire d'un nouveau mot de passe, le mieux serait de récupérer un nouveau mot de passe depuis un formulaire
-    //      $newPassword = 'azerty';
+        // Envoi du mail
+        $mailer->send($email);
 
-    //      // Grâce au service, on génère un nouveau hash de notre nouveau mot de passe
-    //      $hashOfNewPassword = $encoder->hashPassword($connectedUser, $newPassword);
-
-    //      // On change l'ancien mot de passe hashé par le nouveau que l'on a généré juste au dessus
-    //      $connectedUser->setPassword( $hashOfNewPassword );
+        // Affichage d'une vue quelconque
+        return $this->render('main/sendEmailTest.html.twig');
+    }
 
 
-    //      // Sauvegarde des modifications en BDD grâce au manager des entités
-    //      $em = $this->getDoctrine()->getManager();
-
-    //      $em->flush();
 
 
-    //      return $this->render('main/articleList.html.twig');
-
-    //  }
 
 
 }
