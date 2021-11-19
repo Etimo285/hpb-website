@@ -20,19 +20,19 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[IsGranted('ROLE_ADHERENT')]
 
 // Préfixes de la route et du nom des pages adhérent
-#[Route("/adherent", name:"adherent_")]
+#[Route(name:"adherent_")]
 
 class AdherentController extends AbstractController
 {
     // Page de gestion de l'adhérent
-    #[Route('/gestion/', name: 'gestion')]
+    #[Route('/gestionnaire-utilisateur/', name: 'gestion')]
     public function gestion(): Response
     {
-        return $this->render('adherent/gestion.html.twig');
+        return $this->render('adherent/adherentGestion.html.twig');
     }
 
     // Page du profil de l'adhérent
-    #[Route('/mon-profil/', name: 'profil')]
+    #[Route('/gestionnaire-utilisateur/mon-profil/', name: 'profil')]
     public function profil(): Response
     {
         return $this->render('adherent/profil.html.twig');
@@ -40,7 +40,7 @@ class AdherentController extends AbstractController
 
 
     // Page permettant de modifier un profil adhérent existant
-    #[Route('/modifier-mon-profil/', name: 'profil_update')]
+    #[Route('/gestionnaire-utilisateur/mon-profil/modifier-mon-profil/', name: 'profil_update')]
     public function profilUpdate(Request $request): Response
     {
         // Récupération des données de l'utilisateur
@@ -77,7 +77,7 @@ class AdherentController extends AbstractController
     // Page de changement de mot de passe de l'adhérent
     // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
 
-    #[Route("/changer-mon-mot-de-passe/", name: "change_password")]
+    #[Route("/gestionnaire-utilisateur/mon-profil/changer-mon-mot-de-passe/", name: "change_password")]
     public function changePassword(Request $request, UserPasswordHasherInterface $encoder, RecaptchaValidator $recaptcha): Response
     {
 
@@ -142,7 +142,7 @@ class AdherentController extends AbstractController
 
     // Page des alertes créées par l'adhérent
 
-    #[Route('/mes-alertes/', name: 'alert')]
+    #[Route('/gestionnaire-utilisateur/mes-alertes/', name: 'alert')]
     public function alert(): Response
     {
         return $this->render('adherent/alert.html.twig');

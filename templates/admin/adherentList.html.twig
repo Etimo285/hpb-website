@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des adhérents{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center my-5 text-decoration-underline">Liste des adhérents du site</h1>
+
+    <div class="my-5 legend-adherent-list">
+        <p class="fs-3 fw-bold"><i class="fas fa-question-circle text-success me-2"></i>Signification des rôles</p>
+        <p class="fs-5"><span class="fw-bold">Adhérent </span>: Un utilisateur vérifié sans cotisation. </p>
+        <p class="fs-5"><span class="fw-bold">Membre </span>: Un utilisateur vérifié, avec une cotisation à jour. </p>
+    </div>
+
+    {# Table des profils #}
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Email</th>
+                <th>Rôle</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Créé le</th>
+                <th>Modifié le</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {# Affichage des utilisateurs #}
+            {% for user in users %}
+                {% if user.roles[0] == "ROLE_ADHERENT" %}
+
+                    <tr>
+                        <td>{{ user.pseudo }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.isMember %}
+                                {{ user.roles|json_encode|replace({'["ROLE_ADHERENT","ROLE_USER"]': "Membre"}) }}
+                            {% else %}
+                                {{ user.roles|json_encode|replace({'["ROLE_ADHERENT","ROLE_USER"]': "Adhérent"}) }}
+                            {% endif %}
+                        </td>
+                        <td>{{ user.lastName }}</td>
+                        <td>{{ user.firstName }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.createdAt|date('d-m-Y H:i') }}</td>
+                        <td>{{ user.updatedAt ? user.updatedAt|date('d-m-Y H:i') : '' }}</td>
+                        <td><a class="btn btn-outline-primary" href="">Modifier</a></td>
+                        <td>
+                            <form method="post" action="" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button class="btn btn-outline-danger">Effacer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="8">Aucun adhérent enregistré</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

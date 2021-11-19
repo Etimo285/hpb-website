@@ -82,7 +82,7 @@
                         <button class="btn btn-white bg-dark dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories</button>
                         <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
                             {% for category in category_repo.findAll %}
-                                <li class="fw-bold"><a class="dropdown-item" href="{{ path('category_confirm_delete', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+                                <li class="fw-bold"><a class="dropdown-item" href="{{ path('admin_category_confirm_delete', {'slug': category.slug}) }}">{{ category.name }}</a></li>
                             {% endfor %}
                         </ul>
                         

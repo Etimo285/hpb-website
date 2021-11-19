@@ -170,6 +170,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $alertMessages;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isMember;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $functionTitle;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -527,6 +537,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $alertMessage->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsMember(): ?bool
+    {
+        return $this->isMember;
+    }
+
+    public function setIsMember(bool $isMember): self
+    {
+        $this->isMember = $isMember;
+
+        return $this;
+    }
+
+    public function getFunctionTitle(): ?string
+    {
+        return $this->functionTitle;
+    }
+
+    public function setFunctionTitle(?string $functionTitle): self
+    {
+        $this->functionTitle = $functionTitle;
 
         return $this;
     }
