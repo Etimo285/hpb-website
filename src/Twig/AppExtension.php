@@ -12,8 +12,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('size', [$this, 'size']),
-            new TwigFilter('excerpt', [$this, 'excerpt']), // Enregistrement du nouveau filtre auprès de Twig
-            new TwigFilter('explodeUrl', [$this, 'explodeUrl'])
+            new TwigFilter('excerpt', [$this, 'excerpt']),
         ];
     }
 
@@ -41,19 +40,6 @@ class AppExtension extends AbstractExtension
 
         return $text;
 
-    }
-
-    public function explodeUrl(string $url): array
-    {
-        $arrayUrl = [];
-
-        $segments = explode('/', $url);
-
-        foreach ($segments as $segment) {
-            $segment.array_push($arrayUrl);
-        }
-
-        return $arrayUrl;
     }
 
 

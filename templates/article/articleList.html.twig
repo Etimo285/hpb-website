@@ -10,6 +10,86 @@
         </div>
     </div>
 
+    {# Affichage de la liste des administrateurs dans la catégorie associée #}
+    {% if slug == 'conseil-dadministration' %}
+
+        {# Table des profils administrateurs #}
+        <div class="container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Téléphone</th>
+                    {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                        <th>Fonction occupée</th>
+                        <th>Modifier le titre de la fonction</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+
+                {# Affichage des utilisateurs #}
+                {% for user in users %}
+                    {% if user.roles[0] == "ROLE_ADMIN" %}
+
+                        <tr>
+                            <td>{{ user.pseudo }}</td>
+                            <td>{{ user.lastName }}</td>
+                            <td>{{ user.firstName }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone }}</td>
+
+                            {% if app.user.roles[0] == "ROLE_ADMIN" %}
+
+                                {% if user.functionTitle %}
+
+                                    <td class="fw-bold">
+                                        {{ user.functionTitle }}
+                                    </td>
+
+                                    <td class="d-flex flex-row flex-nowrap">
+                                        {# Function unhide de modifyFunctionTitleUnhide.js ayant pour paramètre l'id de l'user sélectionné #}
+                                        <button class="btn btn-secondary mx-4" onclick="unhide({{ user.id }})">Modifier</button>
+
+                                        {# Formulaire généré après un click, selon l'id de l'utilisateur #}
+                                        <form id="modifyFunctionTitleForm-{{ user.id }}" class="mx-2" style="display: none" action="">
+
+                                            <input type="text" placeholder="{{ user.functionTitle }}">
+                                            <input class="btn btn-success" type="submit" value="Valider">
+                                        </form>
+                                    </td>
+
+                                {% else %}
+
+                                    <td>
+                                        <div class="d-flex flex-row flex-nowrap">
+                                            <form action="">
+                                                <input type="text">
+                                                <input class="btn btn-success" type="submit" value="Valider">
+                                            </form>
+                                        </div>
+                                    </td>
+
+                                {% endif %} {# endif : user.functionTitle #}
+
+                            {% endif %} {# endif : app.user.roles[0] == "ROLE_ADMIN" #}
+
+                        </tr>
+                    {% endif %} {# endif : user.roles[0] == "ROLE_ADMIN" #}
+                {% else %}
+                    <tr>
+                        <td colspan="8">Aucun adhérent enregistré</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% endif %}
+
     <div class="row">
         <div class="col-8 offset-2">
 
@@ -50,4 +130,7 @@
 
         </div>
     </div>
+
+    <script type="text/javascript" src="{{ asset('js/modifyFunctionTitleUnhide.js') }}"></script>
+
 {% endblock %}

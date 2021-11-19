@@ -45,7 +45,7 @@
 
     <a onclick="return alert('Êtes vous sûr de vouloir supprimer cette catégorie ainsi que tous ses articles?')"
             class="my-5 offset-5 p-2 fs-5 btn-danger button-global text-decoration-none"
-            href="{{ path('category_delete', {'id': category.id, csrf_token: csrf_token('category_delete_' ~ category.id ) }) }}">
+            href="{{ path('admin_category_delete', {'id': category.id, csrf_token: csrf_token('category_delete_' ~ category.id ) }) }}">
         Confirmer la suppression
     </a>
 

@@ -6,17 +6,14 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Recaptcha\RecaptchaValidator;
 use App\Security\EmailVerifier;
-use http\Env;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 class RegistrationController extends AbstractController
 {
@@ -81,6 +78,8 @@ class RegistrationController extends AbstractController
                     ->setCreatedAt(new \DateTime());
                 $user
                     ->setUpdatedAt();
+                $user
+                    ->setIsMember(false);
 
                 // Sauvegarde du nouveau compte grâce au manager général des entités
                 $entityManager = $this->getDoctrine()->getManager();
@@ -99,9 +98,6 @@ class RegistrationController extends AbstractController
                         ->subject('Veuillez confirmer votre email')
                         ->htmlTemplate('registration/confirmation_email.html.twig')
                 );
-
-                // Message flash de succès
-                $this->addFlash('success', 'Votre compte a bien été créé.');
 
                 // Redirection de l'utilisateur vers la page de connexion
                 return $this->redirectToRoute('app_login');

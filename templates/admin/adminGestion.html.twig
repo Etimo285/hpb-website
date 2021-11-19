@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestionnaire Administrateur{% endblock %}
+
+{% block body %}
+
+    <div class="row my-5">
+        {# Titre principal de la page #}
+        <h1 class="text-center fs-custom-1 text-decoration-underline">Gestionnaire Administrateur de {{ app.user.pseudo }}</h1>
+    </div>
+
+    <div class="container fs-5">
+        <ul>
+            <li><a href=""></a></li>
+            <li><a href="{{ path('admin_article_create') }}">Ecrire un nouvel article</a></li>
+            <li><a href="{{ path('admin_category_gestion') }}">Gestionnaire des catégories</a></li>
+            <li><a href="{{ path('admin_list_adherent') }}">Accéder à la liste des adhérents</a></li>
+        </ul>
+    </div>
+
+{% endblock %}

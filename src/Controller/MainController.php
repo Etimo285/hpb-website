@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -29,7 +30,7 @@ class MainController extends AbstractController
 
 
     #[Route('/liste-articles/{slug}/', name: 'article_list')]
-    public function articleList(Category $category, Request $request, PaginatorInterface $paginator): Response
+    public function articleList(UserRepository $userRepository, Category $category, Request $request, PaginatorInterface $paginator): Response
     {
 
         // Récupération du numéro de page
@@ -51,7 +52,8 @@ class MainController extends AbstractController
 
         return $this->render('article/articleList.html.twig', [
             'category' => $category,
-            'articles' => $articles
+            'articles' => $articles,
+            'users' => $userRepository->findAll()
         ]);
     }
 

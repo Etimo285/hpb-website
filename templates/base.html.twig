@@ -103,7 +103,14 @@
         <div class="collapse navbar-collapse mx-auto" id="navbarSupportedContent">
             <ul class="navbar-nav col justify-content-evenly">
                 <li class="nav-item">
-                    <a class="nav-link active text-white mx-auto" aria-current="page" href="#">News</a>
+                        <a class="nav-link active text-white mx-auto" aria-current="page" href="
+                        {{ path('article_list', {'slug': 'news' }) }}">News
+                        </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active text-white mx-auto" aria-current="page" href="
+                        {{ path('article_list', {'slug': 'blog' }) }}">Blog
+                    </a>
                 </li>
                 <li class="nav-item bg-danger">
                     <a class="nav-link active text-white mx-auto" aria-current="page" href="#">Alerte Inclusion</a>
@@ -124,7 +131,11 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mon Compte</a>
                         <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('adherent_gestion') }}">Adhérent</a></li>
+                        {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('admin_gestion') }}">Administration</a></li>
+                        {% endif %}
+                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('adherent_gestion') }}">Gérer mon compte</a></li>
+
                             <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a></li>
                         </ul>
                     </li>
@@ -170,7 +181,8 @@
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('category_gestion'), 'text': 'Gestion des catégories'},
+        {'url': url('admin_gestion'), 'text': 'Gestion administrateur'},
+        {'url': url('admin_category_gestion'), 'text': 'Gestion des catégories'},
         {'text': 'Supprimer une catégorie'}
     ]) }}
 
@@ -189,10 +201,11 @@
         {'text': slug|capitalize}
     ]) }}
 
-{% elseif route == 'article_create' %}
+{% elseif route == 'admin_article_create' %}
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
         {'text': 'Creer un article'}
     ]) }}
 
@@ -210,11 +223,34 @@
         {'text': 'Se connecter'}
     ]) }}
 
+{% elseif route == 'admin_gestion' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Gestion Administrateur'}
+    ]) }}
+
+{% elseif route == 'admin_category_gestion' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
+        {'text': 'Gestionnaire des catégories'}
+    ]) }}
+
+{% elseif route == 'admin_list_adherent' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
+        {'text': 'Liste des adhérents'}
+    ]) }}
+
 {% elseif route == 'adherent_gestion' %}
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'text': 'Gestion Adhérent'}
+        {'text': 'Gérer mon compte'}
     ]) }}
 
 {% elseif route == 'adherent_profil' %}
@@ -291,14 +327,17 @@
     </div>
 {% endif %}
 
-{# Fin du Message flashs en cas de succès #}
+{# Fin des Messages flashs en cas de succès #}
+
 {# --------------------------------------------------------------------------------------------- #}
 
 
-<div id="main">
+
 {# BODY #}
 
+<div id="main">
 {% block body %}{% endblock %}
+</div>
 
 {# FOOTER #}
 
@@ -391,6 +430,6 @@
 
 {# Bloc pour ajouter du js additionnel #}
 {% block js %}{% endblock %}
-</div>
+
 </body>
 </html>

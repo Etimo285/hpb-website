@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\PersistentCollection;
 use App\Form\CreateArticleFormType;
 use App\Form\CreateCategoryFormType;
@@ -12,6 +13,7 @@ use App\Form\EditCategoryFormType;
 use App\Form\EditArticleFormType;
 use App\Repository\CategoryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,15 +21,26 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\All;
 
 #[IsGranted('ROLE_ADMIN')]
+
+// Préfixes de la route et du nom des pages adhérent
+#[Route('/admin', name: 'admin_')]
+
 class AdminController extends AbstractController
 {
-    protected $container;
 
-    #[Route('/admin', name: 'admin')]
-    public function index(): Response
+    /* GESTIONNAIRE ADMIN */
+    #[Route('/gestion/', name: 'gestion')]
+    public function gestion(): Response
     {
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
+        return $this->render('admin/adminGestion.html.twig');
+    }
+
+    #[Route('/liste-adherents/', name: 'list_adherent')]
+    public function userList(UserRepository $userRepository): Response
+    {
+
+        return $this->render('admin/adherentList.html.twig', [
+            'users' => $userRepository->findAll(),
         ]);
     }
 
@@ -130,8 +143,8 @@ class AdminController extends AbstractController
     /* GESTIONNAIRE DES CATEGORIES */
 
     #[Route('/gestionnaire-categories/', name: 'category_gestion')]
-    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
-    public function gestionCategory(Category $category, Request $request): Response
+    //#[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function gestionCategory(Request $request): Response
     {
 
         //-- Ajout --//
@@ -148,7 +161,7 @@ class AdminController extends AbstractController
             $this->addFlash('success', 'Votre catégorie a été créé avec succès !');
 
             // Redirection sur la page de gestionnaire de catégories
-            return $this->redirectToRoute('category_gestion');
+            return $this->redirectToRoute('admin_category_gestion');
         }
 
         //-- Modification --//
@@ -170,7 +183,7 @@ class AdminController extends AbstractController
 
         return $this->render('category/gestionCategory.html.twig', [
             'createCategoryForm' => $creationForm->createView(),
-            'editCategoryForm' => $editForm->createView()
+            //'editCategoryForm' => $editForm->createView()
         ]);
 
     }

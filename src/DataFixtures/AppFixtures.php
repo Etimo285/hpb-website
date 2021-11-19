@@ -33,6 +33,7 @@ class AppFixtures extends Fixture
         $articleCount = 40;
         $eventCount = 5;
         $alertCount = 10;
+        $adminCount = 10;
         $adherentCount = 25;
         $userBasicCount = 10;
         $commentCount = rand(0, 10);
@@ -40,23 +41,28 @@ class AppFixtures extends Fixture
         // --USER ADMIN-- //
 
         // Attribution d'une nouvelle entité User à une variable
-        $newAdmin = new User();
 
-        // Hydratation du compte admin
-        $newAdmin
-            ->setRoles(['ROLE_ADMIN'])
-            ->setFirstName('admin')
-            ->setLastName('admin')
-            ->setEmail('admin@a.fr')
-            ->setPseudo('HPB')
-            ->setIsVerified(true)
-            ->setPassword( $this->encoder->hashPassword($newAdmin, 'Password1*') );
-        $newAdmin->setCreatedAt();
-        $newAdmin->setUpdatedAt();
+        for ($i = 0; $i < $adminCount; $i++) {
+            $newAdmin = new User();
+
+            // Hydratation du compte admin
+            $newAdmin
+                ->setRoles(['ROLE_ADMIN'])
+                ->setFirstName($faker->firstName)
+                ->setLastName($faker->lastName)
+                ->setEmail('admin'.$i.'@a.fr')
+                ->setPseudo($faker->userName)
+                ->setIsVerified(true)
+                ->setIsMember(false)
+                ->setPassword($this->encoder->hashPassword($newAdmin, 'Password1*'));
+            $newAdmin->setCreatedAt();
+            $newAdmin->setUpdatedAt();
 
 
-        // Persistance de l'admin
-        $manager->persist($newAdmin);
+            // Persistance de l'admin
+            $manager->persist($newAdmin);
+
+        }
 
         // --USER ADHERENT--//
 
@@ -74,6 +80,7 @@ class AppFixtures extends Fixture
                 ->setPhone($faker->e164PhoneNumber)
                 ->setPseudo($faker->userName)
                 ->setIsVerified(true)
+                ->setIsMember($faker->randomElement( [true, false] ))
                 ->setPassword( $this->encoder->hashPassword($newAdherent, 'Password1*') );
             $newAdherent->setCreatedAt();
             $newAdherent->setUpdatedAt();
@@ -102,6 +109,7 @@ class AppFixtures extends Fixture
                 ->setPhone($faker->e164PhoneNumber)
                 ->setPseudo($faker->userName)
                 ->setIsVerified(false)
+                ->setIsMember(false)
                 ->setPassword( $this->encoder->hashPassword($newUser, 'Password1*') );
             $newUser->setCreatedAt();
             $newUser->setUpdatedAt();
@@ -117,7 +125,7 @@ class AppFixtures extends Fixture
         // --CATEGORY-- //
 
         $categoryList = ['News', 'Blog', 'Documentation',
-            'Conseil d administation', 'Grande Dépendance',
+            'Conseil d\'administration', 'Grande Dépendance',
             'Vie scolaire', 'Vie professionnelle',
             'Culture, sport et loisirs', 'Accessibilité',
             'Handi-Acceuillance', 'Humour', 'Nos Amis'];
