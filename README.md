@@ -52,6 +52,7 @@ symfony console doctrine:database:create
 symfony console make:migration
 symfony console doctrine:migrations:migrate
 symfony console doctrine:fixtures:load
+symfony console assets:install public
 ```
 
 Les fixtures créeront :

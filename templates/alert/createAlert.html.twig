@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer une alerte{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 form-container">
+                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box text-center my-5">
+
+                    {# Titre de la page de création d'alerte #}
+                    <div class="heading mb-5">
+                        <h1 class="fs-1">Rédiger une nouvelle alerte</h1>
+                    </div>
+                    {# Formulaire de création d'alerte #}
+                    {# Ouverture du formulaire #}
+                    {{ form_start( createAlertForm ) }}
+
+                        {# Affichage des erreurs générales du formulaire #}
+                        {{ form_errors( createAlertForm )}}
+
+                        {# Champ objet #}
+                        {{ form_row( createAlertForm.object ) }}
+
+                        {# Champ contenu #}
+                        {{ form_row(createAlertForm.content) }}
+
+                        {{ form_row( createAlertForm.city) }}
+
+                        {{ form_row( createAlertForm.postcode) }}
+
+                        {{ form_row( createAlertForm.address1) }}
+
+                        {{ form_row( createAlertForm.address2) }}
+
+                        {# Bouton de validation #}
+                        <div class="text-center">{{ form_row( createAlertForm.save)  }}</div>
+
+                        {# Fermeture du formulaire #}
+                        {{ form_end(createAlertForm) }}
+
+                    {# Fermeture du formulaire #}
+                    {{ form_end(createAlertForm) }}
+
+                    {# Annuler la création, qui redirige vers la gestion de l'adhérent' #}
+                    <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('adherent_profil') }}">Annuler</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

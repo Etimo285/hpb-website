@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Alert;
+use App\Entity\Article;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
+use App\Form\CreateAlertFormType;
+use App\Form\CreateArticleFormType;
 use App\Form\ProfilUpdateFormType;
 use App\Form\RegistrationFormType;
 use App\Recaptcha\RecaptchaValidator;
@@ -139,6 +143,55 @@ class AdherentController extends AbstractController
         ]);
 
         }
+
+
+    // Création d'une Alerte Adhérent
+    #[Route('/creer-alerte/', name: 'alert_create')]
+    public function createAlert(Request $request): Response
+    {
+
+        // Création d'une nouvelle alerte vide pour le moment
+        $alert= new Alert();
+        // Création d'un formulaire de création d'alerte, lié à l'alerte vide
+        $form = $this->createForm(CreateAlertFormType::class, $alert);
+
+        // Liaison des données de requête (POST) avec le formulaire
+        $form->handleRequest($request);
+
+        // Si le formulaire est envoyé et n'a pas d'erreur
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // Hydratation de l'alerte pour la date et l'auteur
+
+            /** @var $user User **/
+            $user = $this->getUser();
+            $alert->setAuthor($user);     // L'auteur est l'adhérent connecté
+            $alert->setCreatedAt();       // Date actuelle
+            $alert->setUpdatedAt();
+
+            // Sauvegarde de l'alerte dans la base de données via le manager général des entités
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($alert);
+            $em->flush();
+
+            // Message flash
+            $this->addFlash('success', 'Votre alerte à bien été créée !');
+
+            // Redirection sur la page interface adhérent
+            return $this->redirectToRoute('adherent_gestion');
+        }
+
+        // Pour que la vue puisse afficher le formulaire, on doit lui envoyer le formulaire généré, avec $form->createView()
+        return $this->render('alert/createAlert.html.twig', [
+            'createAlertForm' => $form->createView()
+        ]);
+
+    }
+
+
+
+
+
 
     // Page des alertes créées par l'adhérent
 
