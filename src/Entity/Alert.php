@@ -58,6 +58,10 @@ class Alert
      * @ORM\Column(type="string", length=50, nullable=true)
      */
 
+    #[Assert\NotBlank(
+        message: 'Merci de renseigner le nom de la ville concernée.'
+    )]
+
     #[Assert\Length(
         max: 50,
         maxMessage: 'La ville renseignée comporte plus de {{ limit }} caractères.',
@@ -79,7 +83,7 @@ class Alert
     )]
 
     #[Assert\Regex(
-        pattern: '/[0-9]/',
+        pattern: '/^[0-9]+$/',
         message: 'Le code postal ne peut comporter que des chiffres.',
     )]
     private $postcode;
