@@ -4,11 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\User;
+use App\Form\NewFunctionTitleFormType;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -50,10 +56,42 @@ class MainController extends AbstractController
             10
         );
 
+        $admins = $userRepository->findUserByRole(['ROLE_ADMIN']);
+        $users = [];
+
+        foreach ($admins as $admin) {
+            $form = $this->createFormBuilder($admin)
+                ->add('functionTitle', TextType::class, array('label' => false, 'required' => false))
+                ->add('save', SubmitType::class)
+                ->getForm();
+
+            $form->handleRequest($request);
+
+            // Tableau associatif de l'utilisateur et son formulaire
+            $user = array('entity' => $admin, 'entityForm' => $form->createView());
+
+            // Push dans un tableau "users"
+            $users[] = $user;
+
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $em = $this->getDoctrine()->getManager();
+
+                $admin->setFunctionTitle($form->get('functionTitle')->getData());
+
+                $em->persist($admin);
+                $em->flush();
+
+            }
+
+        }
+
+
         return $this->render('article/articleList.html.twig', [
             'category' => $category,
             'articles' => $articles,
-            'users' => $userRepository->findAll()
+            'users' => $users,
         ]);
     }
 
