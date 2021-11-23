@@ -168,7 +168,7 @@
 
 {#--------------------------------------------------------------------------------------------------#}
 
-{#  DEBUT DU BREADCRUMBD #}
+{# DEBUT DU BREADCRUMB #}
 
 {% if route == 'category_gestion' %}
 
@@ -257,7 +257,7 @@
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
         {'text': 'Mon profil'}
     ]) }}
 
@@ -265,7 +265,7 @@
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
         {'url': url('adherent_profil'),'text': 'Mon profil'},
         {'text': 'Modifier mon profil'}
     ]) }}
@@ -274,9 +274,17 @@
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
         {'url': url('adherent_profil'),'text': 'Mon profil'},
         {'text': 'Modifier mon mot de passe'}
+    ]) }}
+
+{% elseif route == 'adherent_alert' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
+        {'text': 'Mes alertes'}
     ]) }}
 
 {% else %}
@@ -287,8 +295,7 @@
 
 {% endif %}
 
-
-{#  FIN DU BREADCRUMBD #}
+{#  FIN DU BREADCRUMB #}
 
 {#--------------------------------------------------------------------------------------------------#}
 
