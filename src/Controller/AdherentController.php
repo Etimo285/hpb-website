@@ -15,6 +15,7 @@ use App\Form\ProfilUpdateFormType;
 use App\Form\RegistrationFormType;
 use App\Recaptcha\RecaptchaValidator;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormError;
@@ -270,14 +271,44 @@ class AdherentController extends AbstractController
         ]);
     }
 
-    // Lorsque qu'un utilisateur poste un nouveau commentaire
-    #[Route('/{slug}/consulter-article/nouveau-commentaire/{id}', name: 'create_comment')]
-    public function newComment(Category $category, Article $article, Request $request): Response
+    // Lorsque qu'un commentaire est supprimé
+    #[Route('{slug_category}/supprimer-commentaire/{id}', name: 'comment_delete')]
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function deleteComment(Category $category, Comment $comment, Request $request): Response
     {
+        $article = $comment->getArticle();
 
+        if ($comment->getAuthor() !== $this->getUser() && !$this->isGranted("ROLE_ADMIN")) {
 
+            $this->addFlash('error', 'Accès restreint : Vous n\'êtes ni administrateur, ni auteur de ce commentaire.');
 
+        } else {
 
+            // Contrôle du token csrf
+            if (!$this->isCsrfTokenValid('comment_delete_' . $comment->getId(), $request->query->get('csrf_token'))) {
+
+                // Message flash
+                $this->addFlash('error', 'Token de sécurité invalide, veuillez ré-essayer.');
+            } else {
+
+                // Gestion de la suppression des données en base de données
+                $em = $this->getDoctrine()->getManager();
+
+                $em->remove($comment);
+                $em->flush();
+
+                // Message flash
+                $this->addFlash('success', 'Le commentaire a été supprimé avec succès !');
+
+            }
+
+        }
+
+        return $this->redirectToRoute('article_view', [
+            'article' => $article,
+            'slug' => $article->getSlug(),
+            'slug_category' => $category->getSlug()
+        ]);
     }
 }
 

@@ -149,7 +149,7 @@ class Article
         return $this;
     }
 
-    public function getCategory(): ?array
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
