@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Alert;
 use App\Entity\Article;
+use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\CreateAlertFormType;
@@ -13,6 +15,8 @@ use App\Form\ProfilUpdateFormType;
 use App\Form\RegistrationFormType;
 use App\Recaptcha\RecaptchaValidator;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -266,6 +270,15 @@ class AdherentController extends AbstractController
         ]);
     }
 
+    // Lorsque qu'un utilisateur poste un nouveau commentaire
+    #[Route('/{slug}/consulter-article/nouveau-commentaire/{id}', name: 'create_comment')]
+    public function newComment(Category $category, Article $article, Request $request): Response
+    {
+
+
+
+
+    }
 }
 
 

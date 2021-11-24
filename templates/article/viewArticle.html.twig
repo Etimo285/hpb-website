@@ -40,7 +40,7 @@
             </div>
         </div>
 
-
+        {# Section des boutons d'interaction #}
         <div class="col-8 offset-4">
             {% if article.author == app.user %}
                 {# Bouton de modification de l'article #}
@@ -71,5 +71,79 @@
         </div>
 
     </div>
+
+    {# Section commentaire des utilisateurs #}
+
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="headings mb-3">
+                    <p class="fs-5">Commentaires({{ comments.count }})</p>
+                </div>
+
+                {% if is_granted("ROLE_ADHERENT") %}
+
+                    {# Si l'auteur a un pseudo, il est affiché. Sinon, affiche son Nom et Prénom. #}
+                    {% set commentAuthorName = '' %}
+                    {% if app.user.pseudo is not null %}
+                        {% set commentAuthorName %}
+                            <span class="text-primary">{{ app.user.pseudo }}</span>
+                        {% endset %}
+                    {% else %}
+                        {% set commentAuthorName %}
+                            <span class="text-primary">{{ app.user.firstName }} {{ app.user.lastName }}</span>
+                        {% endset %}
+                    {% endif %}
+
+                    {# Formulaire d'ajout de commentaire #}
+                    {{ form_start(form) }}
+
+                    <label for="form_content">Poster un nouveau commentaire en tant que {{ commentAuthorName }}</label>
+
+                    <div class="d-flex flex-row">
+                        {{ form_row(form.content, {
+                            attr: {
+                                placeholder: 'Votre commentaire...',
+                            },
+                            row_attr: {
+                                style: 'width: 85%;',
+                            }
+                        }) }}
+                        <input type="submit" class="btn btn-success ms-auto h-100">
+
+                    {{ form_end(form) }}
+                    </div>
+
+                {% endif %}
+
+            {% for comment in comments|sort|reverse %}
+                <div class="article-comments-card p-3 my-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-row align-items-center mb-2">
+                            <span>
+                                <small class="font-weight-bold text-primary">{{ comment.author.pseudo }}</small>
+                                <small class="font-weight-bold">{{ comment.content }}</small>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="article-comments-bottom mt-2">
+                        <div class="d-flex flex-row">
+                            {% if comment.author == app.user %}
+                                <small class="pe-2">Modifier</small>
+                            {% endif %}
+                            {% if (comment.author == app.user) or (is_granted("ROLE_ADMIN")) %}
+                                <small class="pe-2">Supprimer</small>
+                            {% endif %}
+                            <small class="ms-auto">Posté le <span class="fw-bold">{{ comment.createdAt|date('d/m/Y à H\\hi') }}</span></small>
+                        </div>
+                        <div class="article-comments-icons align-items-center"></div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ asset('js/newCommentTextArea.js') }}"></script>
 
 {% endblock %}
