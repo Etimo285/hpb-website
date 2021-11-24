@@ -255,7 +255,7 @@
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
         {'text': 'Mon profil'}
     ]) }}
 
@@ -263,7 +263,7 @@
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
         {'url': url('adherent_profil'),'text': 'Mon profil'},
         {'text': 'Modifier mon profil'}
     ]) }}
@@ -272,7 +272,7 @@
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gestion Adhérent'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
         {'url': url('adherent_profil'),'text': 'Mon profil'},
         {'text': 'Modifier mon mot de passe'}
     ]) }}
@@ -294,7 +294,6 @@
         {'text': slug|capitalize}
     ]) }}
 
-
 {% else %}
 
     {{ breadcrumbs.render([
@@ -303,11 +302,9 @@
 
 {% endif %}
 
-
-{#  FIN DU BREADCRUMBD #}
+{#  FIN DU BREADCRUMB #}
 
 {#--------------------------------------------------------------------------------------------------#}
-
 
 {# Message flashs en cas de succès #}
 
@@ -346,8 +343,6 @@
 {# Fin des Messages flashs en cas de succès #}
 
 {# --------------------------------------------------------------------------------------------- #}
-
-
 
 {# BODY #}
 

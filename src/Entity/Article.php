@@ -177,7 +177,6 @@ class Article
         return $this->updatedAt;
     }
 
-    #[ORM\PreUpdate]
     public function setUpdatedAt(): void
     {
         $this->updatedAt = new \DateTime();

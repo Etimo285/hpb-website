@@ -23,11 +23,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\All;
 
+// Les pages ne sont accessibles qu'aux administrateurs
 #[IsGranted('ROLE_ADMIN')]
 
 // Préfixes de la route et du nom des pages adhérent
 #[Route('/admin', name: 'admin_')]
-
 class AdminController extends AbstractController
 {
 
@@ -87,9 +87,22 @@ class AdminController extends AbstractController
     }
 
     // MODIFIER ARTICLE
-    #[Route('/modifier-article/{slug}/', name: 'article_edit')]
-    public function articleEdit(Article $article, Request $request): Response
+    #[Route('/{slug_category}/modifier-article/{slug}/', name: 'article_edit')]
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function articleEdit(Category $category, Article $article, Request $request): Response
     {
+
+        // Condition d'interdiction d'accès à cette page pour ceux qui ne sont pas auteurs de leur articles
+        if ($this->getUser() !== $article->getAuthor()) {
+
+            $this->addFlash('error', 'Accès restreint : Vous n\'avez pas accès à la modification de cet article car vous n\'en n\'êtes pas l\'auteur.');
+
+            return $this->redirectToRoute('article_view', [
+                'slug' => $article->getSlug(),
+                'slug_category' => $category->getSlug()
+            ]);
+
+        }
 
         // Création du formulaire de modification d'article et réinjection de la requête
         $form = $this->createForm(EditArticleFormType::class, $article);
@@ -97,6 +110,9 @@ class AdminController extends AbstractController
 
         // Contrôle sur la validité d'un formulaire envoyé
         if($form->isSubmitted() && $form->isValid()){
+
+            // Hydratation
+            $article->setUpdatedAt();
 
             // Gestion de l'envoi des données en base de données
             $em = $this->getDoctrine()->getManager();
@@ -108,6 +124,7 @@ class AdminController extends AbstractController
             // Redirection sur la vue détaillée du projet
             return $this->redirectToRoute('article_view', [
                 'slug' => $article->getSlug(),
+                'slug_category' => $category->getSlug(),
             ]);
         }
 
@@ -120,11 +137,12 @@ class AdminController extends AbstractController
     }
 
     // SUPPRIMER ARTICLE
-    #[Route('/supprimer-article/{id}/', name: 'article_delete')]
-    public function articleDelete(Article $article, Request $request): Response
+    #[Route('{slug_category}/supprimer-article/{id}/', name: 'article_delete')]
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function articleDelete(Category $category, Article $article, Request $request): Response
     {
         // Contrôle du token csrf
-        if(!$this->isCsrfTokenValid('article_delete_' . $article->getId(), $request->query->get('csrf_token'))){
+        if (!$this->isCsrfTokenValid('article_delete_' . $article->getId(), $request->query->get('csrf_token'))){
 
             // Message flash
             $this->addFlash('error', 'Token de sécurité invalide, veuillez ré-essayer.');
@@ -136,11 +154,45 @@ class AdminController extends AbstractController
             $em->flush();
 
             // Message flash
-            $this->addFlash('success', 'L\'article a été supprimé avec succès !');
+            $this->addFlash('success', "L'article {$article->getTitle()} a été supprimé avec succès !");
         }
 
         // Redirection sur la page d'interface
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('article_list', [
+            'slug' => $category->getSlug(),
+        ]);
+    }
+
+    // CACHER ARTICLE
+    #[Route('/{slug_category}/cacher-article/{id}/{origin}', name: 'article_hide')]
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function hideArticle($origin, Category $category, Article $article, Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$article->getHidden()) {
+            $article->setHidden(true);
+        } else {
+            $article->setHidden(false);
+        }
+
+        $em->flush();
+
+        // Condition pour sélectionner la bonne route grâce à $origin, variable contenant le nom de la route précédente
+        $redirectionParams = [];
+
+        if ($origin === 'article_view') {
+            $redirectionParams = [
+                'slug' => $article->getSlug(),
+                'slug_category' => $category->getSlug()
+            ];
+        } elseif ($origin === 'article_list') {
+            $redirectionParams = [
+                'slug' => $category->getSlug()
+            ];
+        }
+
+        return $this->redirectToRoute($origin, $redirectionParams);
     }
 
     /* GESTIONNAIRE DES CATEGORIES */
@@ -158,6 +210,9 @@ class AdminController extends AbstractController
         if ($creationForm->isSubmitted() && $creationForm->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
+
+            $em->persist($newCategory);
+
             $em->flush();
 
             // Message flash

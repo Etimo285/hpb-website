@@ -10,6 +10,11 @@
         <p class="fs-3 fw-bold"><i class="fas fa-exclamation-circle text-danger me-2"></i>Attention</p>
         <p class="fs-5">- Vous êtes sur le point de supprimer la catégorie <span class="fw-bold"> {{ category.name }}</span>. Après confirmation, les articles ci-dessous vont également être supprimés, veuillez vérifier avant de confirmer votre suppression. </p>
         <p class="fs-5">- Une fois votre vérification terminée, cliquez sur le bouton de suppression en bas de cette liste.</p>
+        {% if category.articles.count == 0 %}
+            <p class="fs-5">- La catégorie <span class="fw-bold">{{ category.name }}</span> ne possède <span class="fw-bold">aucun</span> articles.</p>
+        {% else %}
+            <p class="fs-5">- La catégorie <span class="fw-bold">{{ category.name }}</span> possède actuellement <span class="fw-bold">{{ category.articles.count }}</span> articles.</p>
+        {% endif %}
     </div>
 
     <table class="table article-to-delete-table fs-5">

@@ -4,9 +4,17 @@
 
 {% block body %}
 
-    <div class="row my-2">
+    {% if (article.hidden) and (app.user.roles[0] == "ROLE_ADMIN") %}
+        <div class="legend-adherent-list">
+            <p class="fs-3 fw-bold"><i class="fas fa-question-circle text-success me-2"></i>Cet article est caché</p>
+            <p class="fs-5">- Un article caché est invisible aux utilisateurs qui ne sont pas administrateurs. Pour rendre cet article visible, veuillez cliquer sur le bouton correspondant en dessous de la description.</p>
+            <p class="fs-5">- Également, cette fenêtre d'aide est rendu visible seulement pas les administrateurs.</p>
+        </div>
+    {% endif %}
+
+    <div class="row my-4">
         <div class="col-8 offset-2">
-            <h1 class="fs-2 fw-bold">{{ article.title }}</h1>
+            <h1 class="fs-2 fw-bold text-decoration-underline">{{ article.title }}</h1>
             <div class="bg-white my-4 p-3">
                 <p class="fs-4 ">{{ article.content }}</p>
 
@@ -23,23 +31,45 @@
                     <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
                 {% endif %}
 
-                <p class="text-end">Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+                {% if article.updatedAt != article.createdAt %}
+                    <p class="text-end">Publié le <span class="fw-bold">{{ article.createdAt|date('d/m/Y à H\\hi') }}</span></p>
+                    <p class="text-end">Modifié le <span class="fw-bold">{{ article.updatedAt|date('d/m/Y à H\\hi') }}</span></p>
+                {% else %}
+                    <p class="text-end">Publié le <span class="fw-bold">{{ article.createdAt|date('d/m/Y à H\\hi') }}</span></p>
+                {% endif %}
             </div>
         </div>
 
-        {% if article.author == app.user %}
-        <div class="col-8 offset-5">
-            {# Bouton de modification de l'article #}
-            <a href="{{ path('admin_article_edit', {'slug': article.slug}) }}" class="bg-warning button-global text-decoration-none text-dark">
-                <i class="fas fa-edit me-1"></i> Modifier
-            </a>
 
-            {# Bouton de suppression de l'article #}
-            <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')" class="bg-danger button-global text-decoration-none text-dark" href="{{ path('admin_article_delete', {'id': article.id, csrf_token: csrf_token('article_delete_' ~ article.id ) }) }}">
-                <i class="fas fa-trash-alt me-1"></i> Supprimer
-            </a>
+        <div class="col-8 offset-4">
+            {% if article.author == app.user %}
+                {# Bouton de modification de l'article #}
+                <a class="btn btn-warning" href="{{ path('admin_article_edit', {'slug': article.slug, 'slug_category': slug_category}) }}">
+                    <i class="fas fa-edit me-1"></i> Modifier
+                </a>
+            {% endif %}
+
+            {% if app.user.roles[0] == "ROLE_ADMIN" %}
+
+                {% if article.hidden %}
+                    {# Bouton pour rendre visible l'article #}
+                    <a class="btn btn-secondary" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': slug_category, 'origin': route}) }}">
+                        <i class="fas fa-eye text-white mx-1"></i> Rendre visible cet article
+                    </a>
+                {% else %}
+                    <a class="btn btn-secondary" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': slug_category, 'origin': route }) }}">
+                        <i class="fas fa-eye-slash text-white mx-1"></i> Cacher cet article
+                    </a>
+                {% endif %}
+
+                {# Bouton de suppression de l'article #}
+                <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')" class="btn btn-danger" href="{{ path('admin_article_delete', {'slug_category': slug_category,'id': article.id, csrf_token: csrf_token('article_delete_' ~ article.id ) }) }}">
+                    <i class="fas fa-trash-alt me-1"></i> Supprimer
+                </a>
+
+            {% endif %}
         </div>
-        {% endif %}
+
     </div>
 
 {% endblock %}

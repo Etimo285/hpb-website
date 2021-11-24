@@ -38,7 +38,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
                 <li class="my-3 fs-5 fw-bold breadcrumb-item {{- active_class }}" {%- if active %} aria-current="page" {%- endif %}>
                     {%- if item.url is defined -%}
-                        <a href="{{ item.url }}">{{ item.text }}</a>
+                        <a class="text-decoration-none" href="{{ item.url }}">{{ item.text }}</a>
                         {%- set ld_item = ld_item|merge({'item': item.url}) -%}
                     {%- else -%}
                         {{- item.text -}}

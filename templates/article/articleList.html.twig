@@ -13,6 +13,8 @@
     {# Affichage de la liste des administrateurs dans la catégorie associée #}
     {% if slug == 'conseil-dadministration' %}
 
+        <h1 class="text-center fw-bold">EN TRAVAUX</h1>
+
         {# Table des profils administrateurs #}
         <div class="container">
             <table class="table">
@@ -31,45 +33,52 @@
                 </thead>
                 <tbody>
 
-                {# Affichage des utilisateurs #}
+                {# Affichage des utilisateurs admin #}
                 {% for user in users %}
-                    {% if user.roles[0] == "ROLE_ADMIN" %}
 
                         <tr>
-                            <td>{{ user.pseudo }}</td>
-                            <td>{{ user.lastName }}</td>
-                            <td>{{ user.firstName }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.phone }}</td>
+                            <td>{{ user['entity'].pseudo }}</td>
+                            <td>{{ user['entity'].lastName }}</td>
+                            <td>{{ user['entity'].firstName }}</td>
+                            <td>{{ user['entity'].email }}</td>
+                            <td>{{ user['entity'].phone }}</td>
 
                             {% if app.user.roles[0] == "ROLE_ADMIN" %}
 
-                                {% if user.functionTitle %}
+                                {% if user['entity'].functionTitle %} {# Si l'utilisateur possède déjà une fonction, affiche un formulaire de modification #}
 
                                     <td class="fw-bold">
-                                        {{ user.functionTitle }}
+                                        {{ user['entity'].functionTitle }}
                                     </td>
 
                                     <td class="d-flex flex-row flex-nowrap">
                                         {# Function unhide de modifyFunctionTitleUnhide.js ayant pour paramètre l'id de l'user sélectionné #}
-                                        <button class="btn btn-secondary mx-4" onclick="unhide({{ user.id }})">Modifier</button>
+                                        <button class="btn btn-secondary mx-4" onclick="unhide({{ user['entity'].id }})">Modifier</button>
 
                                         {# Formulaire généré après un click, selon l'id de l'utilisateur #}
-                                        <form id="modifyFunctionTitleForm-{{ user.id }}" class="mx-2" style="display: none" action="">
-
-                                            <input type="text" placeholder="{{ user.functionTitle }}">
-                                            <input class="btn btn-success" type="submit" value="Valider">
-                                        </form>
+                                        {{ form_start(user['entityForm']) }}
+                                        <div id="modifyFunctionTitleForm-{{ user['entity'].id }}" style="display: none" action="">
+                                            {{ form_row(user['entityForm'].functionTitle, {
+                                                attr: {'placeholder': (user['entity'].functionTitle) }
+                                            }) }}
+                                            {{ form_row(user['entityForm'].save, {
+                                                attr: {'class' : 'btn btn-success mx-3'}
+                                            }) }}
+                                            {{ form_end(user['entityForm']) }}
+                                        </div>
                                     </td>
 
                                 {% else %}
 
                                     <td>
+                                        {{ form_start(user['entityForm']) }}
                                         <div class="d-flex flex-row flex-nowrap">
-                                            <form action="">
-                                                <input type="text">
-                                                <input class="btn btn-success" type="submit" value="Valider">
-                                            </form>
+                                            <p>{{ user['entity'].email }}</p>
+                                            {{ form_row(user['entityForm'].functionTitle) }}
+                                            {{ form_row(user['entityForm'].save, {
+                                                attr: {'class' : 'btn btn-success mx-3'}
+                                            }) }}
+                                            {{ form_end(user['entityForm']) }}
                                         </div>
                                     </td>
 
@@ -78,10 +87,10 @@
                             {% endif %} {# endif : app.user.roles[0] == "ROLE_ADMIN" #}
 
                         </tr>
-                    {% endif %} {# endif : user.roles[0] == "ROLE_ADMIN" #}
+
                 {% else %}
                     <tr>
-                        <td colspan="8">Aucun adhérent enregistré</td>
+                        <td colspan="8">Aucun administrateur enregistré</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -89,6 +98,8 @@
         </div>
 
     {% endif %}
+
+    {# Général #}
 
     <div class="row">
         <div class="col-8 offset-2">
@@ -98,23 +109,55 @@
                 {# Boucle qui liste les articles, triés dans l'odre chronologique inverse (le plus récent en premier) #}
                 {% for article in articles|sort|reverse %}
 
-                    <div class="card my-5">
-                        <h2 class="p-3 bg-custom-green text-white fs-2">{{ article.title }}</h2>
-                        <div class="card-body">
-                            <p class="card-text fs-4">{{ article.content }}</p>
+                    {% if article.hidden == false %}
 
-                            {% if article.author.pseudo is not null %}
-                                <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
-                            {% else %}
-                                <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
-                            {% endif %}
+                        <div class="card my-5">
+                            <h2 class="p-3 bg-custom-green text-white fs-2">{{ article.title }}</h2>
+                            <div class="card-body">
+                                <p class="card-text fs-4">{{ article.content }}</p>
 
-                            <p>Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+                                {% if article.author.pseudo is not null %}
+                                    <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                                {% else %}
+                                    <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
+                                {% endif %}
+
+                                <p>Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+                            </div>
+                            <div class="card-footer d-flex flex-row justify-content-between">
+                                <a href="{{ path('article_view', {'slug_category': category.slug ,'slug': article.slug }) }}">
+                                    Voir l'article en détail
+                                </a>
+                                {% if app.user.roles[0] == "ROLE_ADMIN" %}
+
+                                    <p class="text-secondary"><span class="fst-italic">Option administrateur :</span>
+                                        <a class="text-decoration-none" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': category.slug, 'origin': route}) }}">
+                                            Cacher cet article
+                                        </a>
+                                    </p>
+
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <a href="{{ path('article_view', {'slug_category': category.slug ,'slug': article.slug }) }}">Voir l'article en détail</a>
-                        </div>
-                    </div>
+
+                    {% else %}
+
+                        {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                            <div class="hidden-article my-4">
+                                <p class="fs-5 my-2 p-3">Titre : <span class="fw-bold">{{ article.title }}</span></p>
+                                {% if article.author.pseudo is not null %}
+                                    <p class="my-2">Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                                {% else %}
+                                    <p class="my-2">Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
+                                {% endif %}
+                                <p class="my-2 p-3">Publié le <span class="fw-bold">{{ article.createdAt|date('d/m/Y à H\\hi') }}</span></p>
+                                <a class="my-2 p-3 text-decoration-none" href="{{ path('article_view', {'slug': article.slug, 'slug_category': category.slug}) }}">Accéder à cet article en détail</a>
+                                <a class="my-2 p-3 text-decoration-none" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': category.slug, 'origin': route}) }}">Rendre visible cet article</a>
+                            </div>
+                        {% endif %}
+
+
+                    {% endif %}
 
                 {% else %}
 
