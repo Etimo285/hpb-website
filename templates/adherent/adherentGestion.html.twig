@@ -14,11 +14,21 @@
                 {% endif %}
             </h1>
         </div>
+
         <div class="row">
 
-            <button type="button" class="btn btn-warning col-3 offset-1 my-5 "><a class="text-decoration-none fw-bold" href="{{ path('adherent_profil') }}">Modifier mon profil</a></button>
+            <div class="col-12 text-center">
+                {# Lien allant vers la page de modification du profil et mot de passe #}
+                <a href="{{ path('adherent_profil') }}" class="btn btn-warning w-25 text-dark my-3 mx-3 fs-4">
+                    <i class="fas fa-edit me-1"></i> Modifier mon profil
+                </a>
 
-            <button type="button" class="btn btn-danger col-3 offset-1 my-5 "><a class="text-decoration-none fw-bold" href="{{ path('adherent_alert') }}">Mes alertes</a></button>
+                {# Lien allant vers la page de mes alertes adhérent #}
+                <a href="{{ path('adherent_alert') }}" class="btn btn-danger w-25 text-white my-3 mx-3 fs-4">
+                    <i class="fas fa-edit me-1"></i> Mes alertes
+                </a>
+
+            </div>
 
         </div>
 

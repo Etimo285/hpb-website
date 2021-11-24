@@ -17,9 +17,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('css/visibiliter.css') }}">
-   {#  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">#}
     <link rel="stylesheet" href="{{ asset('css/styles-slide.css') }}">
     {% block stylesheets %}{% endblock %}
 
@@ -39,12 +36,12 @@
 {#  DEBUT DE LA NAV "OFFICIELLE"  #}
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-success justify-content-around">
+<nav class="navbar navbar-expand-lg navbar-light vert justify-content-around">
 
     <div class="container-fluid ">
         <div class="d-flex flex-column align-items-center justify-content-center p-2">
             <img src="{{ asset('images/accueil/logo_hpb.jpg') }}" alt="logo" class="image-logo">
-            <a class="navbar-brand text-white" href="{{ path('home') }}">Accueil</a>
+            <a class="navbar-brand text-black fw-bold fs-5" href="{{ path('home') }}">Accueil</a>
         </div>
 
         {#--------------------------------------------------------------------------------------------------#}
@@ -53,10 +50,10 @@
 
         <div id="sideNavigation" class="sidenav flex-md-column flex-row navbar-nav p-10 m-10 mx-10 justify-content-between col-12 col-md-2 ">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a class="nav-item m-10 p-10 mb-3 mx-auto bg-danger" href="#">Alerte inclusion</a>
+            <a class="nav-item m-10 p-10 mb-3 mx-auto bg-danger fw-bold fs-4 text-center" href="{{ path('adherent_alert_create') }}">Alerte inclusion</a>
             <li class="nav-item m-10 p-10 mb-3 mx-auto dropdown">
-                <a class="nav-item m-10 p-10 mb-3 mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Meillieur contraste</a>
-                <ul class="dropdown-menu colors" aria-labelledby="navbarDropdown">
+                <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Meilleur contraste</a>
+                <ul class="list-unstyled p-0 m-0 colors row ali " aria-labelledby="navbarDropdown">
                     {#  <li class="fw-bold"><button id="squareblue" class="square" onclick="ChangeStyleSheet('css/sty//le-blue.css')">Bleu</button></li>#}
                     <li class="fw-bold"><button class="bttn contra" data-color="blue">Bleu</button></li>
                     <li class="fw-bold"><button class="bttn contra" data-color="red"> Rouge</button></li>
@@ -81,8 +78,8 @@
 
 
                 </ul>#}
-            <a class="nav-item m-10 p-10 mb-3 mx-auto" href="#">Lecteur d'ecran</a>
-            <a class="nav-item m-10 p-10 mb-3 mx-auto " href="#">version simplifié</a>
+            <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="#">Lecteur d'ecran</a>
+            <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="#">version simplifié</a>
 
         </div>
 
@@ -98,25 +95,26 @@
 
         {# FIN DU BANDEAU LATERALE #}
 
+
         {#--------------------------------------------------------------------------------------------------#}
 
         <div class="collapse navbar-collapse mx-auto" id="navbarSupportedContent">
             <ul class="navbar-nav col justify-content-evenly">
-                <li class="nav-item">
-                        <a class="nav-link active text-white mx-auto" aria-current="page" href="
+                <li class="nav-item blanc">
+                        <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page" href="
                         {{ path('article_list', {'slug': 'news' }) }}">News
                         </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active text-white mx-auto" aria-current="page" href="
+                <li class="nav-item blanc">
+                    <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page" href="
                         {{ path('article_list', {'slug': 'blog' }) }}">Blog
                     </a>
                 </li>
                 <li class="nav-item bg-danger">
-                    <a class="nav-link active text-white mx-auto" aria-current="page" href="#">Alerte Inclusion</a>
+                    <a class="nav-link active mx-auto text-white fw-bold fs-5" aria-current="page" href=" {{ path('adherent_alert_create') }}">Alerte Inclusion</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rubriques</a>
+                <li class="nav-item dropdown blanc">
+                    <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rubriques</a>
                     <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
                         {% for category in category_repo.findAll %}
                             <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
@@ -124,29 +122,29 @@
                     </ul>
                 </li>
                 {% if not app.user %}
-                    <li class="nav-item">
-                        <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
+                    <li class="nav-item blanc">
+                        <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
                     </li>
                 {% else %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mon Compte</a>
+                    <li class="nav-item dropdown blanc">
+                        <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mon Compte</a>
                         <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-                        {% if is_granted("ROLE_ADMIN") %}
-                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('admin_gestion') }}">Administration</a></li>
+                        {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                            <li class="fw-bold blanc"><a class="dropdown-item" aria-current="page" href="{{ path('admin_gestion') }}">Administration</a></li>
                         {% endif %}
-                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('adherent_gestion') }}">Gérer mon compte</a></li>
+                            <li class="fw-bold blanc"><a class="dropdown-item" aria-current="page" href="{{ path('adherent_gestion') }}">Gérer mon compte</a></li>
 
-                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                            <li class="fw-bold blanc"><a class="dropdown-item" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a></li>
                         </ul>
                     </li>
                     {#<li class="nav-item dropdown">
                             <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
 
                             <li class="nav-item">
-                                <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
+                                <a class="nav-link active mx-auto" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active text-white mx-auto" aria-current="page" href="{{ path('adherent_gestion') }}">Adhérent</a>
+                                <a class="nav-link active mx-auto" aria-current="page" href="{{ path('adherent_gestion') }}">Adhérent</a>
                             </li>
                         </li>#}
                 {% endif %}
@@ -156,7 +154,7 @@
 
         <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success text-white" type="submit">Search</button>
+            <button class="btn btn-outline-success blanc" type="submit">Search</button>
         </form>
 
     </div>
@@ -168,7 +166,7 @@
 
 {#--------------------------------------------------------------------------------------------------#}
 
-{# DEBUT DU BREADCRUMB #}
+{#  DEBUT DU BREADCRUMBD - FIL D'ARIANE DES LIENS  #}
 
 {% if route == 'category_gestion' %}
 
@@ -287,6 +285,15 @@
         {'text': 'Mes alertes'}
     ]) }}
 
+{% elseif route == 'admin_alert_view' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
+        {'url': url('adherent_alert'), 'text': 'Mes alertes'},
+        {'text': slug|capitalize}
+    ]) }}
+
 {% else %}
 
     {{ breadcrumbs.render([
@@ -298,7 +305,6 @@
 {#  FIN DU BREADCRUMB #}
 
 {#--------------------------------------------------------------------------------------------------#}
-
 
 {# Message flashs en cas de succès #}
 
@@ -338,8 +344,6 @@
 
 {# --------------------------------------------------------------------------------------------- #}
 
-
-
 {# BODY #}
 
 <div id="main">
@@ -348,7 +352,7 @@
 
 {# FOOTER #}
 
-<footer class="text-center text-white bg-success" >
+<footer class="text-center vert" >
     <!-- Grid container -->
     <div class="container p-4">
         <!-- Section: Images -->
@@ -423,9 +427,9 @@
     <!-- Grid container -->
 
     <!-- Copyright -->
-    <div class="text-center p-3 bg-success border" >
+    <div class="text-center p-3 border" >
         © 2021 Copyright:
-        <a class="text-white" href="#">TU COPIE PAS !!! HEAINNNN!!</a>
+        <a href="#">TU COPIE PAS !!! HEAINNNN!!</a>
     </div>
     <!-- Copyright -->
     </footer>

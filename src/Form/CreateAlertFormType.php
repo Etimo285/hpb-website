@@ -19,6 +19,9 @@ class CreateAlertFormType extends AbstractType
             // Champ objet de l'alerte
             ->add('object',TextType::class,[
                 'label' => 'Objet de votre alerte',
+                'attr' => array(
+                    'placeholder' => 'Champs obligatoire'
+                ),
             ])
 
             // Champ contenu de l'alerte
@@ -28,9 +31,8 @@ class CreateAlertFormType extends AbstractType
                     // Masque le chargement de CKEditor dans le contenu
                     'class' => 'd-none',
                     ],
-                    // Enlève les balises html du contenu du texte
-                    // TODO: purify_html n'existe pas CKEditor ????
-                    //'purify_html' => true,
+                    // Nettoie le code html du contenu du texte (bundle htmlpurifier à installer)
+                    'purify_html' => true,
             ])
             ->add('city',TextType::class, [
                 'label' => 'Ville concernée',
@@ -40,20 +42,19 @@ class CreateAlertFormType extends AbstractType
             ])
             ->add('postcode',TextType::class, [
                 'label' => 'Code postal',
-                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Champs obligatoire'
+                ),
             ])
             ->add('address1', TextType::class, [
                 'label' => 'Adresse',
-                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Champs obligatoire'
+                ),
             ])
             ->add('address2', TextType::class, [
                 'label' => 'Complément d\'adresse',
                 'required' => false,
-            ])
-
-            // Bouton de validation
-            ->add('save', SubmitType::class, [
-                'label' => 'Publier',
             ])
         ;
     }
