@@ -99,9 +99,13 @@ class MainController extends AbstractController
     #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
     public function viewArticle(Article $article, Category $category): Response
     {
+        if ($article->getHidden() && $this->getUser() === null) {
 
-        // Condition pour restreindre l'accès si l'utilisateur connecté n'est pas un administrateur
-        if ($article->getHidden() && $this->getUser()->getRoles()[0] !== "ROLE_ADMIN") {
+        $this->addFlash('error', 'Accès restreint : Cet article est caché. Veuillez vous connecter en tant qu\'administrateur pour y accéder.');
+
+            return $this->redirectToRoute('');
+
+        } elseif ($article->getHidden() && $this->getUser()->getRoles()[0] !== "ROLE_ADMIN") { // Condition pour restreindre l'accès si l'utilisateur connecté n'est pas un administrateur
 
             $this->addFlash('error', 'Accès restreint : L\'article que vous essayez de consulter à été caché par un administrateur.');
 

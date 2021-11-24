@@ -25,7 +25,7 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Téléphone</th>
-                    {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                    {% if is_granted("ROLE_ADMIN") %}
                         <th>Fonction occupée</th>
                         <th>Modifier le titre de la fonction</th>
                     {% endif %}
@@ -43,7 +43,7 @@
                             <td>{{ user['entity'].email }}</td>
                             <td>{{ user['entity'].phone }}</td>
 
-                            {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                            {% if is_granted("ROLE_ADMIN") %}
 
                                 {% if user['entity'].functionTitle %} {# Si l'utilisateur possède déjà une fonction, affiche un formulaire de modification #}
 
@@ -84,7 +84,7 @@
 
                                 {% endif %} {# endif : user.functionTitle #}
 
-                            {% endif %} {# endif : app.user.roles[0] == "ROLE_ADMIN" #}
+                            {% endif %} {# endif : is_granted("ROLE_ADMIN") #}
 
                         </tr>
 
@@ -128,7 +128,7 @@
                                 <a href="{{ path('article_view', {'slug_category': category.slug ,'slug': article.slug }) }}">
                                     Voir l'article en détail
                                 </a>
-                                {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                                {% if is_granted("ROLE_ADMIN") %}
 
                                     <p class="text-secondary"><span class="fst-italic">Option administrateur :</span>
                                         <a class="text-decoration-none" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': category.slug, 'origin': route}) }}">
@@ -142,7 +142,7 @@
 
                     {% else %}
 
-                        {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                        {% if is_granted("ROLE_ADMIN") %}
                             <div class="hidden-article my-4">
                                 <p class="fs-5 my-2 p-3">Titre : <span class="fw-bold">{{ article.title }}</span></p>
                                 {% if article.author.pseudo is not null %}
