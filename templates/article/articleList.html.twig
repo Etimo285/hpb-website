@@ -161,7 +161,23 @@
 
                 {% else %}
 
-                    <h2 style="color: #B0413E">Rien à afficher.</h2>
+                    <h2></h2>
+
+                    {% if (is_granted("ROLE_ADMIN")) %}
+                        <div class="legend-adherent-list">
+                            <p class="fs-3 fw-bold"><i class="fas fa-question-circle text-success me-2"></i>La catégorie {{ category.name }} ne contient aucun articles.</p>
+                            <p class="fs-5">- <a class="text-decoration-none" href="{{ path('admin_article_create') }}">Ecrire un nouvel article</a></p>
+                            <p class="fs-5">- Cette fenêtre d'aide est rendu visible seulement pas les administrateurs.</p>
+                        </div>
+                    {% else %}
+                        <div class="legend-adherent-list">
+                            <p class="fs-3 fw-bold"><i class="fas fa-question-circle text-success me-2"></i>La catégorie {{ category.name }} ne contient aucun articles.</p>
+                            <p class="fs-5">- Si possédez un compte administrateur et que vous souhaitez écrire un nouvel article, veuillez vous connecter en administrateur en cliquant ici :
+                                <a class="text-decoration-none" href="{{ path('app_login') }}">Se connecter</a>
+                            </p>
+                            <p class="fs-5">- Sinon, veuillez prendre contact avec l'un des administrateur.</p>
+                        </div>
+                    {% endif %}
 
                 {% endfor %}
             </div>
