@@ -129,8 +129,10 @@
                     <li class="nav-item dropdown blanc">
                         <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mon Compte</a>
                         <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-                        {% if app.user.roles[0] == "ROLE_ADMIN" %}
-                            <li class="fw-bold blanc"><a class="dropdown-item" aria-current="page" href="{{ path('admin_gestion') }}">Administration</a></li>
+
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('admin_gestion') }}">Administration</a></li>
+
                         {% endif %}
                             <li class="fw-bold blanc"><a class="dropdown-item" aria-current="page" href="{{ path('adherent_gestion') }}">Gérer mon compte</a></li>
 
