@@ -122,3 +122,11 @@ html, body{
 .text-color-dark-celadon{
     color: #063b25;
 }
+
+/* Custom-Commentaires */
+
+.article-comments-card {
+    border: 1px solid black;
+    box-shadow: 5px 6px 6px 2px #9b9b9b;
+    border-radius: 4px
+}
