@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Alert;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\User;
@@ -12,11 +13,13 @@ use App\Form\CreateCategoryFormType;
 use App\Form\EditCategoryFormType;
 use App\Form\EditArticleFormType;
 use App\Repository\CategoryRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\All;
 
@@ -291,5 +294,60 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('category_gestion');
     }
 
+    // Page qui liste toutes les alertes
+    #[Route("/liste-alertes/", name: "list_alert")]
+    public function alertList(Request $request, PaginatorInterface $paginator): Response
+    {
+        // Récupération du numéro de la page demandée dans l'URL
+        $requestedPage = $request->query->getInt('page', 1);
+
+        // Vérification que le numéro est positif
+        if($requestedPage < 1){
+            throw new NotFoundHttpException();
+        }
+
+        // Récupération du manager général des entités
+        $em = $this->getDoctrine()->getManager();
+
+        // Création d'une requête permettant de récupérer les alertes (uniquement ceux de la page demandée, grâce au paginator,et non toutes les alertes)
+        $query = $em->createQuery('SELECT a FROM App\Entity\Alert a ORDER BY a.createdAt DESC');
+
+        // Récupération des alertes
+        $alerts = $paginator->paginate(
+            $query,             // Requête créée précedemment
+            $requestedPage,     // Numéro de la page demandée
+            10              // Nombre d'articles affichés par page
+        );
+
+        // Appel de la vue en envoyant les alertes à afficher
+        return $this->render('alert/alertList.html.twig', [
+            'alerts' => $alerts,
+        ]);
+    }
+
+
+    // Page admin servant à supprimer une alerte via son id passé dans l'URL
+    #[Route('/supprimer-alerte/{id}/', name: 'alert_delete')]
+    public function alertDelete(Alert $alert, Request $request): Response
+    {
+        // Si le token CSRF passé dans l'url n'est pas le token valide, message d'erreur
+        if(!$this->isCsrfTokenValid('alert_delete_' . $alert->getId(), $request->query->get('csrf_token'))){
+
+            // Message flash d'erreur
+            $this->addFlash('error', 'Token de sécurité invalide, veuillez ré-essayer !.');
+        } else {
+
+            // Suppression de l'alerte via le manager général des entités
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($alert);
+            $em->flush();
+
+            // Message flash de succès
+            $this->addFlash('success', 'L\'alerte a été supprimé avec succès !');
+        }
+
+        // Redirection de l'utilisateur sur la liste des alertes
+        return $this->redirectToRoute('admin_list_alert');
+    }
 
 }

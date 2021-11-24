@@ -65,7 +65,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
 
     #[Assert\Regex(
-        pattern: "/[a-zA-Z0-9 -]/",
+        pattern: "/^[a-zA-Z0-9 -]+$/",
+        message: 'Le pseudo ne peut contenir de caractères spéciaux !'
     )]
     private $pseudo;
 
@@ -83,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'Le prénom ne peut dépasser {{ limit }} caractères.',
     )]
     #[Assert\Regex(
-        pattern: "/[a-zA-Z ,.'-]/",
+        pattern: "/^[a-zA-Z ,.'-]+$/",
         message: 'Le prénom ne peut contenir que des lettres et/ou tirets.',
     )]
     private $first_name;
@@ -103,7 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
 
     #[Assert\Regex(
-        pattern: "/[a-zA-Z ,.'-]/",
+        pattern: "/^[a-zA-Z ,.'-]+$/",
         message: 'Le nom ne peut contenir que des lettres.',
     )]
     private $last_name;
@@ -120,7 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
 
     #[Assert\Regex(
-        pattern: '/[0-9]/',
+        pattern: '/^[0-9]+$/',
         message: 'Le numéro de téléphone ne peut contenir que des chiffres.',
     )]
     private $phone;

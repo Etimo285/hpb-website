@@ -36,7 +36,7 @@ OTHER DEALINGS IN THE SOFTWARE.
                 {%- set active = loop.last -%}
                 {%- set active_class = active ? ' active' -%}
 
-                <li class="my-3 fs-5 breadcrumb-item {{- active_class }}" {%- if active %} aria-current="page" {%- endif %}>
+                <li class="my-3 fs-5 fw-bold breadcrumb-item {{- active_class }}" {%- if active %} aria-current="page" {%- endif %}>
                     {%- if item.url is defined -%}
                         <a class="text-decoration-none" href="{{ item.url }}">{{ item.text }}</a>
                         {%- set ld_item = ld_item|merge({'item': item.url}) -%}

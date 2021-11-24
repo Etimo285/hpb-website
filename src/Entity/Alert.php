@@ -23,7 +23,7 @@ class Alert
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=150)
+     * @ORM\Column(type="string")
      */
 
     #[Assert\NotBlank(
@@ -55,11 +55,11 @@ class Alert
     private $content;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string")
      */
 
     #[Assert\NotBlank(
-        message: 'Merci de renseigner le nom de la ville concernée.'
+        message: 'Merci de renseigner le nom de la ville concernée.',
     )]
 
     #[Assert\Length(
@@ -68,7 +68,7 @@ class Alert
     )]
 
     #[Assert\Regex(
-        pattern: "/^[a-z ,.'-]+/",
+        pattern: "/^[a-z,A-Z,.'-]+$/",
         message: 'La ville renseignée ne peut comporter uniquement des lettres et/ou tirets',
     )]
     private $city;
@@ -98,7 +98,7 @@ class Alert
     )]
 
     #[Assert\Regex(
-        pattern: '/[A-Za-z0-9\ \-\_]/',
+        pattern: '/^[A-Za-z0-9\ \-\_]+$/',
         message: 'Le premier champ d\'adresse ne peut comporter que des caractères, chiffres, espaces et tirets.',
     )]
     private $address1;
@@ -113,7 +113,7 @@ class Alert
     )]
 
     #[Assert\Regex(
-        pattern: '/[A-Za-z0-9\ \-\_]/',
+        pattern: '/^[A-Za-z0-9\ \-\_]+$/',
         message: 'Le deuxieme champ d\'adresse ne peut comporter que des caractères, chiffres, espaces et tirets.',
     )]
     private $address2;
