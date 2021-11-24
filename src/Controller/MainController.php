@@ -100,6 +100,17 @@ class MainController extends AbstractController
     public function viewArticle(Article $article, Category $category): Response
     {
 
+        // Condition pour restreindre l'accès si l'utilisateur connecté n'est pas un administrateur
+        if ($article->getHidden() && $this->getUser()->getRoles()[0] !== "ROLE_ADMIN") {
+
+            $this->addFlash('error', 'Accès restreint : L\'article que vous essayez de consulter à été caché par un administrateur.');
+
+            return $this->redirectToRoute('article_list', [
+                'slug' => $category->getSlug()
+            ]);
+
+        }
+
         $medias = $article->getMedia();
 
         return $this->render('article/viewArticle.html.twig', [
