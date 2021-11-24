@@ -291,7 +291,7 @@ class AdminController extends AbstractController
 
         }
 
-        return $this->redirectToRoute('category_gestion');
+        return $this->redirectToRoute('admin_category_gestion');
     }
 
     // Page qui liste toutes les alertes
