@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    {% if (article.hidden) and (app.user.roles[0] == "ROLE_ADMIN") %}
+    {% if (article.hidden) and (is_granted("ROLE_ADMIN")) %}
         <div class="legend-adherent-list">
             <p class="fs-3 fw-bold"><i class="fas fa-question-circle text-success me-2"></i>Cet article est caché</p>
             <p class="fs-5">- Un article caché est invisible aux utilisateurs qui ne sont pas administrateurs. Pour rendre cet article visible, veuillez cliquer sur le bouton correspondant en dessous de la description.</p>
@@ -49,7 +49,7 @@
                 </a>
             {% endif %}
 
-            {% if app.user.roles[0] == "ROLE_ADMIN" %}
+            {% if is_granted("ROLE_ADMIN") %}
 
                 {% if article.hidden %}
                     {# Bouton pour rendre visible l'article #}
