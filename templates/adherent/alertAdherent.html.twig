@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Alertes Adhérent{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <h1 class="col-12 text-center my-5">Mes Alertes : {{ app.user.firstName }} {{ app.user.lastName }} </h1>
+
+        <div class="row">
+            <div class="col-8 offset-2">
+
+                <div class="list-alerts">
+
+                    {# Boucle qui liste les alertes, triés dans l'odre chronologique inverse (le plus récent en premier) #}
+                    {% for alert in alerts|sort|reverse %}
+
+                        <div class="card my-5">
+                            <h2 class="p-3 bg-custom-green text-white fs-2">{{ alert.object }}</h2>
+                            <div class="card-body">
+                                <p class="card-text fs-4">{{ alert.content|raw }}</p>
+
+                                {% if alert.author.pseudo is not null %}
+                                    <p>Ecris par <span class="fw-bold">{{ alert.author.pseudo }}</span></p>
+                                {% else %}
+                                    <p>Ecris par <span class="fw-bold">{{ alert.author.firstname }} {{ alert.author.lastname }}</span></p>
+                                {% endif %}
+
+                                <p>Le {{ alert.createdAt|date('d/m/Y à H\\hi') }}</p>
+                            </div>
+
+                            <div class="card-footer">
+                                <a href="{{ path('adherent_alert_view', {'slug': alert.slug }) }}">Voir l'alerte en détail</a>
+                            </div>
+
+                        </div>
+
+                    {% else %}
+
+                        </div>
+                            <div class="row">
+                                <h2 class="col-12 text-center alert alert-warning">Aucune alerte à afficher.</h2>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <a class="col-12 text-center fs-1 my-5 text-decoration-none" href=" {{ path('adherent_alert_create') }} ">Rédiger une nouvelle Alerte Inclusion</a>
+    </div>
+
+
+
+
+{% endblock %}
+

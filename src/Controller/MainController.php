@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Alert;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\User;
@@ -119,6 +120,7 @@ class MainController extends AbstractController
             'medias' => $medias
         ]);
     }
+
 
 
     // Tester l'envoi d'email
