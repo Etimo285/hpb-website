@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{ alert.object }}{% endblock %}
+
+
+{% block body %}
+
+    <div class="row my-2">
+        <div class="col-8 offset-2">
+            <h1 class="fs-2 fw-bold">{{ alert.object }}</h1>
+            <div class="bg-white my-4 p-3">
+                {# Affichage du contenu de l'article, nettoyé de tout code html dangereux ! (filtre amené par le bundle "exercise/htmlpurifier-bundle") #}
+                {# On est obligé de faire comme ça pour conserver le code html produit par l'éditeur CKEditor, sans se mettre en danger avec des failles XSS #}
+                <p class="fs-4 ">{{ alert.content|purify }}</p>
+
+                <div class="alert-images">
+                    {% for media in medias %}
+                        {# La liste des photos associée à l'alerte est affichée ici #}
+                        <img src="{{ asset( media.url )| imagine_filter('small_picture') }}" alt="">
+                    {% endfor %}
+                </div>
+
+                {% if alert.author.pseudo is not null %}
+                    <p>Ecris par <span class="fw-bold">{{ alert.author.pseudo }}</span></p>
+                {% else %}
+                    <p>Ecris par <span class="fw-bold">{{ alert.author.firstname }} {{ alert.author.lastname }}</span></p>
+                {% endif %}
+
+                {% if alert.updatedAt != alert.createdAt %}
+                    <p class="text-end">Publié le {{ alert.createdAt|date('d/m/Y à H\\hi') }}</p>
+                    <p class="text-end">Modifié le <span class="fw-bold">{{ alert.updatedAt|date('d/m/Y à H\\hi') }}</span></p>
+                {% else %}
+                    <p class="text-end">Publié le <span class="fw-bold">{{ alert.createdAt|date('d/m/Y à H\\hi') }}</span></p>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Modification si l'adhérent est bien l'auteur ou par un admin #}
+        {% if (alert.author == app.user) or (app.user.roles[0] == "ROLE_ADMIN") %}
+            <div class="col-12 text-center">
+                {# Bouton de modification de l'alerte #}
+                <a href="{{ path('adherent_edit_alert', {'slug': alert.slug}) }}" class="btn btn-warning text-dark my-3 mx-3 fs-4">
+                    <i class="fas fa-edit me-1"></i> Modifier
+                </a>
+                {# Bouton de suppression de l'alerte  si admin #}
+                {% if app.user.roles[0] == "ROLE_ADMIN" %}
+                    <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette alerte ?')" class="btn btn-danger text-white my-3 mx-3 fs-4" href="{{ path('admin_alert_delete', {'id': alert.id, csrf_token: csrf_token('alert_delete_' ~ alert.id ) }) }}">
+                        <i class="fas fa-trash-alt me-1"></i> Supprimer
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+
+

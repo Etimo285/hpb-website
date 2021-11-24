@@ -32,13 +32,22 @@
         </div>
 
 
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <button type="button" class="btn btn-warning"><a class="text-decoration-none fs-4 fw-bold" href="{{ path('adherent_profil_update') }}">Modifier mon profil</a></button>
-        </div>
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <button type="button" class="btn btn-warning"><a class="text-decoration-none fs-4 fw-bold" href="{{ path('adherent_change_password') }}">Modifier mon mot de passe</a></button>
-        </div>
+        <div class="row">
 
+            <div class="col-12 text-center">
+                {# Lien allant vers la page de modification du profil #}
+                <a href="{{ path('adherent_profil_update') }}" class="btn btn-warning w-25 text-dark my-3 mx-3 fs-4">
+                    <i class="fas fa-edit me-1"></i> Modifier mon profil
+                </a>
+
+                {# Lien allant vers la page de modification du mot de passe #}
+                <a href="{{ path('adherent_change_password') }}" class="btn btn-danger w-25 text-white my-3 mx-3 fs-4">
+                    <i class="fas fa-edit me-1"></i> Modifier mon mot de passe
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 

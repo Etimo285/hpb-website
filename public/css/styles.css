@@ -8,7 +8,6 @@ html, body{
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background-color: #deefc2;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -20,9 +19,13 @@ html, body{
     width: 80%;
     padding: 16px;
     margin-left: 10%;
-    background-color: #c8e0b6;
 }
-
+.vert{
+    background-color: yellowgreen !important;
+}
+.blanc{
+    background-color: white !important;
+}
 .warning-article-to-delete{
     border: solid 2px black;
     border-radius: 6px;

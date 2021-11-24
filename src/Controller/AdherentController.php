@@ -8,9 +8,11 @@ use App\Entity\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\CreateAlertFormType;
 use App\Form\CreateArticleFormType;
+use App\Form\EditArticleFormType;
 use App\Form\ProfilUpdateFormType;
 use App\Form\RegistrationFormType;
 use App\Recaptcha\RecaptchaValidator;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -28,6 +30,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 class AdherentController extends AbstractController
 {
+
     // Page de gestion de l'adhérent
     #[Route('/gestionnaire-utilisateur/', name: 'gestion')]
     public function gestion(): Response
@@ -78,9 +81,9 @@ class AdherentController extends AbstractController
         ]);
     }
 
+
     // Page de changement de mot de passe de l'adhérent
     // On ajoute une sécurité pour être sûr que l'utilisateur est bien connecté, sinon on ne pourra pas changer son mot de passe.
-
     #[Route("/gestionnaire-utilisateur/mon-profil/changer-mon-mot-de-passe/", name: "change_password")]
     public function changePassword(Request $request, UserPasswordHasherInterface $encoder, RecaptchaValidator $recaptcha): Response
     {
@@ -150,7 +153,7 @@ class AdherentController extends AbstractController
     public function createAlert(Request $request): Response
     {
 
-        // Création d'une nouvelle alerte vide pour le moment
+        // Création d'une nouvelle alerte
         $alert= new Alert();
         // Création d'un formulaire de création d'alerte, lié à l'alerte vide
         $form = $this->createForm(CreateAlertFormType::class, $alert);
@@ -181,24 +184,86 @@ class AdherentController extends AbstractController
             return $this->redirectToRoute('adherent_gestion');
         }
 
-        // Pour que la vue puisse afficher le formulaire, on doit lui envoyer le formulaire généré, avec $form->createView()
+        // // Appel de la vue en lui envoyant le formulaire à afficher
         return $this->render('alert/createAlert.html.twig', [
             'createAlertForm' => $form->createView()
         ]);
 
     }
 
+    // Page permettant de lire une alerte en détail par l'admin ET l'adhérent concerné
+    #[Route("/consulter-alerte/{slug}", name: "alert_view")]
+    public function viewAlert(Alert $alert, Request $request): Response
+    {
+        $medias = $alert->getMedia();
+
+        return $this->render('alert/viewAlert.html.twig', [
+            'alert' => $alert,
+            'slug' => $alert  ->getSlug(),
+            'medias' => $medias
+        ]);
+    }
+
+    // Modification d'une alerte adhérent
+    #[Route('/modifier-alerte/{slug}/', name: 'edit_alert')]
+    public function alertEdit(Alert $alert, Request $request): Response
+    {
+
+        // Création du formulaire de modification d'alerte (c'est le même que le formulaire permettant de créer une nouvelle alerte, sauf qu'il sera déjà rempli avec les données de l'alerte existante "$alert")
+        $form = $this->createForm(CreateAlertFormType::class, $alert);
+
+        // Liaison des données de requête (POST) avec le formulaire
+        $form->handleRequest($request);
+
+        // Si le formulaire est envoyé et n'a pas d'erreur
+        if($form->isSubmitted() && $form->isValid()){
+
+            // Hydratation de la modification de l'alerte pour la date et l'auteur
+            /** @var $user User **/
+            $user = $this->getUser();
+            $alert->setAuthor($user);     // L'auteur est l'adhérent connecté
+            $alert->setUpdatedAt();
+
+            // Sauvegarde des changements faits dans l'alerte via le manager général des entités
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            // Message flash de succès
+            $this->addFlash('success', 'Alerte modifiée avec succès !');
+
+            // Redirection vers la page de l'alerte modifiée
+            return $this->redirectToRoute('adherent_alert_view', [
+                'slug' => $alert->getSlug(),
+            ]);
+        }
+
+        // Appel de la vue en lui envoyant le formulaire à afficher
+        return $this->render('alert/editAlert.html.twig', [
+            'createAlertForm' => $form->createView(),
+            'slug' => $alert->getSlug(),
+            'alert' => $alert
+        ]);
+    }
 
 
-
-
-
-    // Page des alertes créées par l'adhérent
+    // Page qui liste les alertes créées par l'adhérent
 
     #[Route('/gestionnaire-utilisateur/mes-alertes/', name: 'alert')]
-    public function alert(): Response
+    public function alertAdherentList(): Response
     {
-        return $this->render('adherent/alert.html.twig');
+        // Récupération du manager général des entités
+        $em = $this->getDoctrine()->getManager();
+
+        // Récupération des alertes de l'adhérent connecté
+        $user = $this->getUser();
+        $alertsRepository = $this->getDoctrine()->getRepository(Alert::class);
+        $alerts = $alertsRepository->findByAuthor($user);
+
+
+        // Appel de la vue pour affichage de la liste des alertes créées par l'adhérent
+        return $this->render('adherent/alertAdherent.html.twig', [
+            'alerts' => $alerts,
+        ]);
     }
 
 }

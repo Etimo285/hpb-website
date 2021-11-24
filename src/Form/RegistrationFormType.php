@@ -29,6 +29,9 @@ class RegistrationFormType extends AbstractType
             ->add('pseudo', TextType::class, [
                 'label' => 'Pseudo',
                 'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Champs facultatif'
+                ),
             ])
 
             // Champ nom
@@ -44,6 +47,9 @@ class RegistrationFormType extends AbstractType
             // Champ téléphone
             ->add('phone', TextType::class, [
                 'label' => 'Téléphone',
+                'attr' => array(
+                    'placeholder' => 'Champs facultatif'
+                ),
                 'required' => false,
             ])
 

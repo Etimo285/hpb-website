@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des alertes{% endblock %}
+
+{% block body %}
+
+    <div class="row my-3">
+        <div class="col-12 text-center">
+            {# avec affichage du nombre total des alertes (attribut apporté par knp_paginator) #}
+            <h1 class="border-3 border text-white bg-custom-green">Liste des alertes ({{ alerts.getTotalItemCount }})</h1>
+        </div>
+
+        {# S'il y a des alertes, on affiche le menu de pagination #}
+        {% if alerts is not empty %}
+
+            <div class="row">
+                <div class="col-12 my-3 text-center fs-4">
+                    <div class="d-inline-block">
+                        {{ knp_pagination_render(alerts) }}
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <div class="row">
+        <div class="col-8 offset-2">
+
+            <div class="list-alerts">
+
+                {# Boucle qui liste les alertes, triés dans l'odre chronologique inverse (le plus récent en premier) #}
+                {% for alert in alerts|sort|reverse %}
+
+                    <div class="card my-5">
+                        <h2 class="p-3 bg-custom-green text-white fs-2">{{ alert.object }}</h2>
+                        <div class="card-body">
+                            <p class="card-text fs-4">{{ alert.content }}</p>
+
+                            {% if alert.author.pseudo is not null %}
+                                <p>Ecris par <span class="fw-bold">{{ alert.author.pseudo }}</span></p>
+                            {% else %}
+                                <p>Ecris par <span class="fw-bold">{{ alert.author.firstname }} {{ alert.author.lastname }}</span></p>
+                            {% endif %}
+
+                            <p>Le {{ alert.createdAt|date('d/m/Y à H\\hi') }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('adherent_alert_view', {'slug': alert.slug }) }}">Voir l'alerte en détail</a>
+                        </div>
+                    </div>
+
+                {% else %}
+
+                    <div class="row">
+                        <h2 class="col-12 text-center alert alert-warning">Aucune alerte à afficher.</h2>
+                    </div>
+
+                {% endfor %}
+
+                {# S'il y a des alertes, on affiche le menu de pagination #}
+                {% if alerts is not empty %}
+                    <div class="row">
+                        <div class="col-12 my-3 text-center fs-4">
+                            <div class="d-inline-block">
+                                {{ knp_pagination_render(alerts) }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <a href="{{ path('home') }}">Retourner à l'accueil</a>
+
+
+
+
+
+{% endblock %}
+
+
+
