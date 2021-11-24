@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\All;
 
+// Les pages ne sont accessibles qu'aux administrateurs
 #[IsGranted('ROLE_ADMIN')]
 
 // Préfixes de la route et du nom des pages adhérent
@@ -83,10 +84,22 @@ class AdminController extends AbstractController
     }
 
     // MODIFIER ARTICLE
-    #[Route('{slug_category}/modifier-article/{slug}/', name: 'article_edit')]
+    #[Route('/{slug_category}/modifier-article/{slug}/', name: 'article_edit')]
     #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
     public function articleEdit(Category $category, Article $article, Request $request): Response
     {
+
+        // Condition d'interdiction d'accès à cette page pour ceux qui ne sont pas auteurs de leur articles
+        if ($this->getUser() !== $article->getAuthor()) {
+
+            $this->addFlash('error', 'Accès restreint : Vous n\'avez pas accès à la modification de cet article car vous n\'en n\'êtes pas l\'auteur.');
+
+            return $this->redirectToRoute('article_view', [
+                'slug' => $article->getSlug(),
+                'slug_category' => $category->getSlug()
+            ]);
+
+        }
 
         // Création du formulaire de modification d'article et réinjection de la requête
         $form = $this->createForm(EditArticleFormType::class, $article);
