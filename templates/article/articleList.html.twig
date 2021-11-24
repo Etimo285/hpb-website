@@ -101,6 +101,8 @@
 
     {# Général #}
 
+    {% set hiddenButNotAdmin = '' %}
+
     <div class="row">
         <div class="col-8 offset-2">
 
@@ -142,6 +144,7 @@
 
                     {% else %}
 
+                        {# Affichage des articles cachés pour les administrateurs #}
                         {% if is_granted("ROLE_ADMIN") %}
                             <div class="hidden-article my-4">
                                 <p class="fs-5 my-2 p-3">Titre : <span class="fw-bold">{{ article.title }}</span></p>
@@ -154,30 +157,42 @@
                                 <a class="my-2 p-3 text-decoration-none" href="{{ path('article_view', {'slug': article.slug, 'slug_category': category.slug}) }}">Accéder à cet article en détail</a>
                                 <a class="my-2 p-3 text-decoration-none" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': category.slug, 'origin': route}) }}">Rendre visible cet article</a>
                             </div>
+                        {% else %}
+
+                            {% set hiddenButNotAdmin %}
+                                {# Si tous les articles sont cachés et que l'utilisateur n'est pas administrateur pour les voir, affiche une boîte d'aide personnalisée #}
+                                <div class="legend-adherent-list">
+                                    <p class="fs-3 fw-bold"><i class="fas fa-eye-slash text-secondary me-2"></i>La catégorie {{ category.name }} contient des articles, mais ils sont tous cachés.</p>
+                                    <p class="fs-5">- Seuls les administrateurs peuvent les consulter les articles cachés.</p>
+                                    <p class="fs-5">- Si vous avez une réclamation d'article caché à faire, veuillez prendre contact avec l'un d'entre eux.</p>
+                                </div>
+                            {% endset %}
+
                         {% endif %}
 
-
                     {% endif %}
+
+                    {{ hiddenButNotAdmin }}
 
                 {% else %}
 
-                    <h2></h2>
-
-                    {% if (is_granted("ROLE_ADMIN")) %}
+                        {# Boite d'aide de catégorie vide avec redirections, selon l'état de connection et le rôle #}
                         <div class="legend-adherent-list">
                             <p class="fs-3 fw-bold"><i class="fas fa-question-circle text-success me-2"></i>La catégorie {{ category.name }} ne contient aucun articles.</p>
-                            <p class="fs-5">- <a class="text-decoration-none" href="{{ path('admin_article_create') }}">Ecrire un nouvel article</a></p>
-                            <p class="fs-5">- Cette fenêtre d'aide est rendu visible seulement pas les administrateurs.</p>
+                            {% if (is_granted("ROLE_ADMIN")) %}
+                                <p class="fs-5">- <a class="text-decoration-none" href="{{ path('admin_article_create') }}">Ecrire un nouvel article</a></p>
+                                <p class="fs-5">- Seuls les administrateurs peuvent écrire des articles.</p>
+                            {% elseif (is_granted("ROLE_ADHERENT")) %}
+                                <p class="fs-5">- Vous êtes connecté en tant qu'adhérent. Si possédez un compte administrateur et que vous souhaitez écrire un nouvel article, veuillez vous déconnecter, puis vous reconnecter en administrateur.
+                                    <a class="text-decoration-none" href="{{ path('app_logout') }}">Se déconnecter</a>
+                                </p>
+                            {% else %}
+                                <p class="fs-5">- Vous n'êtes pas connecté. Si possédez un compte administrateur et que vous souhaitez écrire un nouvel article, veuillez vous connecter en administrateur en cliquant ici :
+                                    <a class="text-decoration-none" href="{{ path('app_login') }}">Se connecter</a>
+                                </p>
+                            {% endif %}
+                                <p class="fs-5">- Sinon, veuillez prendre contact avec l'un des administrateur.</p>
                         </div>
-                    {% else %}
-                        <div class="legend-adherent-list">
-                            <p class="fs-3 fw-bold"><i class="fas fa-question-circle text-success me-2"></i>La catégorie {{ category.name }} ne contient aucun articles.</p>
-                            <p class="fs-5">- Si possédez un compte administrateur et que vous souhaitez écrire un nouvel article, veuillez vous connecter en administrateur en cliquant ici :
-                                <a class="text-decoration-none" href="{{ path('app_login') }}">Se connecter</a>
-                            </p>
-                            <p class="fs-5">- Sinon, veuillez prendre contact avec l'un des administrateur.</p>
-                        </div>
-                    {% endif %}
 
                 {% endfor %}
             </div>
