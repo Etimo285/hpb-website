@@ -150,11 +150,20 @@ class AdminController extends AbstractController
 
             // Gestion de la suppression des données en base de données
             $em = $this->getDoctrine()->getManager();
+
+            // Suppression de tous les commentaires appartenant à l'article via une boucle Foreach
+            $comments = $article->getComment();
+
+            foreach ($comments as $comment) {
+                $em->remove($comment);
+            }
+
+            // Suppression de l'article
             $em->remove($article);
             $em->flush();
 
-            // Message flash
-            $this->addFlash('success', "L'article {$article->getTitle()} a été supprimé avec succès !");
+            // Message flash en cas de succès
+            $this->addFlash('success', "L'article {$article->getTitle()} et tout ses commentaires ont étés supprimé avec succès !");
         }
 
         // Redirection sur la page d'interface
@@ -291,7 +300,7 @@ class AdminController extends AbstractController
 
         }
 
-        return $this->redirectToRoute('category_gestion');
+        return $this->redirectToRoute('admin_category_gestion');
     }
 
     // Page qui liste toutes les alertes
