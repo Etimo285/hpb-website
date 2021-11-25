@@ -121,17 +121,19 @@ class AdminController extends AbstractController
             // Message flash
             $this->addFlash('success', 'Article modifié avec succès !');
 
-            // Redirection sur la vue détaillée du projet
+            // Redirection sur la vue détaillée de l'article
             return $this->redirectToRoute('article_view', [
                 'slug' => $article->getSlug(),
-                'slug_category' => $category->getSlug(),
+                // On récupère le slug de la donnée envoyée en formulaire afin de rediriger sur la bonne page de catégorie.
+                'slug_category' => $form->get('category')->getData()->getSlug(),
             ]);
         }
 
-        // Envoi de l'utilisateur sur la page d'édition du projet
+        // Envoi de l'utilisateur sur la page d'édition de l'article
         return $this->render('article/editArticle.html.twig', [
             'form' => $form->createView(),
             'slug' => $article->getSlug(),
+            'slug_category' => $category->getSlug(),
             'article' => $article
         ]);
     }

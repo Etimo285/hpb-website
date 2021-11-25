@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editer un commentaire{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 form-container">
+                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box text-center my-5">
+
+                    {# Titre de la page de modification #}
+                    <div class="heading mb-5">
+                        <h1 class="fs-1">Modifier un commentaire de l'article {{ comment.article.title }}</h1>
+                    </div>
+
+                    <p class="fw-bold">Contenu actuel du commentaire</p>
+                    <div class="article-comments-card p-3 mb-5">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-row text-start mb-2">
+                                <span>
+                                    <small class="font-weight-bold text-primary">{{ comment.author.pseudo }}</small>
+                                    <small class="font-weight-bold">{{ comment.content }}</small>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Formulaire de création, inclus des labels pour le nom, la description, la catégorie #}
+                    {{ form_start(form) }}
+
+                    {{ form_row(form.content, {
+                        label: 'Rédigez le nouveau contenu du commentaire',
+                        label_attr: {
+                            class: 'fw-bold',
+                        }
+                    }) }}
+                    {# Bouton pour valider l'édition de l'article #}
+                    <button class="btn btn-success mt-4 w-100" type="submit">Valider la modification</button>
+                    {{ form_end(form) }}
+                    {# Annuler l'édition puis retour a l'interface #}
+                    <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('article_view', {'slug': comment.article.slug, 'slug_category': comment.article.category.slug}) }}">Annuler</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

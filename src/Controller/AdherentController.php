@@ -271,6 +271,60 @@ class AdherentController extends AbstractController
         ]);
     }
 
+    // Modifier commentaire
+    #[Route('{slug_category}/{slug}/modifier-commentaire/{id}', name: 'comment_edit')]
+    #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
+    public function editComment(Category $category, Comment $comment, Request $request): Response
+    {
+        // Redirection vers la view si l'utilisateur connecté n'est pas l'auteur du commentaire
+        if ($this->getUser() !== $comment->getAuthor()) {
+
+            $this->addFlash('error', 'Accès restreint : La modification est impossible, vous n\'êtes pas auteur de ce commentaire.');
+
+            return $this->redirectToRoute('article_view', [
+                'article', $comment->getArticle(),
+                'slug' => $comment->getArticle()->getSlug(),
+                'slug_category' => $category->getSlug()
+            ]);
+
+        }
+
+        // Création du formulaire de modification de commentaire et réinjection de la requête
+        $form = $this->createFormBuilder($comment)
+            ->add('content', TextareaType::class, array('label' => false))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        // Contrôle sur la validité du formulaire envoyé
+        if($form->isSubmitted() && $form->isValid()){
+
+            // Hydratation
+            $comment->setUpdatedAt();
+
+            // Gestion de l'envoi des données en base de données
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            // Message flash
+            $this->addFlash('success', 'Le commentaire a été modifié avec succès !');
+
+            // Redirection sur la vue détaillé de l'article
+            return $this->redirectToRoute('article_view', [
+                'slug' => $comment->getArticle()->getSlug(),
+                'slug_category' => $category->getSlug(),
+            ]);
+
+        }
+
+        return $this->render('article/editComment.html.twig', [
+            'comment' => $comment,
+            'form' => $form->createView(),
+            'slug' => $comment->getArticle()->getSlug(),
+            'slug_category' => $category->getSlug()
+        ]);
+    }
+
     // Lorsque qu'un commentaire est supprimé
     #[Route('{slug_category}/supprimer-commentaire/{id}', name: 'comment_delete')]
     #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
