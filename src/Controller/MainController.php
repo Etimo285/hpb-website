@@ -85,7 +85,7 @@ class MainController extends AbstractController
                 $em->persist($admin);
                 $em->flush();
 
-            }
+    }
 
         }
 
@@ -120,12 +120,13 @@ class MainController extends AbstractController
 
         }
 
+        // Formulaire d'un nouveau commentaire
         $newComment = new Comment();
         $form = $this->createFormBuilder($newComment)
             ->add('content', TextareaType::class, array('label' => false))
             ->getForm();
 
-        // Formulaire d'un nouveau commentaire
+        // Vérification si l'utilisateur connecté est (au moins) un adhérent
         if($this->isGranted('ROLE_ADHERENT')) {
 
             $form->handleRequest($request);

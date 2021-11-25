@@ -17,13 +17,19 @@
                     {# Formulaire de création, inclus des labels pour le nom, la description, la catégorie #}
                     {{ form_start(form) }}
                     {{ form_row(form.title, {
-                        label: 'Titre de votre article',
+                        label: 'Modifier le titre de l\'article',
                         label_attr: {
                             class: 'fw-bold',
                         }
                     }) }}
                     {{ form_row(form.content, {
-                        label: 'Décrivez votre article',
+                        label: 'Description de l\'article à modifier',
+                        label_attr: {
+                            class: 'fw-bold',
+                        }
+                    }) }}
+                    {{ form_row(form.category, {
+                        label: 'Changer la catégorie (Laisser par défaut si aucun changements)',
                         label_attr: {
                             class: 'fw-bold',
                         }

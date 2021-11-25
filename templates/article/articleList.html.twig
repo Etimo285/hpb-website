@@ -101,6 +101,17 @@
 
     {# Général #}
 
+    {% if is_granted("ROLE_ADMIN") %}
+        <div class="row">
+            <div class="col-12 text-center">
+                <a class="fs-3 text-decoration-none"
+                   href="{{ path('admin_article_create') }}">
+                    Rédiger un nouvel article
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
     {% set hiddenButNotAdmin = '' %}
 
     <div class="row">

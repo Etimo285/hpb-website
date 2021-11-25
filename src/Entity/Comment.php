@@ -27,7 +27,7 @@ class Comment
     )]
 
     #[Assert\Length(
-        min: 5,
+        min: 2,
         max: 2500,
         minMessage: 'Le contenu de votre commentaire doit comporter au moins {{ limit }} caractères.',
         maxMessage: 'Le contenu de votre commentaire ne peut dépasser {{ limit }} caractères.',
