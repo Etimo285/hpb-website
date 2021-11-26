@@ -101,13 +101,13 @@
         <div class="collapse navbar-collapse mx-auto" id="navbarSupportedContent">
             <ul class="navbar-nav col justify-content-evenly">
                 <li class="nav-item blanc">
-                        <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page" href="
-                        {{ path('article_list', {'slug': 'news' }) }}">News
-                        </a>
+                    <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page"
+                       href="{{ path('new_articles_list') }}">Actualité
+                    </a>
                 </li>
                 <li class="nav-item blanc">
-                    <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page" href="
-                        {{ path('article_list', {'slug': 'blog' }) }}">Blog
+                    <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page"
+                       href="{{ path('article_list', {'slug': 'blog' }) }}">Blog
                     </a>
                 </li>
                 <li class="nav-item bg-danger alerfocus">
@@ -117,7 +117,7 @@
                     <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rubriques</a>
                     <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
                         {% for category in category_repo.findAll %}
-                            <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+                            <li class="fw-bold"><a class="dropdown-item" href="{{ path('article_list', {'slug': category.slug}) }}"><i class="pe-1 fas fa-{{ category.icon }}"></i>{{ category.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -177,6 +177,13 @@
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
         {'text': slug|capitalize},
+    ]) }}
+
+{% elseif route == 'new_articles_list' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Actualité'}
     ]) }}
 
 {% elseif route == 'article_view' %}

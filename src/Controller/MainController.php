@@ -8,6 +8,7 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\User;
 use App\Form\NewFunctionTitleFormType;
+use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -36,7 +37,19 @@ class MainController extends AbstractController
         return $this->render('main/home.html.twig');
     }
 
+    #[Route('/actualité/', name: 'new_articles_list')]
+    public function newArticlesList(ArticleRepository $articleRepository, Request $request): Response
+    {
 
+        $articles = $articleRepository->findAll();
+
+
+        return $this->render('article/newArticlesList.html.twig', [
+            'articles' => $articles,
+        ]);
+    }
+
+    // Liste des articles d'une catégorie
     #[Route('/liste-articles/{slug}/', name: 'article_list')]
     public function articleList(UserRepository $userRepository, Category $category, Request $request, PaginatorInterface $paginator): Response
     {
@@ -85,10 +98,9 @@ class MainController extends AbstractController
                 $em->persist($admin);
                 $em->flush();
 
-    }
+            }
 
         }
-
 
         return $this->render('article/articleList.html.twig', [
             'category' => $category,

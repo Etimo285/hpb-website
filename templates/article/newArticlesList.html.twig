@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actualité{% endblock %}
+
+{% block body %}
+
+    <div class="row my-3">
+        <div class="col-12 text-center">
+            <h1 class="border-3 border text-white bg-custom-green fw-bold">Actualité - 10 Derniers articles publiés</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8 offset-2">
+
+            <div class="list-articles">
+
+                {# Boucle qui liste les articles, triés dans l'odre chronologique inverse (le plus récent en premier) #}
+                {% for article in articles|sort|reverse %}
+
+                    {% if article.hidden == false %}
+
+                        <div class="card my-5">
+                            <div class="bg-custom-green d-flex flex-row">
+                                <h2 class="p-3 text-white fs-2">{{ article.title }}</h2>
+                                <h2 class="p-3 text-white fs-2 ms-auto"><i class="px-2 fas fa-{{ article.category.icon }}"></i>{{ article.category.name }}</h2>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text fs-4">{{ article.content }}</p>
+
+                                {% if article.author.pseudo is not null %}
+                                    <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                                {% else %}
+                                    <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
+                                {% endif %}
+
+                                <p>Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+                            </div>
+                            <div class="card-footer d-flex flex-row justify-content-between">
+                                <a href="{{ path('article_view', {'slug_category': article.category.slug ,'slug': article.slug }) }}">
+                                    Voir l'article en détail
+                                </a>
+                                {% if is_granted("ROLE_ADMIN") %}
+
+                                    <p class="text-secondary"><span class="fst-italic">Option administrateur :</span>
+                                        <a class="text-decoration-none" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': article.category.slug, 'origin': route}) }}">
+                                            Cacher cet article
+                                        </a>
+                                    </p>
+
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    {% else %}
+
+                        {# Affichage des articles cachés pour les administrateurs #}
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <div class="hidden-article my-4">
+                                <a href="{{ path('admin_article_hide', {'id': article.id, 'origin': route, 'slug_category': article.category.slug}) }}"
+                                   title="Cet article est caché. Cliquez ici pour le rendre visible">
+                                    <i class="fas fa-eye-slash ps-3 fs-4"></i>
+                                </a>
+                                <p class="fs-5 my-2 p-3">Titre : <span class="fw-bold">{{ article.title }}</span></p>
+                                {% if article.author.pseudo is not null %}
+                                    <p class="my-2">Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                                {% else %}
+                                    <p class="my-2">Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
+                                {% endif %}
+                                <p class="my-2 p-3">Publié le <span class="fw-bold">{{ article.createdAt|date('d/m/Y à H\\hi') }}</span></p>
+                                <a class="my-2 p-3 text-decoration-none" href="{{ path('article_view', {'slug': article.slug, 'slug_category': article.category.slug}) }}">Accéder à cet article en détail</a>
+                                <a class="my-2 p-3 text-decoration-none" href="{{ path('admin_article_hide', {'id': article.id, 'slug_category': article.category.slug, 'origin': route}) }}">Rendre visible cet article</a>
+                            </div>
+                        {% endif %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

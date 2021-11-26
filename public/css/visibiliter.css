@@ -13,18 +13,11 @@
 }
 
 
-.blue body{
+.blue body, .blue p, .blue div{
     background: #4b88bb;
     color: orange;
 }
-.blue p{
-    background: #4b88bb;
-    color: orange;
-}
-.blue div{
-    background: #4b88bb;
-    color: orange;
-}
+
 .blue h2{
     background: #06357a;
     color: orange;
