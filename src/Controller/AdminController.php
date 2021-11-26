@@ -121,17 +121,19 @@ class AdminController extends AbstractController
             // Message flash
             $this->addFlash('success', 'Article modifié avec succès !');
 
-            // Redirection sur la vue détaillée du projet
+            // Redirection sur la vue détaillée de l'article
             return $this->redirectToRoute('article_view', [
                 'slug' => $article->getSlug(),
-                'slug_category' => $category->getSlug(),
+                // On récupère le slug de la donnée envoyée en formulaire afin de rediriger sur la bonne page de catégorie.
+                'slug_category' => $form->get('category')->getData()->getSlug(),
             ]);
         }
 
-        // Envoi de l'utilisateur sur la page d'édition du projet
+        // Envoi de l'utilisateur sur la page d'édition de l'article
         return $this->render('article/editArticle.html.twig', [
             'form' => $form->createView(),
             'slug' => $article->getSlug(),
+            'slug_category' => $category->getSlug(),
             'article' => $article
         ]);
     }
@@ -150,11 +152,20 @@ class AdminController extends AbstractController
 
             // Gestion de la suppression des données en base de données
             $em = $this->getDoctrine()->getManager();
+
+            // Suppression de tous les commentaires appartenant à l'article via une boucle Foreach
+            $comments = $article->getComment();
+
+            foreach ($comments as $comment) {
+                $em->remove($comment);
+            }
+
+            // Suppression de l'article
             $em->remove($article);
             $em->flush();
 
-            // Message flash
-            $this->addFlash('success', "L'article {$article->getTitle()} a été supprimé avec succès !");
+            // Message flash en cas de succès
+            $this->addFlash('success', "L'article {$article->getTitle()} et tout ses commentaires ont étés supprimé avec succès !");
         }
 
         // Redirection sur la page d'interface
@@ -291,7 +302,7 @@ class AdminController extends AbstractController
 
         }
 
-        return $this->redirectToRoute('category_gestion');
+        return $this->redirectToRoute('admin_category_gestion');
     }
 
     // Page qui liste toutes les alertes

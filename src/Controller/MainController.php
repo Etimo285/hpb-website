@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Alert;
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\User;
 use App\Form\NewFunctionTitleFormType;
 use App\Repository\UserRepository;
@@ -13,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\SubmitButton;
@@ -22,7 +24,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 class MainController extends AbstractController
 {
@@ -84,7 +85,7 @@ class MainController extends AbstractController
                 $em->persist($admin);
                 $em->flush();
 
-            }
+    }
 
         }
 
@@ -98,15 +99,18 @@ class MainController extends AbstractController
 
     #[Route('/{slug_category}/consulter-article/{slug}/', name: 'article_view')]
     #[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
-    public function viewArticle(Article $article, Category $category): Response
+    public function viewArticle(Article $article, Category $category, Request $request): Response
     {
+
+        // Restriction d'un article caché si l'utilisateur n'est pas connecté.
         if ($article->getHidden() && $this->getUser() === null) {
 
         $this->addFlash('error', 'Accès restreint : Cet article est caché. Veuillez vous connecter en tant qu\'administrateur pour y accéder.');
 
-            return $this->redirectToRoute('');
+            return $this->redirectToRoute('app_login');
 
-        } elseif ($article->getHidden() && $this->getUser()->getRoles()[0] !== "ROLE_ADMIN") { // Condition pour restreindre l'accès si l'utilisateur connecté n'est pas un administrateur
+        // Condition pour restreindre l'accès si l'utilisateur connecté n'est pas un administrateur
+        } elseif ($article->getHidden() && $this->getUser()->getRoles()[0] !== "ROLE_ADMIN") {
 
             $this->addFlash('error', 'Accès restreint : L\'article que vous essayez de consulter à été caché par un administrateur.');
 
@@ -116,13 +120,53 @@ class MainController extends AbstractController
 
         }
 
+        // Formulaire d'un nouveau commentaire
+        $newComment = new Comment();
+        $form = $this->createFormBuilder($newComment)
+            ->add('content', TextareaType::class, array('label' => false))
+            ->getForm();
+
+        // Vérification si l'utilisateur connecté est (au moins) un adhérent
+        if($this->isGranted('ROLE_ADHERENT')) {
+
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $em = $this->getDoctrine()->getManager();
+
+                /** @var $user User **/
+                $user = $this->getUser();
+                $newComment->setAuthor($user);
+                $newComment->setCreatedAt();
+                $newComment->setUpdatedAt();
+                $newComment->setArticle($article);
+
+                $em->persist($newComment);
+
+                $em->flush();
+
+                // Message flash
+                $this->addFlash('success', 'Votre commentaire a été posté avec succès !');
+
+                // Redirection sur la page de gestionnaire de catégories
+                return $this->redirectToRoute('article_view', [
+                    'slug' => $article->getSlug(),
+                    'slug_category' => $category->getSlug()
+                ]);
+            }
+
+        }
+
         $medias = $article->getMedia();
 
         return $this->render('article/viewArticle.html.twig', [
             'article' => $article,
             'slug_category' => $category->getSlug(),
+            'comments' => $article->getComment(),
+            'form' => $form->createView(),
             'medias' => $medias
-        ]);
+    ]);
     }
 
 
