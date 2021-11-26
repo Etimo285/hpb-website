@@ -208,3 +208,93 @@
 .bttn[data-color="black"] {
     background: #343437;
 }
+
+.versimp .list-items button.alt {
+    color: white;
+    border-color: wheat;
+}
+.bttn[data-color="versimp"] {
+    background: white;
+}
+
+
+.versimp body{
+    background-color: black;
+    color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+
+}
+.versimp article{
+    background-color: black;
+    color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp p{
+    background-color: black;
+    color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp div{
+    background-color: black;
+    color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp *{
+    background-color: black;
+    color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp li{
+    color: black;
+    background-color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp .closebtn{
+    color: black;
+    background-color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+    align-items: center;
+}
+.versimp #navbarDropdown {
+    color: black;
+    background-color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp .nav-item {
+    color: black;
+    background-color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp .nav-link {
+    color: black;
+    background-color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp .alerfocus {
+    color: black;
+    background-color: darkred !important;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}

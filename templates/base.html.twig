@@ -78,8 +78,8 @@
 
 
                 </ul>#}
-            <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="#">Lecteur d'ecran</a>
-            <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="#">version simplifié</a>
+            {#  <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="#">Lecteur d'ecran</a>#}
+            <a class="fw-bold"><button class="bttn contra" data-color="versimp">version simplifié</button></a>
 
         </div>
 
@@ -110,8 +110,8 @@
                         {{ path('article_list', {'slug': 'blog' }) }}">Blog
                     </a>
                 </li>
-                <li class="nav-item bg-danger">
-                    <a class="nav-link active mx-auto text-white fw-bold fs-5" aria-current="page" href=" {{ path('adherent_alert_create') }}">Alerte Inclusion</a>
+                <li class="nav-item bg-danger alerfocus">
+                    <a class="nav-link active mx-auto text-white fw-bold fs-5 alerfocus" aria-current="page" href=" {{ path('adherent_alert_create') }}">Alerte Inclusion</a>
                 </li>
                 <li class="nav-item dropdown blanc">
                     <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rubriques</a>
