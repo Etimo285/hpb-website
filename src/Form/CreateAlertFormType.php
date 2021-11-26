@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CreateAlertFormType extends AbstractType
 {
@@ -33,7 +34,11 @@ class CreateAlertFormType extends AbstractType
                     ],
                     // Nettoie le code html du contenu du texte (bundle htmlpurifier à installer)
                     'purify_html' => true,
-            ])
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'Merci de renseigner un contenu',
+                        ]),
+                ]])
             ->add('city',TextType::class, [
                 'label' => 'Ville concernée',
                 'attr' => array(

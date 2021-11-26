@@ -36,13 +36,10 @@
 
                     {# Bouton pour valider la modification de l'alerte #}
                     <button class="btn btn-success mt-4 w-100" type="submit">Valider la modification</button>
-                    {# TODO: supprimer ligne ci-desous supprime le bouton publier !!!??? #}
                     {# Fermeture du formulaire #}
                     {{ form_end(createAlertForm) }}
 
-                    {#TODO: orienter vers profil adhérent/mes alertes #}
-                    {# Annuler la modification, qui redirige vers la gestion de l'adhérent' #}
-                    <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('adherent_profil') }}">Annuler</a>
+                    <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('adherent_alert') }}">Annuler</a>
                 </div>
             </div>
         </div>

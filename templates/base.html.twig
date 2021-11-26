@@ -50,7 +50,7 @@
 
         <div id="sideNavigation" class="sidenav flex-md-column flex-row navbar-nav p-10 m-10 mx-10 justify-content-between col-12 col-md-2 ">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a class="nav-item m-10 p-10 mb-3 mx-auto bg-danger fw-bold fs-4 text-center" href="{{ path('adherent_alert_create') }}">Alerte inclusion</a>
+            <a class="nav-item m-10 p-10 mb-3 mx-auto bg-danger fw-bold fs-4 text-center" href="{{ path('adherent_alert_def') }}">Alerte inclusion</a>
             <li class="nav-item m-10 p-10 mb-3 mx-auto dropdown">
                 <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Meilleur contraste</a>
                 <ul class="list-unstyled p-0 m-0 colors row ali " aria-labelledby="navbarDropdown">
@@ -111,7 +111,7 @@
                     </a>
                 </li>
                 <li class="nav-item bg-danger">
-                    <a class="nav-link active mx-auto text-white fw-bold fs-5" aria-current="page" href=" {{ path('adherent_alert_create') }}">Alerte Inclusion</a>
+                    <a class="nav-link active mx-auto text-white fw-bold fs-5" aria-current="page" href=" {{ path('adherent_alert_def') }}">Alerte Inclusion</a>
                 </li>
                 <li class="nav-item dropdown blanc">
                     <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rubriques</a>
@@ -279,6 +279,21 @@
         {'text': 'Modifier mon mot de passe'}
     ]) }}
 
+{% elseif route == 'adherent_alert_def' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'ALerte-Inclusion'}
+    ]) }}
+
+{% elseif route == 'adherent_alert_create' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
+        {'text': 'Créer une alerte'}
+    ]) }}
+
 {% elseif route == 'adherent_alert' %}
 
     {{ breadcrumbs.render([
@@ -287,13 +302,23 @@
         {'text': 'Mes alertes'}
     ]) }}
 
-{% elseif route == 'admin_alert_view' %}
+{% elseif route == 'adherent_alert_view' %}
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
         {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
         {'url': url('adherent_alert'), 'text': 'Mes alertes'},
-        {'text': slug|capitalize}
+        {'text': slug|trim('-1')|capitalize}
+    ]) }}
+
+{% elseif route == 'adherent_edit_alert' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
+        {'url': url('adherent_alert'), 'text': 'Mes alertes'},
+        {'url': url('adherent_alert_view', {'slug': slug}), 'text': slug|trim('-1')|capitalize},
+        {'text': 'Modifier'}
     ]) }}
 
 {% else %}
