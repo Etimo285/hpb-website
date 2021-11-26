@@ -153,6 +153,14 @@ class AdherentController extends AbstractController
         }
 
 
+    // Page d'accueil de l'alerte-Inclusion
+    #[Route('/alerte-inclusion/', name: 'alert_def')]
+    public function defAlert(): Response
+    {
+        // Appel de la vue correspondante
+        return $this->render('alert/defAlert.html.twig');
+    }
+
     // Création d'une Alerte Adhérent
     #[Route('/creer-alerte/', name: 'alert_create')]
     public function createAlert(Request $request): Response
@@ -186,7 +194,7 @@ class AdherentController extends AbstractController
             $this->addFlash('success', 'Votre alerte à bien été créée !');
 
             // Redirection sur la page interface adhérent
-            return $this->redirectToRoute('adherent_gestion');
+            return $this->redirectToRoute('adherent_alert');
         }
 
         // // Appel de la vue en lui envoyant le formulaire à afficher
@@ -223,6 +231,8 @@ class AdherentController extends AbstractController
         // Si le formulaire est envoyé et n'a pas d'erreur
         if($form->isSubmitted() && $form->isValid()){
 
+            //TODO: Si modification avec content vide -> Error500 (NULL : expected string)
+
             // Hydratation de la modification de l'alerte pour la date et l'auteur
             /** @var $user User **/
             $user = $this->getUser();
@@ -236,10 +246,18 @@ class AdherentController extends AbstractController
             // Message flash de succès
             $this->addFlash('success', 'Alerte modifiée avec succès !');
 
-            // Redirection vers la page de l'alerte modifiée
-            return $this->redirectToRoute('adherent_alert_view', [
-                'slug' => $alert->getSlug(),
-            ]);
+            // Redirection vers la page de l'alerte modifiée suivant la hierarchie
+            if($this->isGranted('ROLE_ADMIN')){
+                return $this->redirectToRoute('admin_list_alert', [
+                    'slug' => $alert->getSlug(),
+                ]);
+            } else {
+                return $this->redirectToRoute('adherent_alert', [
+                    'slug' => $alert->getSlug(),
+                ]);
+
+            }
+
         }
 
         // Appel de la vue en lui envoyant le formulaire à afficher

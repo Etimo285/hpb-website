@@ -36,7 +36,8 @@
                     <div class="card my-5">
                         <h2 class="p-3 bg-custom-green text-white fs-2">{{ alert.object }}</h2>
                         <div class="card-body">
-                            <p class="card-text fs-4">{{ alert.content }}</p>
+                            {# Affichage du contenu de l'alerte sans balises html #}
+                            <p class="card-text fs-4">{{ alert.content|striptags }}</p>
 
                             {% if alert.author.pseudo is not null %}
                                 <p>Ecris par <span class="fw-bold">{{ alert.author.pseudo }}</span></p>

@@ -10,3 +10,5 @@ fos_ck_editor:
             language: fr
             height: 300px
             toolbar: full
+            font_defaultLabel: Arial
+            fontSize_defaultLabel: 32
