@@ -131,6 +131,7 @@ class AppFixtures extends Fixture
             'Handi-Acceuillance', 'Humour', 'Nos Amis'];
 
         $categories = [];
+        $icon = '';
 
         // Boucle qui récupère chaque element du tableau ci-dessus, pour hydrater la BDD
         foreach ($categoryList as $categoryName) {
@@ -139,6 +140,37 @@ class AppFixtures extends Fixture
 
             // Hydratation du champ name
             $newCategory->setName($categoryName);
+
+            switch ($categoryName) {
+
+                case 'News': $icon = 'newspaper';
+                    break;
+                case 'Blog': $icon = 'comment';
+                    break;
+                case 'Documentation': $icon = 'book';
+                    break;
+                case 'Conseil d\'administration': $icon = 'users';
+                    break;
+                case 'Grande Dépendance': $icon = 'wheelchair';
+                    break;
+                case 'Vie scolaire': $icon = 'graduation-cap';
+                    break;
+                case 'Vie professionnelle': $icon = 'briefcase';
+                    break;
+                case 'Culture, sport et loisirs': $icon = 'futbol';
+                    break;
+                case 'Accessibilité': $icon = 'low-vision';
+                    break;
+                case 'Handi-Acceuillance': $icon = 'door-open';
+                    break;
+                case 'Humour': $icon = 'laugh-beam';
+                    break;
+                case 'Nos Amis': $icon = 'universal-access';
+                    break;
+
+            }
+
+            $newCategory->setIcon($icon);
 
             $manager->persist($newCategory);
 
