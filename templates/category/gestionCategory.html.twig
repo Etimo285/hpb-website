@@ -17,16 +17,26 @@
                     <section id="add-category">
                         <h2 class="fs-2">Ajouter une catégorie</h2>
 
-                        <div class="offset-3 col-6 my-5">
-                        {{ form_start(createCategoryForm) }}
-                        {{ form_row(createCategoryForm.name, {
-                            label: 'Donnez un nom à votre catégorie',
-                            label_attr: {
-                                class: 'fw-bold',
-                            }
-                        }) }}
-                        <button class="btn btn-success mt-4 w-100" type="submit">Valider</button>
-                        {{ form_end(createCategoryForm) }}
+                        <div class="offset-4 col-4 my-5">
+                            {{ form_start(createCategoryForm) }}
+                            {{ form_row(createCategoryForm.name, {
+                                label: 'Donnez un nom à votre catégorie',
+                                label_attr: {
+                                    class: 'fw-bold',
+                                },
+
+                            }) }}
+                            {{ form_row(createCategoryForm.icon, {
+                                label: 'Selectionnez une îcone',
+                                label_attr: {
+                                    class: 'fw-bold',
+                                },
+                            }) }}
+
+                            <button class="btn btn-success mt-4 w-100" type="submit">Valider</button>
+                            {{ form_end(createCategoryForm) }}
+
+
                         </div>
 
                     </section>
@@ -77,7 +87,7 @@
 
                         <h2 class="fs-2">Supprimer une catégorie</h2>
 
-                        <button class="btn btn-white bg-dark dropdown-toggle text-white mx-auto" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories</button>
+                        <button class="btn btn-white bg-dark dropdown-toggle text-white mx-auto" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories</button>
                         <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
                             {% for category in category_repo.findAll %}
                                 <li class="fw-bold"><a class="dropdown-item" href="{{ path('admin_category_confirm_delete', {'slug': category.slug}) }}">{{ category.name }}</a></li>
@@ -92,8 +102,5 @@
             </div>
         </div>
     </div>
-
-
-    {% block js %}{% endblock %}
 
 {% endblock %}
