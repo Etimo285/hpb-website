@@ -29,7 +29,7 @@ class AppFixtures extends Fixture
         // Instanciation du Faker en français
         $faker = Faker\Factory::create('fr_FR');
 
-        // Attribution d'un nombre boucles des entités
+        // Attribution d'un nombre aux boucles des entités
         $articleCount = 40;
         $eventCount = 5;
         $alertCount = 10;
@@ -40,7 +40,8 @@ class AppFixtures extends Fixture
 
         // --USER ADMIN-- //
 
-        // Attribution d'une nouvelle entité User à une variable
+        // Instanciation du tableau des admins
+        $admins = [];
 
         for ($i = 0; $i < $adminCount; $i++) {
             $newAdmin = new User();
@@ -62,6 +63,7 @@ class AppFixtures extends Fixture
             // Persistance de l'admin
             $manager->persist($newAdmin);
 
+            $admins[] = $newAdmin;
         }
 
         // --USER ADHERENT--//
@@ -189,7 +191,7 @@ class AppFixtures extends Fixture
             $newArticle
                 ->setTitle($faker->sentence(10))
                 ->setContent($faker->paragraph(10))
-                ->setAuthor($newAdmin) // 'HPB' sera l'auteur
+                ->setAuthor($faker->randomElement($admins))
                 ->setHidden(false)
                 ->setCategory($faker->randomElement($categories));
             $newArticle->setCreatedAt();
