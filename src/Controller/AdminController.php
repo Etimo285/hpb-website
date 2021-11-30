@@ -38,12 +38,115 @@ class AdminController extends AbstractController
         return $this->render('admin/adminGestion.html.twig');
     }
 
-    #[Route('/liste-adherents/', name: 'list_adherent')]
-    public function userList(UserRepository $userRepository): Response
+    // Liste des utilisateurs du site (non-admins)
+    #[Route('/liste-utilisateurs/{orderBy}/{orderParam}', name: 'list_users')]
+    public function userList($orderBy, $orderParam, UserRepository $userRepository): Response
     {
+        // Switch d'ordre de tri (Ascendant ou descendant)
+        if ($orderParam === 'ASC') {
+            $orderParam = 'DESC';
+        } else {
+            $orderParam = 'ASC';
+        }
 
-        return $this->render('admin/adherentList.html.twig', [
-            'users' => $userRepository->findAll(),
+        // On récupère la liste des utilisateurs selon le critère envoyé en donnée GET
+        $users = $userRepository->findBy(array(), array($orderBy => $orderParam), null, 0);
+
+        return $this->render('admin/usersList.html.twig', [
+            'users' => $users,
+            'orderBy' => $orderBy,
+            'orderParam' => $orderParam
+        ]);
+    }
+
+    // SUPPRIMER UN UTILISATEUR
+    #[Route('/supprimer-utilisateur/{id}/{origin_orderBy}/{origin_orderParam}', name: 'delete_user')]
+    public function deleteUser($origin_orderBy, $origin_orderParam, User $user ,Request $request): Response
+    {
+        // Contrôle du token csrf
+        if(!$this->isCsrfTokenValid('user_delete_' . $user->getId(), $request->query->get('csrf_token'))){
+
+            // Message flash
+            $this->addFlash('error', 'Token de sécurité invalide, veuillez ré-essayer.');
+        } else {
+
+            // Gestion de la suppression des données en base de données
+            $em = $this->getDoctrine()->getManager();
+
+            /*
+             * [ Purge en BDD de tout ce qui est associé à l'utilisateur supprimé ]
+             */
+
+            // Pour chaque articles écris par l'utilisateur...
+            foreach ($user->getArticles() as $article) {
+
+                // Pour chaque commentaires de l'article (de n'importe quel utilisateur)...
+                foreach ($article->getComment() as $comment) {
+
+                    // On supprimme ce commentaire
+                    $em->remove($comment);
+                }
+
+                // Une fois tous les commentaires supprimés, on supprime cet article
+                $em->remove($article);
+            }
+
+            // Pour chaque commentaires postés par l'utilisateur (où qu'ils soient)...
+            foreach ($user->getComments() as $comment) {
+
+                // On supprime ce commentaire
+                $em->remove($comment);
+            }
+
+            // Pour chaque alertes postés par l'utilisateur...
+            foreach ($user->getAlerts() as $alert) {
+
+                // Pour chaque messages de discussion d'alerte (que ce soit par l'utilisateur ou un administrateur)...
+                foreach ($alert->getAlertMessage() as $alertMessage) {
+
+                    // On supprime le message
+                    $em->remove($alertMessage);
+                }
+
+                // Une fois tous les messages supprimés, on supprime l'alerte
+                $em->remove($alert);
+            }
+
+            // Pour chaque messages de discussion d'alerte posté par l'utilisateur (où qu'ils soient)...
+            foreach ($user->getAlertMessages() as $alertMessage) {
+
+                // On supprime ce message
+                $em->remove($alertMessage);
+            }
+
+            // Pour chaque 'vues d'alerte' de la part de l'utilisateur (où qu'elles soient)...
+            foreach ($user->getAlertViews() as $alertView) {
+
+                // On supprime la vue d'alerte
+                $em->remove($alertView);
+            }
+
+            // Pour chaque évènements écris par l'utilisateur...
+            foreach ($user->getEvents() as $event) {
+
+                // On supprime l'évènement
+                $em->remove($event);
+            }
+
+            // Et enfin, suppression de l'utilisateur
+            $em->remove($user);
+
+            // Validation de toutes les requêtes de suppression
+            $em->flush();
+
+            // Message flash
+            $this->addFlash('success', 'L\'utilisateur et tout ce qu\'il lui est associé ont étés supprimés avec succès !');
+
+        }
+
+        return $this->redirectToRoute('admin_list_users', [
+            'orderBy' => $origin_orderBy,
+            'orderParam' => $origin_orderParam
         ]);
     }
 
@@ -282,8 +385,6 @@ class AdminController extends AbstractController
             // Message flash
             $this->addFlash('error', 'Token de sécurité invalide, veuillez ré-essayer.');
         } else {
-
-
 
             // Gestion de la suppression des données en base de données
             $em = $this->getDoctrine()->getManager();

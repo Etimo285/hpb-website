@@ -13,6 +13,12 @@ html, body{
 
 /*-------------------- CUSTOM CLASSES --------------------*/
 
+.admin-btn{
+    display: flex;
+    flex-direction: row;
+}
+
+
 .limit-box{
     border: 1px solid black;
     border-radius: 4px;
