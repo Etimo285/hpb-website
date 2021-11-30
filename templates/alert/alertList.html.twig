@@ -7,7 +7,7 @@
     <div class="row my-3">
         <div class="col-12 text-center">
             {# avec affichage du nombre total des alertes (attribut apporté par knp_paginator) #}
-            <h1 class="border-3 border text-white bg-custom-green">Liste des alertes ({{ alerts.getTotalItemCount }})</h1>
+            <h1 class="border-3 border text-white bg-custom-red">Liste des alertes ({{ alerts.getTotalItemCount }})</h1>
         </div>
 
         {# S'il y a des alertes, on affiche le menu de pagination #}
@@ -34,18 +34,19 @@
                 {% for alert in alerts|sort|reverse %}
 
                     <div class="card my-5">
-                        <h2 class="p-3 bg-custom-green text-white fs-2">{{ alert.object }}</h2>
+                        <h2 class="p-3 bg-custom-red text-white fs-2">{{ alert.object }}</h2>
                         <div class="card-body">
                             {# Affichage du contenu de l'alerte sans balises html #}
                             <p class="card-text fs-4">{{ alert.content|striptags }}</p>
 
-                            {% if alert.author.pseudo is not null %}
-                                <p>Ecris par <span class="fw-bold">{{ alert.author.pseudo }}</span></p>
-                            {% else %}
-                                <p>Ecris par <span class="fw-bold">{{ alert.author.firstname }} {{ alert.author.lastname }}</span></p>
-                            {% endif %}
-
-                            <p>Le {{ alert.createdAt|date('d/m/Y à H\\hi') }}</p>
+                            <div class="d-flex flex-row">
+                                {% if alert.author.pseudo is not null %}
+                                    <p>Ecris par <span class="fw-bold">{{ alert.author.pseudo }}</span></p>
+                                {% else %}
+                                    <p>Ecris par <span class="fw-bold">{{ alert.author.firstname }} {{ alert.author.lastname }}</span></p>
+                                {% endif %}
+                                <p class="ms-auto">Le <span class="fw-bold">{{ alert.createdAt|date('d/m/Y à H\\hi') }}</span></p>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <a href="{{ path('adherent_alert_view', {'slug': alert.slug }) }}">Voir l'alerte en détail</a>

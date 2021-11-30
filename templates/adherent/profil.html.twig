@@ -9,25 +9,70 @@
         <div class="row fs-4">
 
             <h1 class="col-12 text-center my-3">Mon profil</h1>
-            <p>
-            <div class="col-3 offset-3 text-center my-3">Pseudo</div>
-            <div class="col-3 text-center my-3">{{ app.user.pseudo }}</div>
-            </p>
-            <p>
-            <div class="col-3 offset-3 text-center my-3">Nom</div>
-            <div class="col-3 text-center my-3">{{ app.user.lastName }}</div>
-            </p>
-            <div class="col-3 offset-3 text-center my-3">Prénom</div>
-            <div class="col-3 text-center my-3">{{ app.user.firstName }}</div>
-            </p>
-            </p>
-            <div class="col-3 offset-3 text-center my-3">Téléphone</div>
-            <div class="col-3 text-center my-3">{{ app.user.phone }}</div>
-            </p>
-            </p>
-            <div class="col-3 offset-3 text-center my-3">Email</div>
-            <div class="col-3 text-center my-3">{{ app.user.email }}</div>
-            </p>
+
+
+            <table class="table offset-3 col-6 mt-5">
+                <tbody>
+                <tr>
+                    <th>Pseudo</th>
+                    {% if app.user.pseudo is null %}
+                        <td><span class="text-secondary">(Aucun pseudo renseigné)</span></td>
+                    {% else %}
+                        <td>{{ app.user.pseudo }}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ app.user.lastName }}</td>
+                </tr>
+                <tr>
+                    <th>Prénom</th>
+                    <td>{{ app.user.firstName }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone</th>
+                    {% if app.user.phone is null %}
+                        <td><span class="text-secondary">(Aucun numéro renseigné)</span></td>
+                    {% else %}
+                        <td>{{ app.user.phone }}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ app.user.email }}</td>
+                </tr>
+                <tr>
+                    <th>Rôle</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>Administrateur</td>
+                    {% elseif is_granted('ROLE_ADHERENT') %}
+                        <td>Adhérent</td>
+                    {% else %}
+                        <td>Utilisateur</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Membre</th>
+                    {% if app.user.isMember %}
+                        <td>Oui</td>
+                    {% else %}
+                        <td>Non</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Vérifié</th>
+                    {% if app.user.verified %}
+                        <td>Oui</td>
+                    {% else %}
+                        <td>Non</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <th>Compte créé le</th>
+                    <td>{{ app.user.createdAt|date('d/m/Y') }}</td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
 

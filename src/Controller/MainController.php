@@ -37,15 +37,15 @@ class MainController extends AbstractController
         return $this->render('main/home.html.twig');
     }
 
-    #[Route('/actualité/', name: 'new_articles_list')]
-    public function newArticlesList(ArticleRepository $articleRepository, Request $request): Response
+    #[Route('/actualité/{limit}', name: 'new_articles_list')]
+    public function newArticlesList($limit ,ArticleRepository $articleRepository, Request $request): Response
     {
-
-        $articles = $articleRepository->findAll();
-
+        //Récupération des $limit derniers articles selon leur date de création
+        $articles = $articleRepository->findBy(array(), array('createdAt' => 'DESC'), $limit, 0);
 
         return $this->render('article/newArticlesList.html.twig', [
             'articles' => $articles,
+            'limit' => $limit
         ]);
     }
 

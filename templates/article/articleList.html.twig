@@ -6,7 +6,10 @@
 
     <div class="row my-3">
         <div class="col-12 text-center">
-            <h1 class="border-3 border text-white bg-custom-green fw-bold">{{ category.name }}</h1>
+            <h1 class="border-3 border text-white bg-custom-green fw-bold">
+                <i class="px-2 fas fa-{{ category.icon }}"></i>
+                {{ category.name }}
+            </h1>
         </div>
     </div>
 
@@ -131,13 +134,14 @@
                             <div class="card-body">
                                 <p class="card-text fs-4">{{ article.content }}</p>
 
-                                {% if article.author.pseudo is not null %}
-                                    <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
-                                {% else %}
-                                    <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
-                                {% endif %}
-
-                                <p>Le {{ article.createdAt|date('d/m/Y à H\\hi') }}</p>
+                                <div class="d-flex flex-row">
+                                    {% if article.author.pseudo is not null %}
+                                        <p>Ecris par <span class="fw-bold">{{ article.author.pseudo }}</span></p>
+                                    {% else %}
+                                        <p>Ecris par <span class="fw-bold">{{ article.author.firstname }} {{ article.author.lastname }}</span></p>
+                                    {% endif %}
+                                    <p class="ms-auto">Le <span class="fw-bold">{{ article.createdAt|date('d/m/Y à H\\hi') }}</span></p>
+                                </div>
                             </div>
                             <div class="card-footer d-flex flex-row justify-content-between">
                                 <a href="{{ path('article_view', {'slug_category': category.slug ,'slug': article.slug }) }}">
