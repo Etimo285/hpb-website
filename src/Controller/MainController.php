@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Alert;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\User;
-use App\Form\NewFunctionTitleFormType;
 use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -17,8 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -38,7 +34,7 @@ class MainController extends AbstractController
     }
 
     #[Route('/actualité/{limit}', name: 'new_articles_list')]
-    public function newArticlesList($limit ,ArticleRepository $articleRepository, Request $request): Response
+    public function newArticlesList($limit, ArticleRepository $articleRepository, Request $request): Response
     {
         //Récupération des $limit derniers articles selon leur date de création
         $articles = $articleRepository->findBy(array(), array('createdAt' => 'DESC'), $limit, 0);

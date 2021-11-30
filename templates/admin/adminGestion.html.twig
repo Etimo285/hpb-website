@@ -10,15 +10,16 @@
     </div>
 
     <div class="container fs-5">
-        <ul>
-            <li><a href=""></a></li>
-            <li><a href="{{ path('admin_article_create') }}">Ecrire un nouvel article</a></li>
-            <li><a href="{{ path('admin_category_gestion') }}">Gestionnaire des catégories</a></li>
-            <li><a href="{{ path('admin_list_adherent') }}">Accéder à la liste des adhérents</a></li>
-            <li><a href="{{ path('admin_list_alert') }}">Accéder à la liste des alertes</a></li>
-        </ul>
+        <div class="col-8 offset-2">
+            <ul class="list-unstyled admin-btn">
+                <li><a class="fs-5 mx-2 btn btn-secondary" href="{{ path('admin_article_create') }}"><i class="pe-2 fas fa-feather-alt"></i>Ecrire un nouvel article</a></li>
+                <li><a class="fs-5 mx-2 btn btn-secondary" href="{{ path('admin_category_gestion') }}"><i class="pe-2 fas fa-boxes"></i>Gestionnaire des catégories</a></li>
+                <li><a class="fs-5 mx-2 btn btn-secondary" href="{{ path('admin_list_users', {'orderBy': 'createdAt', 'orderParam': 'ASC'}) }}"><i class="pe-2 fas fa-list"></i><i class="pe-2 fas fa-users"></i>Accéder à la liste des adhérents</a></li>
+                <li><a class="fs-5 mx-2 btn btn-secondary" href="{{ path('admin_list_alert') }}"><i class="pe-2 fas fa-list"></i><i class="pe-2 fas fa-exclamation-triangle"></i>Accéder à la liste des alertes</a></li>
+            </ul>
 
-        </ul>
+            </ul>
+        </div>
     </div>
 
 {% endblock %}

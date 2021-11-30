@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des adhérents{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center my-5 text-decoration-underline">Liste des adhérents du site</h1>
+
+    {# Liens pour définir le critère de tri des utilisateur #}
+    <div class="limit-box d-flex flex-row align-items-baseline offset-2 my-4">
+        <a title="Changer l'ordre d'affichage" class="fs-2 ps-3" href="{{ path(route, {'orderBy': orderBy, 'orderParam': orderParam}) }}"><i class="fas fa-arrows-alt-v"></i></a>
+        <p class="fs-4 px-3">Trier par :</p>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'createdAt', 'orderParam': orderParam}) }}">Date de création</a>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'pseudo', 'orderParam': orderParam}) }}">Pseudo</a>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'last_name', 'orderParam': orderParam}) }}">Nom</a>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'first_name', 'orderParam': orderParam}) }}">Prénom</a>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'roles', 'orderParam': orderParam}) }}">Rôle</a>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'isMember', 'orderParam': orderParam}) }}">Côtisation</a>
+    </div>
+
+
+
+    {# Table des profils #}
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    <span class="{% if orderBy == 'isMember' %}text-success{% endif %}">A côtisé</span>
+                </th>
+                <th>
+                    <span class="{% if orderBy == 'pseudo' %}text-success{% endif %}">Pseudo</span>
+                </th>
+                <th>Email</th>
+                <th>
+                    <span class="{% if orderBy == 'roles' %}text-success{% endif %}">Rôle</span>
+                </th>
+                <th>Vérifié</th>
+                <th>
+                    <span class="{% if orderBy == 'last_name' %}text-success{% endif %}">Nom</span>
+                </th>
+                <th>
+                    <span class="{% if orderBy == 'first_name' %}text-success{% endif %}">Prénom</span>
+                </th>
+                <th>Téléphone</th>
+                <th>
+                    <span class="{% if orderBy == 'createdAt' %}text-success{% endif %}">Créé le</span>
+                </th>
+                <th>Modifié le</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {# Affichage des utilisateurs #}
+            {% for user in users %}
+
+                    <tr>
+                        <td>
+                            {% if user.isMember %}
+                                <i class="fs-5 text-success fas fa-check"></i>
+                            {% else %}
+                                <i class="fs-5 text-danger fas fa-times"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.pseudo }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.roles[0] == 'ROLE_ADHERENT' %}
+                                Adhérent
+                            {% else %}
+                                Utilisateur
+                            {% endif %}
+                        </td>
+                            {% if user.verified %}
+                                <td>Oui</td>
+                            {% else %}
+                                <td>Non</td>
+                            {% endif %}
+                        <td>{{ user.lastName }}</td>
+                        <td>{{ user.firstName }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>{{ user.createdAt|date('d-m-Y H:i') }}</td>
+                        <td>{{ user.updatedAt ? user.updatedAt|date('d-m-Y H:i') : '' }}</td>
+                        <td><a class="btn btn-outline-primary" href="">Modifier</a></td>
+                        <td>
+                            <a class="btn btn-outline-danger"
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ainsi que tout ce dont il est auteur ?')"
+                               href="{{ path('admin_delete_user', {'id': user.id,'origin_orderBy': orderBy, 'origin_orderParam': orderParam, csrf_token: csrf_token('user_delete_' ~ user.id ) }) }}">
+                                Supprimer
+                            </a>
+
+                        </td>
+                    </tr>
+
+            {% else %}
+                <tr>
+                    <td colspan="8">Aucun adhérent enregistré</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

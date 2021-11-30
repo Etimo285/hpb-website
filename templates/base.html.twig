@@ -266,12 +266,12 @@
         {'text': 'Modifier un article'}
     ]) }}
 
-{% elseif route == 'admin_list_adherent' %}
+{% elseif route == 'admin_list_users' %}
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
         {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
-        {'text': 'Liste des adhérents'}
+        {'text': 'Liste des utilisateurs'}
     ]) }}
 
 {% elseif route == 'admin_list_alert' %}
