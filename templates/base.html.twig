@@ -102,17 +102,24 @@
             <ul class="navbar-nav col justify-content-evenly">
                 <li class="nav-item blanc">
                     <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page"
-                       href="{{ path('new_articles_list') }}">Actualité
+                       href="{{ path('new_articles_list', {'limit': 10}) }}">
+                        <i class="fas fa-newspaper"></i>
+                        Actualité
                     </a>
                 </li>
                 <li class="nav-item blanc">
                     <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page"
-                       href="{{ path('article_list', {'slug': 'blog' }) }}">Blog
+                       href="{{ path('article_list', {'slug': 'blog' }) }}">
+
+                        Blog
                     </a>
                 </li>
 
                 <li class="nav-item bg-danger alerfocus">
-                    <a class="nav-link active mx-auto text-white fw-bold fs-5 alerfocus" aria-current="page" href=" {{ path('adherent_alert_create') }}">Alerte Inclusion</a>
+                    <a class="nav-link active mx-auto text-white fw-bold fs-5 alerfocus" aria-current="page" href=" {{ path('adherent_alert_create') }}">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Alerte Inclusion
+                    </a>
 
                 </li>
                 <li class="nav-item dropdown blanc">
@@ -129,7 +136,10 @@
                 </li>
                 {% if not app.user %}
                     <li class="nav-item blanc">
-                        <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page" href="{{ path('app_login') }}">Connexion</a>
+                        <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page" href="{{ path('app_login') }}">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Connexion
+                        </a>
                     </li>
                 {% else %}
                     <li class="nav-item dropdown blanc">
@@ -138,11 +148,15 @@
 
                         {% if is_granted("ROLE_ADMIN") %}
                             <li class="fw-bold"><a class="dropdown-item" aria-current="page" href="{{ path('admin_gestion') }}">Administration</a></li>
-
                         {% endif %}
                             <li class="fw-bold blanc"><a class="dropdown-item" aria-current="page" href="{{ path('adherent_gestion') }}">Gérer mon compte</a></li>
 
-                            <li class="fw-bold blanc"><a class="dropdown-item" aria-current="page" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                            <li class="fw-bold blanc">
+                                <a class="dropdown-item" aria-current="page" href="{{ path('app_logout') }}">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Déconnexion
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     {#<li class="nav-item dropdown">
@@ -159,11 +173,6 @@
 
             </ul>
         </div>
-
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success blanc" type="submit">Search</button>
-        </form>
 
     </div>
 
@@ -265,13 +274,12 @@
         {'text': 'Liste des adhérents'}
     ]) }}
 
-{% elseif route == 'admin_alert_view' %}
+{% elseif route == 'admin_list_alert' %}
 
     {{ breadcrumbs.render([
         {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
-        {'url': url('adherent_alert'), 'text': 'Mes alertes'},
-        {'text': slug|capitalize}
+        {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
+        {'text': 'Liste des alertes'}
     ]) }}
 
 {# 3) Groupe de conditions des pages adhérent / Préfixe 'adherent_' #}
@@ -335,12 +343,21 @@
 
 {% elseif route == 'adherent_alert_view' %}
 
-    {{ breadcrumbs.render([
-        {'url': url('home'), 'text': 'Accueil'},
-        {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
-        {'url': url('adherent_alert'), 'text': 'Mes alertes'},
-        {'text': slug|trim('-1')|capitalize}
-    ]) }}
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ breadcrumbs.render([
+            {'url': url('home'), 'text': 'Accueil'},
+            {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
+            {'url': url('admin_list_alert') ,'text': 'Liste des alertes'},
+            {'text': slug|capitalize}
+        ]) }}
+    {% else %}
+        {{ breadcrumbs.render([
+            {'url': url('home'), 'text': 'Accueil'},
+            {'url': url('adherent_gestion'), 'text': 'Gérer mon compte'},
+            {'url': url('adherent_alert'), 'text': 'Mes alertes'},
+            {'text': slug|trim('-1')|capitalize}
+        ]) }}
+    {% endif %}
 
 {% elseif route == 'adherent_edit_alert' %}
 
