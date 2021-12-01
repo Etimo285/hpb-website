@@ -167,7 +167,16 @@
     color: deeppink;
     border-color:deeppink;
 }
-
+.latbar{
+    display: flex;
+    flex-direction: row;
+    background-color: yellowgreen;
+    border-radius: 15px;
+    align-items: center;
+    width: inherit;
+    margin: auto;
+    padding: 5px 5px 5px 20px;
+}
 
 
 .bttn {
@@ -176,11 +185,10 @@
     padding: 0;
     cursor: pointer;
     transition: 0.2s ease-in-out;
-    width: 3rem;
+    width: 5rem;
     height: 3rem;
     overflow: hidden;
     border: 0.25rem solid #000000;
-    font-size: 0;
     margin-bottom: 0.5rem;
 }
 .bttn[data-color="red"] {

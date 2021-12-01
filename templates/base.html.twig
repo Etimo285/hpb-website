@@ -50,10 +50,10 @@
 
         <div id="sideNavigation" class="sidenav flex-md-column flex-row navbar-nav p-10 m-10 mx-10 justify-content-between col-12 col-md-2 ">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <a class="nav-item m-10 p-10 mb-3 mx-auto bg-danger fw-bold fs-4 text-center" href="{{ path('adherent_alert_def') }}">Alerte inclusion</a>
-            <li class="nav-item m-10 p-10 mb-3 mx-auto dropdown">
+            <a class="bg-danger latbar" href="{{ path('adherent_alert_def') }}">Alerte inclusion</a>
+            <li class="dropdown latbar">
                 <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Meilleur contraste</a>
-                <ul class="list-unstyled p-0 m-0 colors row ali " aria-labelledby="navbarDropdown">
+                <ul class="list-unstyled p-0 m-2 colors row ali " aria-labelledby="navbarDropdown">
                     {#  <li class="fw-bold"><button id="squareblue" class="square" onclick="ChangeStyleSheet('css/sty//le-blue.css')">Bleu</button></li>#}
                     <li class="fw-bold"><button class="bttn contra" data-color="blue">Bleu</button></li>
                     <li class="fw-bold"><button class="bttn contra" data-color="red"> Rouge</button></li>
@@ -63,24 +63,10 @@
                     <li class="fw-bold"><button class="bttn contra" data-color="orange">Orange</button></li>
                 </ul>
             </li>
-
-            {# <ul>
-                    <a class="nav-item m-10 p-10 mb-3 mx-auto contra">meillieur contraste</a>
-                    .colors
-  button.btn(data-color="red") Switch to red
-  button.btn(data-color="blue") Switch to blue
-  button.btn(data-color="green") Switch to green
-  button.btn(data-color="orange") Switch to orange
-  button.btn(data-color="pink") Switch to pink
-  button.btn(data-color="black") Switch to black
-
-
-
-
-                </ul>#}
-            {#  <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center" href="#">Lecteur d'ecran</a>#}
-            <a class="fw-bold"><button class="bttn contra" data-color="versimp">version simplifié</button></a>
-
+            <ul class="dropdown latbar">
+                <a class="nav-item m-10 p-10 mb-3 mx-auto fw-bold fs-4 text-center " href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Version Simplifié</a>
+                <li class="fw-bold list-unstyled"><button class="bttn contra" data-color="versimp">version simplifié</button></li>
+            </ul>
         </div>
 
         <nav class="topnav">
