@@ -43,7 +43,7 @@
                         <div class="card my-5">
                             <h2 class="p-3 bg-custom-green text-white fs-3">{{ article.title }}</h2>
                             <div class="card-body">
-                                <p class="card-text fs-5">{{ article.content|excerpt(30) }}</p>
+                                <p class="card-text fs-5">{{ article.content|excerpt(50) }}</p>
 
                                 <div class="d-flex flex-row">
                                     {% if article.author.pseudo is not null %}

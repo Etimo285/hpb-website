@@ -5,19 +5,16 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\Comment;
+use App\Entity\Event;
 use App\Entity\User;
 use App\Repository\ArticleRepository;
-use App\Repository\UserRepository;
-use Knp\Component\Pager\PaginatorInterface;
+use App\Repository\EventRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,9 +31,9 @@ class MainController extends AbstractController
     }
 
     #[Route('/actualité/{limit}', name: 'new_articles_list')]
-    public function newArticlesList($limit, ArticleRepository $articleRepository, Request $request): Response
+    public function newArticlesList($limit, ArticleRepository $articleRepository): Response
     {
-        //Récupération des $limit derniers articles selon leur date de création
+
         $articles = $articleRepository->findBy(array(), array('createdAt' => 'DESC'), $limit, 0);
 
         return $this->render('article/newArticlesList.html.twig', [
@@ -47,61 +44,13 @@ class MainController extends AbstractController
 
     // Liste des articles d'une catégorie
     #[Route('/liste-articles/{slug}/', name: 'article_list')]
-    public function articleList(UserRepository $userRepository, Category $category, Request $request, PaginatorInterface $paginator): Response
+    public function articleList(Category $category,): Response
     {
 
-        // Récupération du numéro de page
-        $requestedPage = $request->query->getInt('page', 1);
-
-        // Vérification que le numéro est positif
-        if ($requestedPage < 1) {
-            throw new NotFoundHttpException();
-        }
-
-        $query = $category->getArticles();
-
-        // On stocke dans $pageArticles les 10 articles de la page demandée dans l'URL
-        $articles = $paginator->paginate(
-            $query,
-            $requestedPage,
-            10
-        );
-
-        $admins = $userRepository->findUserByRole(['ROLE_ADMIN']);
-        $users = [];
-
-        foreach ($admins as $admin) {
-            $form = $this->createFormBuilder($admin)
-                ->add('functionTitle', TextType::class, array('label' => false, 'required' => false))
-                ->add('save', SubmitType::class)
-                ->getForm();
-
-            $form->handleRequest($request);
-
-            // Tableau associatif de l'utilisateur et son formulaire
-            $user = array('entity' => $admin, 'entityForm' => $form->createView());
-
-            // Push dans un tableau "users"
-            $users[] = $user;
-
-
-            if ($form->isSubmitted() && $form->isValid()) {
-
-                $em = $this->getDoctrine()->getManager();
-
-                $admin->setFunctionTitle($form->get('functionTitle')->getData());
-
-                $em->persist($admin);
-                $em->flush();
-
-            }
-
-        }
 
         return $this->render('article/articleList.html.twig', [
             'category' => $category,
-            'articles' => $articles,
-            'users' => $users,
+            'articles' => $category->getArticles(),
         ]);
     }
 
@@ -113,7 +62,7 @@ class MainController extends AbstractController
         // Restriction d'un article caché si l'utilisateur n'est pas connecté.
         if ($article->getHidden() && $this->getUser() === null) {
 
-        $this->addFlash('error', 'Accès restreint : Cet article est caché. Veuillez vous connecter en tant qu\'administrateur pour y accéder.');
+            $this->addFlash('error', 'Accès restreint : Cet article est caché. Veuillez vous connecter en tant qu\'administrateur pour y accéder.');
 
             return $this->redirectToRoute('app_login');
 
@@ -174,10 +123,34 @@ class MainController extends AbstractController
             'comments' => $article->getComment(),
             'form' => $form->createView(),
             'medias' => $medias
-    ]);
+        ]);
+
     }
 
+    #[Route('/liste-evenements/', name: 'event_list')]
+    public function eventList(EventRepository $eventRepository): Response
+    {
+        // Récupération de l'évènement le plus récent
+        $firstEvent = $eventRepository->findOneBy(array(), array('createdAt' => 'DESC'));
 
+        // Récupération des évènements selon leur date de création, excepté le premier.
+        $events = $eventRepository->findBy(array(), array('createdAt' => 'DESC'), null, 1);
+
+        return $this->render('event/eventList.html.twig', [
+            'firstEvent' => $firstEvent,
+            'events' => $events
+        ]);
+    }
+
+    #[Route('/consulter-evenement/{slug}', name: 'event_view')]
+    public function viewEvent(Event $event): Response
+    {
+
+
+        return $this->render('event/viewEvent.html.twig', [
+            'event' => $event
+        ]);
+    }
 
     // Tester l'envoi d'email
     #[Route("/envoyer-un-email-de-test/", name:"send_email_test")]

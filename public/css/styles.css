@@ -13,6 +13,34 @@ html, body{
 
 /*-------------------- CUSTOM CLASSES --------------------*/
 
+.first-event{
+    width: 70%;
+    position: sticky;
+    left: 15%;
+    margin: 40px 0;
+}
+
+.first-event>.card>.card-img-top{
+    height: 400px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.list-events{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 70%;
+    position: sticky;
+    left: 15%;
+}
+
+.list-events>.card{
+    width: 20rem;
+    margin: 20px;
+}
+
 .add-category-help{
     width: 50%;
 }
