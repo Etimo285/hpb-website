@@ -369,11 +369,9 @@ class AdminController extends AbstractController
     /* GESTIONNAIRE DES CATEGORIES */
 
     #[Route('/gestionnaire-categories/', name: 'category_gestion')]
-    //#[ParamConverter('category', class: 'App\Entity\Category', options: ['mapping' =>['slug_category' => 'slug']])]
     public function gestionCategory(Request $request): Response
     {
-
-        //-- Ajout --//
+        // AJOUTER CATEGORIE
         $newCategory = new Category();
         $form = $this->createForm(CreateCategoryFormType::class, $newCategory);
         $form->handleRequest($request);
@@ -393,22 +391,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('admin_category_gestion');
         }
 
-        //-- Modification --//
-        //$editForm = $this->createForm(EditCategoryFormType::class, $category);
-        //$editForm->handleRequest($request);
-//
-        //if ($creationForm->isSubmitted() && $creationForm->isValid()) {
-//
-        //    $em = $this->getDoctrine()->getManager();
-        //    $em->persist($newCategory);
-        //    $em->flush();
-//
-        //    // Message flash
-        //    $this->addFlash('success', 'Le nom de votre catégorie à été modifié avec succès !');
-//
-        //    // Redirection sur la page de gestionnaire de catégories
-        //    return $this->redirectToRoute('category_gestion');
-        //}
+
 
         return $this->render('category/gestionCategory.html.twig', [
             'form' => $form->createView(),
@@ -416,8 +399,35 @@ class AdminController extends AbstractController
 
     }
 
-    // --  Suppression -- //
+    // MODIFIER CATEGORIE
+    #[Route('/gestionnaire-categories/modifier/{slug}', name: 'category_edit')]
+    public function editCategory(Category $category, Request $request): Response
+    {
 
+        // Formulaire de modification de catégorie
+        $form = $this->createForm(EditCategoryFormType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($category);
+            $em->flush();
+
+            // Message flash
+            $this->addFlash('success', 'La catégorie à été modifiée avec succès !');
+
+            // Redirection sur la page de gestionnaire de catégories
+            return $this->redirectToRoute('admin_category_gestion');
+        }
+
+        return $this->render('category/editCategory.html.twig', [
+            'form' => $form->createView(),
+            'category' => $category // Récupération des données via l'id, pour afficher une prévisualisation
+        ]);
+    }
+
+    // --  Suppression -- //
     // Page de confirmation de suppression
     #[Route('/gestionnaire-categories/confirmer-suppression/{slug}', name: 'category_confirm_delete')]
     public function confirmDelete(Category $category, Request $request)

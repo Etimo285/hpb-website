@@ -13,7 +13,12 @@ class EditCategoryFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class)
+            ->add('name', TextType::class, [
+                'required' => true,
+            ])
+            ->add('icon', TextType::class, [
+                'required' => false
+            ])
         ;
     }
 
