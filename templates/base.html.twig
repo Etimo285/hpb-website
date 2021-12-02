@@ -24,6 +24,9 @@
     {% block css %}{% endblock %}
 
     <title>{% block title %}{% endblock %} - {{ site_name }}</title>
+
+    {# Icone du site #}
+    <link rel="icon" type="x/icon" href="{{ asset('icons/logo_hpb.jpg') }}">
 </head>
 <body>
 
@@ -264,6 +267,15 @@
         {'text': 'Liste des utilisateurs'}
     ]) }}
 
+{% elseif route == 'admin_edit_user' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
+        {'url': url('admin_list_users', {'orderBy': 'createdAt', 'orderParam': 'DESC'}), 'text': 'Liste des utilisateurs'},
+        {'text': 'Modifier le status d\'un utilisateur'}
+    ]) }}
+
 {% elseif route == 'admin_list_alert' %}
 
     {{ breadcrumbs.render([
@@ -496,7 +508,7 @@
     <!-- Copyright -->
     <div class="text-center p-3 border" >
         © 2021 Copyright:
-        <a href="#">TU COPIE PAS !!! HEAINNNN!!</a>
+        <a href="#"></a>
     </div>
     <!-- Copyright -->
     </footer>

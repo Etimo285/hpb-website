@@ -64,10 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'Votre pseudo doit faire au maximum {{ limit }} caractères.',
     )]
 
-    #[Assert\Regex(
-        pattern: "/^[a-zA-Z0-9 -]+$/",
-        message: 'Le pseudo ne peut contenir de caractères spéciaux !'
-    )]
     private $pseudo;
 
     /**

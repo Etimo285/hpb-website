@@ -15,7 +15,9 @@
         <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'last_name', 'orderParam': orderParam}) }}">Nom</a>
         <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'first_name', 'orderParam': orderParam}) }}">Prénom</a>
         <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'roles', 'orderParam': orderParam}) }}">Rôle</a>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'functionTitle', 'orderParam': orderParam}) }}">Fonction</a>
         <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'isMember', 'orderParam': orderParam}) }}">Côtisation</a>
+        <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path(route, {'orderBy': 'isVerified', 'orderParam': orderParam}) }}">Vérifié</a>
     </div>
 
 
@@ -35,7 +37,12 @@
                 <th>
                     <span class="{% if orderBy == 'roles' %}text-success{% endif %}">Rôle</span>
                 </th>
-                <th>Vérifié</th>
+                <th>
+                    <span class="{% if orderBy == 'functionTitle' %}text-success{% endif %}">Fonction</span>
+                </th>
+                <th>
+                    <span class="{% if orderBy == 'isVerified' %}text-success{% endif %}">Vérifié</span>
+                </th>
                 <th>
                     <span class="{% if orderBy == 'last_name' %}text-success{% endif %}">Nom</span>
                 </th>
@@ -75,6 +82,9 @@
                                 Utilisateur
                             {% endif %}
                         </td>
+                        <td>
+                            {{ user.functionTitle }}
+                        </td>
                             {% if user.verified %}
                                 <td>Oui</td>
                             {% else %}
@@ -98,7 +108,11 @@
                                 </button>
                             </td>
                         {% else %}
-                            <td><a class="btn btn-outline-primary" href="">Modifier</a></td>
+                            <td>
+                                <a class="btn btn-outline-primary" href="{{ path('admin_edit_user', {'id': user.id}) }}">
+                                    Modifier
+                                </a>
+                            </td>
                             <td>
                                 <a class="btn btn-outline-danger"
                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ainsi que tout ce dont il est auteur ?')"
