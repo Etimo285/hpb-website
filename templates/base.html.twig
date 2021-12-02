@@ -103,7 +103,7 @@
                 </li>
                 <li class="nav-item blanc">
                     <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page"
-                       href="{{ path('article_list', {'slug': 'blog' }) }}">
+                       href="{{ path('event_list') }}">
                         <i class="fas fa-calendar-alt"></i>
                         Évènements
                     </a>
@@ -203,6 +203,22 @@
         {'url': url('article_list', {'slug': slug_category }), 'text': slug_category|capitalize},
         {'text': slug|capitalize}
     ]) }}
+
+{% elseif route == 'event_list' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'text': 'Liste des évènements'},
+    ]) }}
+
+{% elseif route == 'event_view' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('event_list'), 'text': 'Liste des évènements'},
+        {'text': slug|capitalize}
+    ]) }}
+
 
 {% elseif route == 'app_register' %}
 

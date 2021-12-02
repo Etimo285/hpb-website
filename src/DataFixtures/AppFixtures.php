@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
 
         // Attribution d'un nombre aux boucles des entités
         $articleCount = 40;
-        $eventCount = 5;
+        $eventCount = 15;
         $alertCount = 10;
         $adminCount = 10;
         $adherentCount = 25;
