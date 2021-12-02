@@ -14,10 +14,12 @@ class CreateCategoryFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
-        // Champ de nom pour la catégorie que l'admin souhaite créer
         $builder
             ->add('name', TextType::class)
-            ->add('icon', TextType::class);
+            ->add('icon', TextType::class, [
+                'required' => false,
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

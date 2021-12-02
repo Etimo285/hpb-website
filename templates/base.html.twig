@@ -121,7 +121,7 @@
 
                 </li>
                 <li class="nav-item dropdown blanc">
-                    <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rubriques</a>
+                    <a class="nav-link dropdown-toggle mx-auto fw-bold fs-5" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% for category in category_repo.findAll %}
                             <li class="fw-bold">
@@ -236,6 +236,15 @@
         {'url': url('home'), 'text': 'Accueil'},
         {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
         {'text': 'Gestion des catégories'}
+    ]) }}
+
+{% elseif route == 'admin_category_edit' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
+        {'url': url('admin_category_gestion'), 'text': 'Gestion des catégories'},
+        {'text': 'Modifier la catégorie'}
     ]) }}
 
 {% elseif route == 'admin_category_confirm_delete' %}

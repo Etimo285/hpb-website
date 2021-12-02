@@ -10,9 +10,9 @@
 
         <hr class="mt-2 mb-2">
         <h2 class="text-center my-5 fw-bold">Ajouter une catégorie</h2>
-        <div class="d-flex flex-row justify-content-evenly">
+        <div class="d-flex flex-column flex-lg-row justify-content-evenly align-items-center">
 
-            <div class="mx-5">
+            <div class="mx-4">
                 {{ form_start(form) }}
 
                 {{ form_row(form.name, {
@@ -27,13 +27,15 @@
                         class: 'fw-bold'
                     }
                 }) }}
+                <button class="btn btn-success mt-4 w-100" type="submit">Valider l'ajout</button>
+                {{ form_end(form) }}
             </div>
-            <div class="w-50">
+            <div class="add-category-help my-4">
                 <h3 class="fs-5 p-2 fst-italic">Que dois-je écrire dans le champ "<span class="fw-bold">Renseigner une îcone</span>" ?</h3>
                 <div class="border border-3 p-3">
                     <p>
                         Depuis la banque d'îcone <a class="fw-bold" target="_blank" href="https://fontawesome.com/v5.15/icons">Font Awesome</a>, veuillez rechercher puis sélectionner l'îcone qui vous convient.
-                        Une fois sélectionné, renseigné le nom dans le champ comme ci-dessous :
+                        Une fois sélectionné, écrivez son nom dans le champ comme l'exemple ci-dessous :
                     </p>
                     <img src="{{ asset('images/category/addcategoryexample1.png') }}" alt="">
                     <img class="ms-5" src="{{ asset('images/category/addcategoryexample2.gif') }}" alt="">
@@ -41,17 +43,6 @@
             </div>
             
         </div>
-
-        <div class="col-4 offset-4 form-box text-center my-5">
-            {# Bouton pour valider l'édition du status utilisateur #}
-            <button class="btn btn-success mt-4 w-100" type="submit">Valider l'ajout</button>
-            {# Annuler l'édition puis retour a l'interface liste utilisateurs #}
-            <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('admin_list_users', {'orderBy': 'createdAt', 'orderParam': 'DESC'}) }}">
-                Annuler
-            </a>
-        </div>
-
-            {{ form_end(form) }}
 
         <hr class="mt-2 mb-2">
         <h2 class="text-center my-5 fw-bold">Gérer les catégories existantes</h2>
@@ -73,12 +64,19 @@
 
                 <tr>
                     <td>{{ category.name }}</td>
-                    <td><i class="fas fa-{{ category.icon }} fs-3"></i><span class="ms-4">{{ category.icon }}</span></td>
+                    <td>
+                        {% if category.icon is not null %}
+                            <i class="fas fa-{{ category.icon }} fs-3"></i><span class="ms-4">{{ category.icon }}</span>
+                        {% else %}
+                            <span class="text-secondary fst-italic">Aucune îcone</span>
+                        {% endif %}
+
+                    </td>
                     <td>
                         <a class="btn btn-secondary" href="{{ path('article_list', {'slug': category.slug}) }}">
                             Accéder aux articles
                         </a>
-                        <a class="btn btn-outline-primary ms-3" href="">
+                        <a class="btn btn-outline-primary ms-3" href="{{ path('admin_category_edit', {'slug': category.slug}) }}">
                             Modifier
                         </a>
                         <a class="btn btn-outline-danger ms-3"

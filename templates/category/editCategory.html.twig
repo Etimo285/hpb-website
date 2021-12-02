@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une catégorie{% endblock %}
+
+{% block body %}
+
+<div class="container">
+
+    <h1 class="text-center my-5 fs-1">Modifier la catégorie<i class="fas fa-{{ category.icon }} mx-3"></i>{{ category.name }}</h1>
+
+    <div class="d-flex flex-column flex-lg-row justify-content-evenly align-items-center">
+
+        <div class="mx-4">
+            {{ form_start(form) }}
+
+            {{ form_row(form.name, {
+                label: 'Modifier le nom de la catégorie',
+                label_attr: {
+                    class: 'fw-bold'
+                }
+            }) }}
+            {{ form_row(form.icon, {
+                label: 'Renseigner une îcone (facultatif)',
+                label_attr: {
+                    class: 'fw-bold'
+                }
+            }) }}
+            <button class="btn btn-success mt-4 w-100" type="submit">Valider l'ajout</button>
+            {{ form_end(form) }}
+            <a class="btn btn-secondary fw-bold mt-4 w-100" href="">Annuler</a>
+        </div>
+        <div class="add-category-help my-4">
+            <h3 class="fs-5 p-2 fst-italic">Que dois-je écrire dans le champ "<span class="fw-bold">Renseigner une îcone</span>" ?</h3>
+            <div class="border border-3 p-3">
+                <p>
+                    Depuis la banque d'îcone <a class="fw-bold" target="_blank" href="https://fontawesome.com/v5.15/icons">Font Awesome</a>, veuillez rechercher puis sélectionner l'îcone qui vous convient.
+                    Une fois sélectionné, écrivez son nom dans le champ comme l'exemple ci-dessous :
+                </p>
+                <img src="{{ asset('images/category/addcategoryexample1.png') }}" alt="">
+                <img class="ms-5" src="{{ asset('images/category/addcategoryexample2.gif') }}" alt="">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

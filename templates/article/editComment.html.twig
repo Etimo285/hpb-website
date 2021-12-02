@@ -26,7 +26,7 @@
                         </div>
                     </div>
 
-                    {# Formulaire de création, inclus des labels pour le nom, la description, la catégorie #}
+                    {# Formulaire de modification de commentaire #}
                     {{ form_start(form) }}
 
                     {{ form_row(form.content, {
@@ -35,10 +35,10 @@
                             class: 'fw-bold',
                         }
                     }) }}
-                    {# Bouton pour valider l'édition de l'article #}
+                    {# Bouton pour valider l'édition du commentaire #}
                     <button class="btn btn-success mt-4 w-100" type="submit">Valider la modification</button>
                     {{ form_end(form) }}
-                    {# Annuler l'édition puis retour a l'interface #}
+                    {# Annuler l'édition puis retour a la vue détaillée de l'article #}
                     <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('article_view', {'slug': comment.article.slug, 'slug_category': comment.article.category.slug}) }}">Annuler</a>
 
                 </div>

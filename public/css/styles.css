@@ -13,6 +13,10 @@ html, body{
 
 /*-------------------- CUSTOM CLASSES --------------------*/
 
+.add-category-help{
+    width: 50%;
+}
+
 .admin-btn{
     display: flex;
     flex-direction: row;
@@ -185,6 +189,10 @@ html, body{
         padding: 10px 0;
         margin: 20px 0;
         height: 80px;
+    }
+
+    .add-category-help{
+        width: 80%;
     }
 
 }
