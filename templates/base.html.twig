@@ -104,12 +104,14 @@
                 <li class="nav-item blanc">
                     <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page"
                        href="{{ path('article_list', {'slug': 'blog' }) }}">
-                        Blog
+                        <i class="fas fa-calendar-alt"></i>
+                        Évènements
                     </a>
                 </li>
 
                 <li class="nav-item bg-danger alerfocus">
-                    <a class="nav-link active mx-auto text-white fw-bold fs-5 alerfocus" aria-current="page" href=" {{ path('adherent_alert_create') }}">
+                    <a class="nav-link active mx-auto text-white fw-bold fs-5 alerfocus" aria-current="page"
+                       href=" {{ path('adherent_alert_create') }}">
                         <i class="fas fa-exclamation-triangle"></i>
                         Alerte Inclusion
                     </a>

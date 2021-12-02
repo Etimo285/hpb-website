@@ -375,10 +375,10 @@ class AdminController extends AbstractController
 
         //-- Ajout --//
         $newCategory = new Category();
-        $creationForm = $this->createForm(CreateCategoryFormType::class, $newCategory);
-        $creationForm->handleRequest($request);
+        $form = $this->createForm(CreateCategoryFormType::class, $newCategory);
+        $form->handleRequest($request);
 
-        if ($creationForm->isSubmitted() && $creationForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
 
@@ -411,8 +411,7 @@ class AdminController extends AbstractController
         //}
 
         return $this->render('category/gestionCategory.html.twig', [
-            'createCategoryForm' => $creationForm->createView(),
-            //'editCategoryForm' => $editForm->createView()
+            'form' => $form->createView(),
         ]);
 
     }
