@@ -24,6 +24,9 @@
     {% block css %}{% endblock %}
 
     <title>{% block title %}{% endblock %} - {{ site_name }}</title>
+
+    {# Icone du site #}
+    <link rel="icon" type="x/icon" href="{{ asset('icons/logo_hpb.jpg') }}">
 </head>
 <body>
 
@@ -104,12 +107,14 @@
                 <li class="nav-item blanc">
                     <a class="nav-link active mx-auto fw-bold fs-5" aria-current="page"
                        href="{{ path('article_list', {'slug': 'blog' }) }}">
-                        Blog
+                        <i class="fas fa-calendar-alt"></i>
+                        Évènements
                     </a>
                 </li>
 
                 <li class="nav-item bg-danger alerfocus">
-                    <a class="nav-link active mx-auto text-white fw-bold fs-5 alerfocus" aria-current="page" href=" {{ path('adherent_alert_create') }}">
+                    <a class="nav-link active mx-auto text-white fw-bold fs-5 alerfocus" aria-current="page"
+                       href=" {{ path('adherent_alert_create') }}">
                         <i class="fas fa-exclamation-triangle"></i>
                         Alerte Inclusion
                     </a>
@@ -265,6 +270,15 @@
         {'url': url('home'), 'text': 'Accueil'},
         {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
         {'text': 'Liste des utilisateurs'}
+    ]) }}
+
+{% elseif route == 'admin_edit_user' %}
+
+    {{ breadcrumbs.render([
+        {'url': url('home'), 'text': 'Accueil'},
+        {'url': url('admin_gestion'), 'text': 'Gestion Administrateur'},
+        {'url': url('admin_list_users', {'orderBy': 'createdAt', 'orderParam': 'DESC'}), 'text': 'Liste des utilisateurs'},
+        {'text': 'Modifier le status d\'un utilisateur'}
     ]) }}
 
 {% elseif route == 'admin_list_alert' %}
@@ -499,7 +513,7 @@
     <!-- Copyright -->
     <div class="text-center p-3 border" >
         © 2021 Copyright:
-        <a href="#">TU COPIE PAS !!! HEAINNNN!!</a>
+        <a href="#"></a>
     </div>
     <!-- Copyright -->
     </footer>

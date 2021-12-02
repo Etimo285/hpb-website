@@ -6,6 +6,7 @@ use App\Entity\Alert;
 use App\Entity\Article;
 use App\Entity\Category;
 use App\Entity\User;
+use App\Form\AdminEditUserFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\PersistentCollection;
 use App\Form\CreateArticleFormType;
@@ -31,7 +32,7 @@ use Symfony\Component\Validator\Constraints\All;
 class AdminController extends AbstractController
 {
 
-    /* GESTIONNAIRE ADMIN */
+    // GESTIONNAIRE ADMIN
     #[Route('/gestion/', name: 'gestion')]
     public function gestion(): Response
     {
@@ -59,89 +60,145 @@ class AdminController extends AbstractController
         ]);
     }
 
-    // SUPPRIMER UN UTILISATEUR
-    #[Route('/supprimer-utilisateur/{id}/{origin_orderBy}/{origin_orderParam}', name: 'delete_user')]
-    public function deleteUser($origin_orderBy, $origin_orderParam, User $user ,Request $request): Response
+    // MODIFIER LE STATUS D'UN UTILISATEUR
+    #[Route('/liste-utilisateurs/{id}', name: 'edit_user')]
+    public function editUser(User $user, Request $request): Response
     {
-        // Contrôle du token csrf
-        if(!$this->isCsrfTokenValid('user_delete_' . $user->getId(), $request->query->get('csrf_token'))){
+        // Redirige vers la liste si l'utilisateur selectionné est l'utilisateur connecté.
+        if($this->getUser() === $user) {
 
-            // Message flash
-            $this->addFlash('error', 'Token de sécurité invalide, veuillez ré-essayer.');
+            $this->addFlash('error', 'Erreur : Vous ne pouvez modifier vos propres rôles et status.');
+
+            return $this->redirectToRoute('admin_list_users', [
+                'orderBy' => 'createdAt',
+                'orderParam' => 'DESC'
+            ]);
         } else {
 
-            // Gestion de la suppression des données en base de données
-            $em = $this->getDoctrine()->getManager();
+            // Création du formulaire de modification des rôles et status
+            $form = $this->createForm(AdminEditUserFormType::class, $user);
+            $form->handleRequest($request);
 
-            /*
-             * [ Purge en BDD de tout ce qui est associé à l'utilisateur supprimé ]
-             */
+            // Contrôle sur la validité du formulaire envoyé
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            // Pour chaque articles écris par l'utilisateur...
-            foreach ($user->getArticles() as $article) {
+                // Gestion de l'envoi des données en base de données
+                $em = $this->getDoctrine()->getManager();
 
-                // Pour chaque commentaires de l'article (de n'importe quel utilisateur)...
-                foreach ($article->getComment() as $comment) {
+                // Hydratation du champ de date de mis à jour
+                $user->setUpdatedAt();
 
-                    // On supprimme ce commentaire
+                $em->persist($user);
+                $em->flush();
+
+                // Message flash
+                $this->addFlash('success', "Le status de l\'utilisateur a été mis à jour avec succès !");
+
+                // Redirection sur la page interface adhérent
+                return $this->redirectToRoute('admin_list_users', [
+                    'orderBy' => 'createdAt',
+                    'orderParam' => 'DESC'
+                ]);
+            }
+
+            return $this->render('admin/editUser.html.twig', [
+                'form' => $form->createView(),
+                'user' => $user
+            ]);
+        }
+    }
+
+    // SUPPRIMER UN UTILISATEUR
+    #[Route('/supprimer-utilisateur/{id}/{origin_orderBy}/{origin_orderParam}', name: 'delete_user')]
+    public function deleteUser($origin_orderBy, $origin_orderParam, User $user, Request $request): Response
+    {
+        // Si l'administrateur décide de supprimer son propre compte, n'effectue pas la suppression et redirige sur la liste.
+        if($this->getUser() === $user) {
+
+            $this->addFlash('error', 'Erreur : Vous ne pouvez supprimer votre propre compte.');
+
+        } else {
+
+            // Contrôle du token csrf
+            if (!$this->isCsrfTokenValid('user_delete_' . $user->getId(), $request->query->get('csrf_token'))) {
+
+                // Message flash
+                $this->addFlash('error', 'Token de sécurité invalide, veuillez ré-essayer.');
+            } else {
+
+                // Gestion de la suppression des données en base de données
+                $em = $this->getDoctrine()->getManager();
+
+                /*
+                 * [ Purge en BDD de tout ce qui est associé à l'utilisateur supprimé ]
+                 */
+
+                // Pour chaque articles écris par l'utilisateur...
+                foreach ($user->getArticles() as $article) {
+
+                    // Pour chaque commentaires de l'article (de n'importe quel utilisateur)...
+                    foreach ($article->getComment() as $comment) {
+
+                        // On supprimme ce commentaire
+                        $em->remove($comment);
+                    }
+
+                    // Une fois tous les commentaires supprimés, on supprime cet article
+                    $em->remove($article);
+                }
+
+                // Pour chaque commentaires postés par l'utilisateur (où qu'ils soient)...
+                foreach ($user->getComments() as $comment) {
+
+                    // On supprime ce commentaire
                     $em->remove($comment);
                 }
 
-                // Une fois tous les commentaires supprimés, on supprime cet article
-                $em->remove($article);
-            }
+                // Pour chaque alertes postés par l'utilisateur...
+                foreach ($user->getAlerts() as $alert) {
 
-            // Pour chaque commentaires postés par l'utilisateur (où qu'ils soient)...
-            foreach ($user->getComments() as $comment) {
+                    // Pour chaque messages de discussion d'alerte (que ce soit par l'utilisateur ou un administrateur)...
+                    foreach ($alert->getAlertMessage() as $alertMessage) {
 
-                // On supprime ce commentaire
-                $em->remove($comment);
-            }
+                        // On supprime le message
+                        $em->remove($alertMessage);
+                    }
 
-            // Pour chaque alertes postés par l'utilisateur...
-            foreach ($user->getAlerts() as $alert) {
+                    // Une fois tous les messages supprimés, on supprime l'alerte
+                    $em->remove($alert);
+                }
 
-                // Pour chaque messages de discussion d'alerte (que ce soit par l'utilisateur ou un administrateur)...
-                foreach ($alert->getAlertMessage() as $alertMessage) {
+                // Pour chaque messages de discussion d'alerte posté par l'utilisateur (où qu'ils soient)...
+                foreach ($user->getAlertMessages() as $alertMessage) {
 
-                    // On supprime le message
+                    // On supprime ce message
                     $em->remove($alertMessage);
                 }
 
-                // Une fois tous les messages supprimés, on supprime l'alerte
-                $em->remove($alert);
+                // Pour chaque 'vues d'alerte' de la part de l'utilisateur (où qu'elles soient)...
+                foreach ($user->getAlertViews() as $alertView) {
+
+                    // On supprime la vue d'alerte
+                    $em->remove($alertView);
+                }
+
+                // Pour chaque évènements écris par l'utilisateur...
+                foreach ($user->getEvents() as $event) {
+
+                    // On supprime l'évènement
+                    $em->remove($event);
+                }
+
+                // Et enfin, suppression de l'utilisateur
+                $em->remove($user);
+
+                // Validation de toutes les requêtes de suppression
+                $em->flush();
+
+                // Message flash
+                $this->addFlash('success', 'L\'utilisateur et tout ce qu\'il lui est associé ont étés supprimés avec succès !');
+
             }
-
-            // Pour chaque messages de discussion d'alerte posté par l'utilisateur (où qu'ils soient)...
-            foreach ($user->getAlertMessages() as $alertMessage) {
-
-                // On supprime ce message
-                $em->remove($alertMessage);
-            }
-
-            // Pour chaque 'vues d'alerte' de la part de l'utilisateur (où qu'elles soient)...
-            foreach ($user->getAlertViews() as $alertView) {
-
-                // On supprime la vue d'alerte
-                $em->remove($alertView);
-            }
-
-            // Pour chaque évènements écris par l'utilisateur...
-            foreach ($user->getEvents() as $event) {
-
-                // On supprime l'évènement
-                $em->remove($event);
-            }
-
-            // Et enfin, suppression de l'utilisateur
-            $em->remove($user);
-
-            // Validation de toutes les requêtes de suppression
-            $em->flush();
-
-            // Message flash
-            $this->addFlash('success', 'L\'utilisateur et tout ce qu\'il lui est associé ont étés supprimés avec succès !');
-
         }
 
         return $this->redirectToRoute('admin_list_users', [
@@ -318,10 +375,10 @@ class AdminController extends AbstractController
 
         //-- Ajout --//
         $newCategory = new Category();
-        $creationForm = $this->createForm(CreateCategoryFormType::class, $newCategory);
-        $creationForm->handleRequest($request);
+        $form = $this->createForm(CreateCategoryFormType::class, $newCategory);
+        $form->handleRequest($request);
 
-        if ($creationForm->isSubmitted() && $creationForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
 
@@ -354,8 +411,7 @@ class AdminController extends AbstractController
         //}
 
         return $this->render('category/gestionCategory.html.twig', [
-            'createCategoryForm' => $creationForm->createView(),
-            //'editCategoryForm' => $editForm->createView()
+            'form' => $form->createView(),
         ]);
 
     }
@@ -374,7 +430,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    // Suppression
+    // SUPPRESSION CATEGORIE
     #[Route('/gestionnaire-categories/supprimer/{id}', name: 'category_delete')]
     public function deleteCategory(Category $category, Request $request): Response
     {

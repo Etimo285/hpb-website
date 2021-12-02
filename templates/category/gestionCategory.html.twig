@@ -4,103 +4,97 @@
 
 {% block body %}
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 form-container">
-                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box text-center my-5">
+    <div class="container">
 
-                    <div class="heading mb-5">
-                        <h1 class="fs-1 text-decoration-underline">Gestionnaire des categories</h1>
-                    </div>
+        <h1 class="text-center my-5 text-decoration-underline fs-1">Gestionnaire des catégories</h1>
 
-                    {# Début - Section d'ajout de catégorie #}
-                    <section id="add-category">
-                        <h2 class="fs-2">Ajouter une catégorie</h2>
+        <hr class="mt-2 mb-2">
+        <h2 class="text-center my-5 fw-bold">Ajouter une catégorie</h2>
+        <div class="d-flex flex-row justify-content-evenly">
 
-                        <div class="offset-4 col-4 my-5">
-                            {{ form_start(createCategoryForm) }}
-                            {{ form_row(createCategoryForm.name, {
-                                label: 'Donnez un nom à votre catégorie',
-                                label_attr: {
-                                    class: 'fw-bold',
-                                },
+            <div class="mx-5">
+                {{ form_start(form) }}
 
-                            }) }}
-                            {{ form_row(createCategoryForm.icon, {
-                                label: 'Selectionnez une îcone',
-                                label_attr: {
-                                    class: 'fw-bold',
-                                },
-                            }) }}
-
-                            <button class="btn btn-success mt-4 w-100" type="submit">Valider</button>
-                            {{ form_end(createCategoryForm) }}
-
-
-                        </div>
-
-                    </section>
-                    {# Fin de Section #}
-
-                    <hr class="my-5">
-
-                    {# Début - Section de modification de nom de catégorie #}
-                    <section id="modify-category">
-                        <h2 class="fs-2">Modifier le nom d'une catégorie</h2>
-
-                        {# <div class="offset-3 col-6 my-5">
-                            {{ form_start(editCategoryForm) }}
-
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-
-                            {% for category in category_repo.findAll %}
-
-                                <option value="{{ category.id }}">{{ category.name }}</option>
-
-                            {% endfor %}
-
-                            </select>
-                            {{ form_row(editCategoryForm.name, {
-                                label: 'Nouveau nom de la catégorie',
-                                label_attr: {
-                                    class: 'fw-bold',
-                                }
-
-                            }) }}
-
-                            <button class="btn btn-success mt-4 w-100" type="submit">Valider</button>
-                            {{ form_end(editCategoryForm) }}
-
-                        </div> #}
-
-                    </section>
-                    {# Fin de Section #}
-
-                    <hr class="my-5">
-
-                    {# Début - Section de suppression de catégorie #}
-                    <section id="delete-category">
-
-                        <h2 class="fs-2">Supprimer une catégorie</h2>
-
-                        <button class="btn btn-white bg-dark dropdown-toggle text-white mx-auto" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catégories</button>
-                        <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-                            {% for category in category_repo.findAll %}
-                                <li class="fw-bold"><a class="dropdown-item" href="{{ path('admin_category_confirm_delete', {'slug': category.slug}) }}">{{ category.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                        
-                    </section>
-                    {# Fin de Section #}
-
-
+                {{ form_row(form.name, {
+                    label: 'Ecrivez un nom de catégorie',
+                    label_attr: {
+                        class: 'fw-bold'
+                    }
+                }) }}
+                {{ form_row(form.icon, {
+                    label: 'Renseigner une îcone (facultatif)',
+                    label_attr: {
+                        class: 'fw-bold'
+                    }
+                }) }}
+            </div>
+            <div class="w-50">
+                <h3 class="fs-5 p-2 fst-italic">Que dois-je écrire dans le champ "<span class="fw-bold">Renseigner une îcone</span>" ?</h3>
+                <div class="border border-3 p-3">
+                    <p>
+                        Depuis la banque d'îcone <a class="fw-bold" target="_blank" href="https://fontawesome.com/v5.15/icons">Font Awesome</a>, veuillez rechercher puis sélectionner l'îcone qui vous convient.
+                        Une fois sélectionné, renseigné le nom dans le champ comme ci-dessous :
+                    </p>
+                    <img src="{{ asset('images/category/addcategoryexample1.png') }}" alt="">
+                    <img class="ms-5" src="{{ asset('images/category/addcategoryexample2.gif') }}" alt="">
                 </div>
             </div>
+            
         </div>
+
+        <div class="col-4 offset-4 form-box text-center my-5">
+            {# Bouton pour valider l'édition du status utilisateur #}
+            <button class="btn btn-success mt-4 w-100" type="submit">Valider l'ajout</button>
+            {# Annuler l'édition puis retour a l'interface liste utilisateurs #}
+            <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('admin_list_users', {'orderBy': 'createdAt', 'orderParam': 'DESC'}) }}">
+                Annuler
+            </a>
+        </div>
+
+            {{ form_end(form) }}
+
+        <hr class="mt-2 mb-2">
+        <h2 class="text-center my-5 fw-bold">Gérer les catégories existantes</h2>
+
+        {# Table des catégories #}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Îcone / Nom de l'îcone</th>
+                <th>Options</th>
+            </tr>
+
+            </thead>
+            <tbody>
+
+            {# Affichage des catégories #}
+            {% for category in category_repo.findAll %}
+
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td><i class="fas fa-{{ category.icon }} fs-3"></i><span class="ms-4">{{ category.icon }}</span></td>
+                    <td>
+                        <a class="btn btn-secondary" href="{{ path('article_list', {'slug': category.slug}) }}">
+                            Accéder aux articles
+                        </a>
+                        <a class="btn btn-outline-primary ms-3" href="">
+                            Modifier
+                        </a>
+                        <a class="btn btn-outline-danger ms-3"
+                           href="{{ path('admin_category_confirm_delete', {'slug': category.slug}) }}">
+                            Supprimer
+                        </a>
+                    </td>
+                </tr>
+
+            {% else %}
+                <tr>
+                    <td colspan="8">Aucune catégorie n'est enregistré.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 {% endblock %}

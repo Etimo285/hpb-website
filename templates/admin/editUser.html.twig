@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un utilisateur{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 form-container">
+                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box text-center my-5">
+
+                    {# Titre de la page de création #}
+                    <div class="heading mb-5">
+                        <h1 class="fs-1">Modifier le status de l'utilisateur
+                            {% if user.pseudo is not null %}
+                                <span class="text-decoration-underline">{{ user.pseudo }}</span> ({{ user.lastName }} {{ user.firstName }})
+                            {% else %}
+                                <span class="text-decoration-underline">{{ user.lastName }} {{ user.firstName }}</span>
+                            {% endif %}
+                        </h1>
+                    </div>
+
+                    {# Formulaire de création, inclus des labels pour le nom, la description, la catégorie #}
+                    {{ form_start(form) }}
+                    {{ form_row(form.roles, {
+                        label: 'Attribuer un rôle',
+                        label_attr: {
+                            class: 'fw-bold'
+                        }
+                    }) }}
+                    {{ form_row(form.functionTitle, {
+                        label: 'Attribuer une fonction administrative (facultatif)',
+                        label_attr: {
+                            class: 'fw-bold'
+                        },
+                        attr: {
+                            placeholder: 'Ex : Président, Secrétaire, Trésorier...'
+                        }
+                    }) }}
+                </div>
+                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box my-3">
+                    {{ form_row(form.isMember, {
+                        label: 'A côtisé pour l\'association ?'
+                    }) }}
+                    {{ form_row(form.isVerified, {
+                        label: 'Cet utilisateur est-il vérifié ? (A cocher en cas de problème de vérification par mail)',
+                    }) }}
+                </div>
+                <div class="col-lg-8 col-md-12 col-10 offset-2 form-box text-center my-5">
+                    {# Bouton pour valider l'édition du status utilisateur #}
+                    <button class="btn btn-success mt-4 w-100" type="submit">Valider la modification</button>
+                    {# Annuler l'édition puis retour a l'interface liste utilisateurs #}
+                    <a class="btn btn-secondary mt-4 w-100 d-block fw-bold" href="{{ path('admin_list_users', {'orderBy': 'createdAt', 'orderParam': 'DESC'}) }}">
+                        Annuler
+                    </a>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
