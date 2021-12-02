@@ -1,6 +1,6 @@
 /*-------------------- IMPORTS --------------------*/
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-/* The side navigation menu */
+/* Menu de navigation latéral */
 .sidenav {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
@@ -15,7 +15,7 @@
     border-right: thick double #000000;
 }
 
-/* The navigation menu links */
+/* Liens du menu de navigation */
 .sidenav a {
     text-decoration: none;
     font-size: 25px;
@@ -23,12 +23,12 @@
     transition: 0.3s
 }
 
-/* When you mouse over the navigation links, change their color */
+/* Lorsque la souris est par dessus un lien, change la couleure */
 .sidenav a:hover, .offcanvas a:focus{
     color: #f1f1f1;
 }
 
-/* Position and style the close button (top right corner) */
+/* Change la position et le style du bouton de fermeture */
 .sidenav .closebtn {
     position: absolute;
     top: 0;

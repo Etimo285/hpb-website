@@ -34,7 +34,7 @@ class ResetPasswordController extends AbstractController
      * Méthode pour initialiser le mot de passe.
      * Display & process form to request a password reset.
      */
-    #[Route('/initialiser-mot-de-passe/', name: 'app_forgot_password_request')]
+    #[Route('/reinitialiser-mot-de-passe/', name: 'app_forgot_password_request')]
     public function request(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);

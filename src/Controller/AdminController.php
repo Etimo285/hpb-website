@@ -38,7 +38,7 @@ class AdminController extends AbstractController
         return $this->render('admin/adminGestion.html.twig');
     }
 
-    // Liste des utilisateurs du site (non-admins)
+    // Liste des utilisateurs du site
     #[Route('/liste-utilisateurs/{orderBy}/{orderParam}', name: 'list_users')]
     public function userList($orderBy, $orderParam, UserRepository $userRepository): Response
     {

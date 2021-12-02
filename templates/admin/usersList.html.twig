@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des adhérents{% endblock %}
+{% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
 
-    <h1 class="text-center my-5 text-decoration-underline">Liste des adhérents du site</h1>
+    <h1 class="text-center my-5 text-decoration-underline">Liste des utilisateurs du site</h1>
 
     {# Liens pour définir le critère de tri des utilisateur #}
     <div class="limit-box d-flex flex-row align-items-baseline offset-2 my-4">
@@ -67,7 +67,9 @@
                         <td>{{ user.pseudo }}</td>
                         <td>{{ user.email }}</td>
                         <td>
-                            {% if user.roles[0] == 'ROLE_ADHERENT' %}
+                            {% if user.roles[0] == 'ROLE_ADMIN' %}
+                                Administrateur
+                            {% elseif user.roles[0] == 'ROLE_ADHERENT' %}
                                 Adhérent
                             {% else %}
                                 Utilisateur
@@ -83,15 +85,30 @@
                         <td>{{ user.phone }}</td>
                         <td>{{ user.createdAt|date('d-m-Y H:i') }}</td>
                         <td>{{ user.updatedAt ? user.updatedAt|date('d-m-Y H:i') : '' }}</td>
-                        <td><a class="btn btn-outline-primary" href="">Modifier</a></td>
-                        <td>
-                            <a class="btn btn-outline-danger"
-                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ainsi que tout ce dont il est auteur ?')"
-                               href="{{ path('admin_delete_user', {'id': user.id,'origin_orderBy': orderBy, 'origin_orderParam': orderParam, csrf_token: csrf_token('user_delete_' ~ user.id ) }) }}">
-                                Supprimer
-                            </a>
+                        {% if user == app.user %}
+                            {# Popovers (info-bulles) pour informer qu'il est impossible de modifier ou supprimer son propre compte #}
+                            <td>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="popover" data-bs-placement="top" title="Modification impossible" data-bs-content="Par mesure de sécurité, vous ne pouvez modifier vos propre rôles et statuts.">
+                                    Modifier
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="popover" data-bs-placement="top" title="Suppression impossible" data-bs-content="Par mesure de sécurité, il vous est impossible de supprimer votre propre compte.">
+                                    Supprimer
+                                </button>
+                            </td>
+                        {% else %}
+                            <td><a class="btn btn-outline-primary" href="">Modifier</a></td>
+                            <td>
+                                <a class="btn btn-outline-danger"
+                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ainsi que tout ce dont il est auteur ?')"
+                                   href="{{ path('admin_delete_user', {'id': user.id,'origin_orderBy': orderBy, 'origin_orderParam': orderParam, csrf_token: csrf_token('user_delete_' ~ user.id ) }) }}">
+                                    Supprimer
+                                </a>
 
-                        </td>
+                            </td>
+                        {% endif %}
+
                     </tr>
 
             {% else %}
@@ -102,5 +119,6 @@
             </tbody>
         </table>
     </div>
+
 
 {% endblock %}

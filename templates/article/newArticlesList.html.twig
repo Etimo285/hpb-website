@@ -14,7 +14,7 @@
         <div class="col-8 offset-2">
 
             {# Liens pour redéfinir la limite à afficher #}
-            <div class="limit-box d-flex flex-row align-items-baseline">
+            <div class="limit-box align-items-baseline">
                 <p class="fs-4 px-3">Définir la limite à afficher :</p>
                 <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path('new_articles_list', {'limit': 10}) }}">10</a>
                 <a class="fs-4 ms-3 p-3 text-decoration-none" href="{{ path('new_articles_list', {'limit': 25}) }}">25</a>
@@ -29,18 +29,18 @@
                     {% if article.hidden == false %}
 
                         <div class="card my-5">
-                            <div class="bg-custom-green d-flex flex-row">
-                                <h2 class="p-3 text-white fs-2">{{ article.title }}</h2>
+                            <div class="bg-custom-green d-flex flex-row flex-wrap-reverse">
+                                <h2 class="p-3 text-white fs-3">{{ article.title }}</h2>
                                 <a class="ms-auto text-decoration-none text-end" title="Accéder à la catégorie {{ article.category.name }}"
                                    href="{{ path('article_list', {'slug': article.category.slug}) }}">
-                                    <h2 class="p-3 text-white fs-2">
+                                    <h2 class="p-3 text-white fs-3">
                                         <i class="px-2 fas fa-{{ article.category.icon }}"></i>
                                         {{ article.category.name }}
                                     </h2>
                                 </a>
                             </div>
                             <div class="card-body">
-                                <p class="card-text fs-4">{{ article.content }}</p>
+                                <p class="card-text fs-4">{{ article.content|excerpt(30) }}</p>
 
                                 <div class="d-flex flex-row">
                                     {% if article.author.pseudo is not null %}
