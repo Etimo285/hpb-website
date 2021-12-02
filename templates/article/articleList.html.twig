@@ -130,9 +130,9 @@
                     {% if article.hidden == false %}
 
                         <div class="card my-5">
-                            <h2 class="p-3 bg-custom-green text-white fs-2">{{ article.title }}</h2>
+                            <h2 class="p-3 bg-custom-green text-white fs-3">{{ article.title }}</h2>
                             <div class="card-body">
-                                <p class="card-text fs-4">{{ article.content }}</p>
+                                <p class="card-text fs-5">{{ article.content|excerpt(30) }}</p>
 
                                 <div class="d-flex flex-row">
                                     {% if article.author.pseudo is not null %}
