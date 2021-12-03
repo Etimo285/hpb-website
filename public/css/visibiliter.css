@@ -11,7 +11,7 @@
 .orange body {
     background: white;
 }
-======
+/*======    */
 .blue body{
     background: #4b88bb;
     color: orange;
@@ -35,7 +35,7 @@
 .blue a{
     color: orange;
 }
-=======
+/*======    */
 .red body{
     background: #d84b3d;
     color: #0d6efd;
@@ -59,7 +59,7 @@
 .red a{
     color: #0d6efd;
 }
-=====
+/*======    */
 .green body {
     background: #90a959;
     color: purple;
@@ -83,7 +83,7 @@
 .green a{
     color: purple;
 }
-=======
+/*======    */
 .black body {
     background: #343437;
     color: white;
@@ -108,10 +108,10 @@
     background: #343437;
     color: white;
 }
-.black a{
+.black a {
     color: white;
 }
-======
+/*======    */
 .pink body{
     background: deeppink;
     color: chartreuse;
@@ -132,10 +132,10 @@
     background: deeppink;
     color: chartreuse;
 }
-.pink a{
+.pink a {
     color: chartreuse;
 }
-======
+/*======    */
 .list-items .contra {
     padding: 0.5em 1em;
     background: #68686a;
