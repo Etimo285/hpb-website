@@ -9,30 +9,38 @@
     flex-direction:row;
 }
 .orange body {
-    background: #deefc2;
+    background: white;
 }
-
-
-.blue body, .blue p, .blue div{
+/*======    */
+.blue body{
     background: #4b88bb;
     color: orange;
 }
-
+.blue p{
+    background: #4b88bb;
+    color: orange;
+}
+.blue div{
+    background: #4b88bb;
+    color: orange;
+}
 .blue h2{
     background: #06357a;
     color: orange;
 }
-
+.blue .breadcrumb-item{
+    background: #4b88bb;
+    color: orange;
+}
 .blue a{
     color: orange;
 }
-
-
-.red body {
+/*======    */
+.red body{
     background: #d84b3d;
     color: #0d6efd;
 }
-.red p {
+.red p{
     background: #d84b3d;
     color: #0d6efd;
 }
@@ -44,9 +52,14 @@
     background: #6a1a21;
     color: #0d6efd;
 }
-
-
-
+.red .breadcrumb-item{
+    background: #d84b3d;
+    color: #0d6efd;
+}
+.red a{
+    color: #0d6efd;
+}
+/*======    */
 .green body {
     background: #90a959;
     color: purple;
@@ -63,11 +76,14 @@
     background: darkgreen;
     color: purple;
 }
-
-
-
-
-
+.green .breadcrumb-item{
+    background: #90a959;
+    color: purple;
+}
+.green a{
+    color: purple;
+}
+/*======    */
 .black body {
     background: #343437;
     color: white;
@@ -88,9 +104,14 @@
     background: #343437;
     color: white;
 }
-
-
-
+.black .breadcrumb-item{
+    background: #343437;
+    color: white;
+}
+.black a {
+    color: white;
+}
+/*======    */
 .pink body{
     background: deeppink;
     color: chartreuse;
@@ -107,9 +128,14 @@
     background: deeppink;
     color: chartreuse;
 }
-
-
-
+.pink .breadcrumb-item{
+    background: deeppink;
+    color: chartreuse;
+}
+.pink a {
+    color: chartreuse;
+}
+/*======    */
 .list-items .contra {
     padding: 0.5em 1em;
     background: #68686a;
@@ -131,7 +157,7 @@
     background: #343437;
 }
 .orange .list-items .contra {
-    background:#deefc2;
+    background:white;
 }
 .pink .list-items .contra {
     background: deeppink;
@@ -160,13 +186,14 @@
     border-color: #343437;
 }
 .orange .list-items button.alt {
-    color: #f7b669;
-    border-color: #f7b669;
+    color: white;
+    border-color: black;
 }
 .pink .list-items button.alt {
     color: deeppink;
     border-color:deeppink;
 }
+
 .latbar{
     display: flex;
     flex-direction: row;
@@ -177,7 +204,6 @@
     margin: 5px;
     padding: 5px 5px 5px 20px;
 }
-
 
 .bttn {
     background: #68686a;
@@ -201,7 +227,7 @@
     background: #90a959;
 }
 .bttn[data-color="orange"] {
-    background: #f7b669;
+    background: white;
 }
 .bttn[data-color="pink"] {
     background: #e8a0e2;
@@ -210,6 +236,7 @@
     background: #343437;
 }
 
+/*====== Version Simplifier====*/
 .versimp .list-items button.alt {
     color: white;
     border-color: wheat;
@@ -217,8 +244,6 @@
 .bttn[data-color="versimp"] {
     background: white;
 }
-
-
 .versimp body{
     background-color: black;
     color: white;
@@ -299,7 +324,6 @@
     text-align: center;
     text-decoration: none;
 }
-
 .versimp .breadcrumb-item {
     color: white;
     background-color: black;
