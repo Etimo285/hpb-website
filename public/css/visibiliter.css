@@ -273,13 +273,36 @@
     text-align: center;
     text-decoration: none;
 }
-.versimp *{
+.versimp #sideNavigation{
+    background-color: black;
+    color: white;
+    font-size: large;
+    text-align: center;
+    text-decoration: none;
+    width: auto;
+}
+.versimp h1{
+    background-color: black;
+    color: white;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
+.versimp .latbar{
+    background-color: black;
+    color: white;
+    font-size: large;
+    text-align: center;
+    text-decoration: none;
+    width: auto;
+}
+/*.versimp *{
     background-color: black;
     color: white !important;
     font-size: xxx-large;
     text-align: center;
     text-decoration: none;
-}
+}    */
 .versimp li{
     color: black;
     background-color: white;

@@ -7,8 +7,8 @@ $(function(){
     }
 });
 function openNav() {
-    document.getElementById("sideNavigation").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    document.getElementById("sideNavigation").style.width = "300px";
+    document.getElementById("main").style.marginLeft = "300px";
 }
 
 function closeNav() {
