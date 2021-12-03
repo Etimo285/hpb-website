@@ -8,49 +8,7 @@
 
     <div class="container">
 
-        <div class="row my-4">
-            <div class="col-8 offset-2 border border-5 p-3 mb-4">
-                <h1 class="fs-2 fw-bold text-decoration-underline">{{ event.title }}</h1>
-                <div class="my-4 p-3">
-                    <p class="fs-4 ">{{ event.content }}</p>
-
-                    <div class="d-flex flex-row mt-5">
-                        {% if event.author.pseudo is not null %}
-                            <p>Ecris par <span class="fw-bold">{{ event.author.pseudo }}</span></p>
-                        {% else %}
-                            <p>Ecris par <span class="fw-bold">{{ event.author.firstname }} {{ event.author.lastname }}</span></p>
-                        {% endif %}
-
-                        {% if event.updatedAt != event.createdAt %}
-                            <p class="ms-auto">Modifié le <span class="fw-bold">{{ event.updatedAt|date('d/m/Y à H\\hi') }}</span></p>
-                            <p class="ms-auto">Publié le <span class="fw-bold">{{ event.createdAt|date('d/m/Y à H\\hi') }}</span></p>
-                        {% else %}
-                            <p class="ms-auto">Publié le <span class="fw-bold">{{ event.createdAt|date('d/m/Y à H\\hi') }}</span></p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            {# Section des boutons d'interaction #}
-            <div class="col-8 offset-4">
-                {% if event.author == app.user %}
-                    {# Bouton de modification de l'evenement #}
-                    <a class="btn btn-warning" href="{{ path('admin_event_edit', {'slug': event.slug}) }}">
-                        <i class="fas fa-edit me-1"></i> Modifier
-                    </a>
-                {% endif %}
-
-                {% if is_granted('ROLE_ADMIN') %}
-
-                    {# Bouton de suppression de l'evenement #}
-                    <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet évènement ainsi que tout les commentaires associés ?')" class="btn btn-danger" href="{{ path('admin_event_delete', {'id': event.id, csrf_token: csrf_token('event_delete_' ~ event.id ) }) }}">
-                        <i class="fas fa-trash-alt me-1"></i> Supprimer
-                    </a>
-
-                {% endif %}
-            </div>
-
-        </div>
+        <h1 class="text-center my-4">EN TRAVAUX</h1>
 
 
     </div>

@@ -299,3 +299,11 @@
     text-align: center;
     text-decoration: none;
 }
+
+.versimp .breadcrumb-item {
+    color: white;
+    background-color: black;
+    font-size: xxx-large;
+    text-align: center;
+    text-decoration: none;
+}
